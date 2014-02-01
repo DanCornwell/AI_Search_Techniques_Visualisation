@@ -53,24 +53,9 @@ abstract class SearchAlgorithm extends Subject {
 		GOAL = TREE.getGoal();
 		ROOT = TREE.getRoot();
 		
-	}
-	
-	/**
-	 * Sets the current node.
-	 * 
-	 * @param node - the new current node
-	 */
-	void setCurrentNode(Node node) {
-		currentNode = node;
-	}
-	
-	/**
-	 * Returns the current node the algorithm is on.
-	 * 
-	 * @return - node representing the current node
-	 */
-	Node getCurrentNode() {
-		return currentNode;
+		// initialise current node here to avoid possible null pointer exceptions
+		currentNode = ROOT;
+		
 	}
 	
 	/**

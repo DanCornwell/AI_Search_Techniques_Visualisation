@@ -1,9 +1,25 @@
 package dac28.model;
 
+/**
+ * The Tree124 class. Implements the tree interface.
+ * This tree has the structure as followed:
+ * 					0
+ * 				1		2
+ * 			  3	  4   5   6
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class Tree124 extends Tree {
 	
+	/**
+	 * Tree124 constructor.
+	 * Takes a goal parameter and calls the super constructor using it.
+	 * 
+	 * @param GOAL - the goal value
+	 */
 	Tree124(int GOAL) {
-		
+		 
 		super(GOAL);
 		
 	}

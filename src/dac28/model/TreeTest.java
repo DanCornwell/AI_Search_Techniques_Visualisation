@@ -4,6 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Tests the tree methods.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class TreeTest {
 
 	@Test

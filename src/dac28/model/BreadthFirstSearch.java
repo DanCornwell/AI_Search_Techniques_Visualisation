@@ -4,17 +4,33 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
+/**
+ * The breadth first search algorithm. 
+ * Implements the search algorithm interface.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 class BreadthFirstSearch extends SearchAlgorithm {
-	
+
+	/**
+	 * Data structure the algorithm uses to hold expanded nodes.
+	 */
 	private Queue<Node> expanded;
-	
+
+	/**
+	 * Breadth first search algorithm constructor.
+	 * Creates the expanded node list and adds the root node to it.
+	 * Takes a tree parameter which is used to set the goal and root node.
+	 * 
+	 * @param TREE - the tree the algorithm will be using
+	 */
 	BreadthFirstSearch(Tree TREE) {
-		
+
 		super(TREE);
 		expanded = new LinkedList<Node>();
 		expanded.add(ROOT);
-		
+
 	}
 
 	@Override
@@ -24,23 +40,22 @@ class BreadthFirstSearch extends SearchAlgorithm {
 
 	@Override
 	void step() {
-		
-		Node node = expanded.remove();
-		setCurrentNode(node);
-		if(atGoal()) {
-			setGoalReached(true);
-			notifyObservers();
-			return;
-		}
-		else {
-			visited.add(node);
-			if(node.hasChild()) {
-				for(int i=0;i<node.getChildren().size();i++) {
-					expanded.add(node.getChildren().get(i));
+		if(getGoalReached() == false) {
+			Node node = expanded.remove();
+			currentNode = node;
+			if(atGoal()) {
+				setGoalReached(true);
+			}
+			else {
+				visited.add(currentNode);
+				if(currentNode.hasChild()) {
+					for(int i=0;i<currentNode.getChildren().size();i++) {
+						expanded.add(currentNode.getChildren().get(i));
+					}
 				}
 			}
+			notifyObservers();
 		}
-		notifyObservers();
 	}
 
 }

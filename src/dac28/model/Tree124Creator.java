@@ -1,8 +1,7 @@
 package dac28.model;
 
 /**
- * Creates an instance of the Tree124 class.
- * Sets the goal to be the 4 node.
+ * Creates an instance of the Tree124 class with the given goal value.
  * 
  * @author Dan Cornwell
  *
@@ -10,8 +9,8 @@ package dac28.model;
 class Tree124Creator extends TreeCreator {
 
 	@Override
-	Tree factoryMethod() {
-		return new Tree124(4);
+	Tree factoryMethod(int GOAL) {
+		return new Tree124(GOAL);
 	}
 
 }

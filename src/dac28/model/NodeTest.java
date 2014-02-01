@@ -4,7 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-
+/**
+ * Tests the node methods.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class NodeTest {
 
 	@Test
