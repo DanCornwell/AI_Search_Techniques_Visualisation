@@ -9,8 +9,10 @@ package dac28.model;
 class BreadthFirstSearchCreator extends SearchAlgorithmCreator {
 
 	@Override
-	SearchAlgorithm factoryMethod() {
-		return new BreadthFirstSearch(new Tree124(4));
+	SearchAlgorithm getSearchAlgorithm(Tree tree) {
+		return new BreadthFirstSearch(tree);
 	}
+
+	
 
 }

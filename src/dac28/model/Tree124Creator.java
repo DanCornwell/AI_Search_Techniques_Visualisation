@@ -9,8 +9,10 @@ package dac28.model;
 class Tree124Creator extends TreeCreator {
 
 	@Override
-	Tree factoryMethod(int GOAL) {
+	Tree getTree(int GOAL) {
 		return new Tree124(GOAL);
 	}
+
+	
 
 }

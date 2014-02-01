@@ -9,20 +9,12 @@ package dac28.model;
 abstract class SearchAlgorithmCreator {
 	
 	/**
-	 * Returns a search algorithm.
+	 * Factory method for the search algorithm creators.
+	 * Subclasses of this class will override this method to return a specific search algorithm.
 	 * 
+	 * @param tree - search tree the search algorithm will iterate over
 	 * @return a search algorithm
 	 */
-	SearchAlgorithm getSearchAlgorithm() {
-		
-		return factoryMethod();
-	}
+	abstract SearchAlgorithm getSearchAlgorithm(Tree tree);
 	
-	/**
-	 * Returns a specific search algorithm.
-	 * 
-	 * @return a search algorithm
-	 */
-	abstract SearchAlgorithm factoryMethod();
-
 }

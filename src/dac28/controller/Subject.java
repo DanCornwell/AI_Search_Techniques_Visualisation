@@ -21,7 +21,7 @@ public abstract class Subject {
 	 * 
 	 * @param observer - observer to be attached
 	 */
-	protected void attach(Observer observer) {
+	public void attach(Observer observer) {
 		
 		observers.add(observer);
 			
@@ -30,7 +30,7 @@ public abstract class Subject {
 	/**
 	 * Notifies all observers in the subject's list
 	 */
-	protected void notifyObservers() {
+	public void notifyObservers() {
 		
 		for(Observer o: observers) {
 			o.update();

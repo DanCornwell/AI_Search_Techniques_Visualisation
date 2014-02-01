@@ -9,24 +9,13 @@ package dac28.model;
 abstract class TreeCreator {
 
 	/**
-	 * Returns a search tree with a supplied goal node.
+	 * Factory method for the tree creators. 
+	 * Subclasses of this class override this method to return specific trees.
+	 * Takes a goal parameter which will become the tree's goal node.
 	 * 
-	 * @param GOAL - the goal node for this search tree
-	 * @return search tree with the supplied goal node
+	 * @param GOAL - value the corresponds to the goal node
+	 * @return a search tree
 	 */
-	Tree getTree(int GOAL) {
-
-		return factoryMethod(GOAL);
-
-	}
-	
-	/**
-	 * Creates a specific search tree.
-	 * 
-	 * @param GOAL - the goal node of the search tree
-	 * @return a concrete search tree
-	 */
-	abstract Tree factoryMethod(int GOAL);
-
+	abstract Tree getTree(int GOAL);
 
 }
