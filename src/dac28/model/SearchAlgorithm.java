@@ -3,8 +3,6 @@ package dac28.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import dac28.controller.Subject;
-
 /**
  * Defines the interface for the search algorithms.
  * Defines methods to return and set the current node, evaluate the goal and 
@@ -14,7 +12,7 @@ import dac28.controller.Subject;
  * @author Dan Cornwell
  *
  */
-abstract class SearchAlgorithm extends Subject {
+public abstract class SearchAlgorithm {
 
 	/**
 	 * Defines the root node, which is used to move through the tree.

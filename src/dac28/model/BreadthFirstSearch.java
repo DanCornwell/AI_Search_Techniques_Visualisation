@@ -11,7 +11,7 @@ import java.util.Queue;
  * @author Dan Cornwell
  *
  */
-class BreadthFirstSearch extends SearchAlgorithm {
+public class BreadthFirstSearch extends SearchAlgorithm {
 
 	/**
 	 * Data structure the algorithm uses to hold expanded nodes.
@@ -54,7 +54,6 @@ class BreadthFirstSearch extends SearchAlgorithm {
 					}
 				}
 			}
-			notifyObservers();
 		}
 	}
 

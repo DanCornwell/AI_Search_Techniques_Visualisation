@@ -6,10 +6,10 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-class Tree124Creator extends TreeCreator {
+public class Tree124Creator extends TreeCreator {
 
 	@Override
-	Tree getTree(int GOAL) {
+	public Tree getTree(int GOAL) {
 		return new Tree124(GOAL);
 	}
 

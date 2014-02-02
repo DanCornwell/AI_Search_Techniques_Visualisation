@@ -6,10 +6,10 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-class BreadthFirstSearchCreator extends SearchAlgorithmCreator {
+public class BreadthFirstSearchCreator extends SearchAlgorithmCreator {
 
 	@Override
-	SearchAlgorithm getSearchAlgorithm(Tree tree) {
+	public SearchAlgorithm getSearchAlgorithm(Tree tree) {
 		return new BreadthFirstSearch(tree);
 	}
 

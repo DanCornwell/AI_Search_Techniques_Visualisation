@@ -8,7 +8,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-abstract class Tree {
+public abstract class Tree {
 	
 	/**
 	 * The goal value.
