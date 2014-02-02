@@ -1,37 +1,37 @@
 package dac28.model;
 
-import java.util.LinkedList;
+import java.util.Stack;
 
 /**
- * The breadth first search algorithm. 
+ * The depth first search algorithm.
  * Implements the search algorithm interface.
  * 
  * @author Dan Cornwell
  *
  */
-public class BreadthFirstSearch extends SearchAlgorithm {
-
+public class DepthFirstSearch extends SearchAlgorithm {
+	
 	/**
-	 * Breadth first search algorithm constructor.
+	 * Depth first search algorithm constructor.
 	 * Creates the expanded node list and adds the root node to it.
 	 * Takes a tree parameter which is used to set the goal and root node.
 	 * 
 	 * @param TREE - the tree the algorithm will be using
 	 */
-	BreadthFirstSearch(Tree TREE) {
-
+	DepthFirstSearch(Tree TREE) {
+		
 		super(TREE);
-		// LinkedList is a queue type data structure
-		expanded = new LinkedList<Node>();
+		// Depth first search uses a stack data structure
+		expanded = new Stack<Node>();
 		// Add root to expanded list to allow algorithm to start
-		((LinkedList<Node>)expanded).add(ROOT);
-
+		((Stack<Node>) expanded).push(ROOT);
+		
 	}
 
 	@Override
 	void step() {
 		if(getGoalReached() == false && !expanded.isEmpty()) {
-			Node node = ((LinkedList<Node>)expanded).remove();
+			Node node = ((Stack<Node>) expanded).pop();
 			currentNode = node;
 			if(atGoal()) {
 				setGoalReached(true);
@@ -39,8 +39,8 @@ public class BreadthFirstSearch extends SearchAlgorithm {
 			else {
 				visited.add(currentNode);
 				if(currentNode.hasChild()) {
-					for(int i=0;i<currentNode.getChildren().size();i++) {
-						expanded.add(currentNode.getChildren().get(i));
+					for(int i=currentNode.getChildren().size()-1;i>-1;i--) {
+						((Stack<Node>)expanded).push(currentNode.getChildren().get(i));
 					}
 				}
 			}

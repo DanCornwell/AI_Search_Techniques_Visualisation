@@ -1,7 +1,7 @@
 package dac28.model;
 
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Defines the interface for the search algorithms.
@@ -34,12 +34,18 @@ public abstract class SearchAlgorithm {
 	 * List representing the nodes the algorithm has traversed.
 	 */
 	protected LinkedList<Node> visited;
-	
+	/**
+	 * List representing the nodes the algorithm will analyse.
+	 */
+	protected List<Node> expanded;
+		
 	/**
 	 * Constructor for a search algorithm.
 	 * Takes a Tree parameter, which is used to retrieve the goal node
 	 * and the root node.
 	 * Also initiates the visited list and sets the goal reached boolean to false.
+	 * Subclasses must add ROOT node to their respective expanded lists in order for 
+	 * the algorithm to work.
 	 * 
 	 * @param TREE - the tree which the algorithm will traverse on
 	 */
@@ -50,10 +56,7 @@ public abstract class SearchAlgorithm {
 		
 		GOAL = TREE.getGoal();
 		ROOT = TREE.getRoot();
-		
-		// initialise current node here to avoid possible null pointer exceptions
-		currentNode = ROOT;
-		
+
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return true if the current node is the goal node, false otherwise
 	 */
-	boolean atGoal() {
+	final boolean atGoal() {
 		return currentNode.getValue() == GOAL;
 	}
 	
@@ -70,7 +73,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @param bool - boolean the goal reached is changed to
 	 */
-	void setGoalReached(boolean bool) {
+	final void setGoalReached(boolean bool) {
 		goalReached = bool;
 	}
 	
@@ -79,7 +82,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return goal reached boolean
 	 */
-	boolean getGoalReached() {
+	final boolean getGoalReached() {
 		return goalReached;
 	}
 	
@@ -88,16 +91,17 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return list represented the visited nodes
 	 */
-	LinkedList<Node> getVisited() {
+	final LinkedList<Node> getVisited() {
 		return visited;
 	}
 	
 	/**
-	 * Repeatedly calls the step method until the goal node is reached.
+	 * Repeatedly calls the step method until the goal node is reached
+	 * or the expanded queue is empty.
 	 */
-	void auto() {
+	final void auto() {
 		
-		while(!goalReached) {
+		while(!goalReached && !expanded.isEmpty()) {
 			step();
 		}
 		
@@ -108,10 +112,13 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return list representing the nodes ready to be evaluated
 	 */
-	abstract Collection<Node> getExpanded();
+	final List<Node> getExpanded() {
+		return expanded;
+	}
 	
 	/**
 	 * Performs the next step of the algorithm.
 	 */
 	abstract void step();
+	
 }
