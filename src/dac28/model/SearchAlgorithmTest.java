@@ -92,20 +92,16 @@ public class SearchAlgorithmTest {
 	}
 	
 	@Test
-	public void testAutoReachesGoal() {
+	public void testAutoAndStepReachesGoal() {
+		// As auto repeatedly calls step(), passing this test verifies both methods reach the goal
+		
 		//BFS test
 		SearchAlgorithm bfs = new BreadthFirstSearch(tree);
-		bfs.currentNode = bfs.ROOT;
-		assertEquals("Node value did not match expected node value",0,bfs.currentNode.getValue());
-		assertFalse("Incorret node was the goal node",bfs.atGoal());
 		bfs.auto();
 		assertEquals("Node value did not match expected node value",4,bfs.currentNode.getValue());
 		assertTrue("Correct node was not the goal node",bfs.atGoal());
 		//DFS test
 		SearchAlgorithm dfs = new DepthFirstSearch(tree);
-		dfs.currentNode = dfs.ROOT;
-		assertEquals("Node value did not match expected node value",0,dfs.currentNode.getValue());
-		assertFalse("Incorret node was the goal node",dfs.atGoal());
 		dfs.auto();
 		assertEquals("Node value did not match expected node value",4,dfs.currentNode.getValue());
 		assertTrue("Correct node was not the goal node",dfs.atGoal());
