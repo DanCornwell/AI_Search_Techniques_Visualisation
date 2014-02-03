@@ -14,13 +14,13 @@ import org.junit.Test;
 public class SearchAlgorithmTest {
 
 	private Tree tree;
-	
+
 	@Before
 	public void setup() {
 		TreeCreator creator = new Tree124Creator();
 		tree = creator.getTree(4);
 	}
-	
+
 	@Test
 	public void testConstructorAssignsRoot() {
 		//BFS test
@@ -46,7 +46,7 @@ public class SearchAlgorithmTest {
 		dfs.currentNode = new Node(4);
 		assertTrue("Correct node was not the goal node",dfs.atGoal());
 	}
-	
+
 	@Test
 	public void testSetAndGetForGoalReached() {
 		//BFS test
@@ -60,7 +60,7 @@ public class SearchAlgorithmTest {
 		dfs.setGoalReached(true);
 		assertTrue("boolean did not change on setter",dfs.getGoalReached());
 	}
-	
+
 	@Test
 	public void testAlgorithmsStopWhenNoNodesLeft() {
 		TreeCreator creator = new Tree124Creator();
@@ -74,7 +74,7 @@ public class SearchAlgorithmTest {
 		dfs.auto();
 		assertFalse("Current node was goal node",dfs.atGoal());
 	}
-	
+
 	@Test
 	public void testStep() {
 		//BFS test
@@ -90,11 +90,11 @@ public class SearchAlgorithmTest {
 		dfs.step();
 		assertEquals("Node value did not match expected node value",1,dfs.currentNode.getValue());
 	}
-	
+
 	@Test
 	public void testAutoAndStepReachesGoal() {
 		// As auto repeatedly calls step(), passing this test verifies both methods reach the goal
-		
+
 		//BFS test
 		SearchAlgorithm bfs = new BreadthFirstSearch(tree);
 		bfs.auto();
@@ -106,7 +106,7 @@ public class SearchAlgorithmTest {
 		assertEquals("Node value did not match expected node value",4,dfs.currentNode.getValue());
 		assertTrue("Correct node was not the goal node",dfs.atGoal());
 	}
-	
+
 	@Test
 	public void testStepDoesNotGoPassGoal() {
 		//BFS test
@@ -126,7 +126,7 @@ public class SearchAlgorithmTest {
 		assertEquals("Step moved from the goal node",4,dfs.currentNode.getValue());
 		assertTrue("No longer at the goal node",dfs.atGoal());
 	}
-	
+
 	@Test
 	public void testFinalExpandedAndVisitedLists() {
 		//BFS test
@@ -167,5 +167,33 @@ public class SearchAlgorithmTest {
 				assertEquals("List element did not match",dfsExpExpanded[i].getValue(),dfs.getExpanded().get(i).getValue());
 			}
 		}
+	}
+
+	@Test
+	public void testReset() {
+		//BFS test
+		SearchAlgorithm bfs = new BreadthFirstSearch(tree);
+		bfs.auto();
+		assertTrue("Goal node not reached",bfs.atGoal());
+		assertEquals("Goal node value did not match expected node value",4,bfs.currentNode.getValue());
+		assertFalse("Expanded list was empty",bfs.expanded.isEmpty());
+		assertFalse("Visited list was empty",bfs.visited.isEmpty());
+		bfs.reset();
+		assertFalse("Current node did not reset",bfs.atGoal());
+		assertEquals("Root node value did not match expected node value",0,bfs.currentNode.getValue());
+		assertTrue("Expanded list was not empty",bfs.expanded.isEmpty());
+		assertTrue("Visited list was not empty",bfs.visited.isEmpty());
+		//DFS test
+		SearchAlgorithm dfs = new DepthFirstSearch(tree);
+		dfs.auto();
+		assertTrue("Goal node not reached",dfs.atGoal());
+		assertEquals("Goal node value did not match expected node value",4,dfs.currentNode.getValue());
+		assertFalse("Expanded list was empty",dfs.expanded.isEmpty());
+		assertFalse("Visited list was empty",dfs.visited.isEmpty());
+		dfs.reset();
+		assertFalse("Current node did not reset",dfs.atGoal());
+		assertEquals("Root node value did not match expected node value",0,dfs.currentNode.getValue());
+		assertTrue("Expanded list was not empty",dfs.expanded.isEmpty());
+		assertTrue("Visited list was not empty",dfs.visited.isEmpty());
 	}
 }

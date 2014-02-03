@@ -117,6 +117,17 @@ public abstract class SearchAlgorithm {
 	}
 	
 	/**
+	 * Resets the search algorithm.
+	 * Clears the visited and expanded list.
+	 * Sets the current node to the root.
+	 */
+	final void reset() {
+		visited.clear();
+		expanded.clear();
+		currentNode = ROOT;
+	}
+	
+	/**
 	 * Performs the next step of the algorithm.
 	 */
 	abstract void step();
