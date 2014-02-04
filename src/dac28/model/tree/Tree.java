@@ -1,4 +1,6 @@
-package dac28.model;
+package dac28.model.tree;
+
+import dac28.model.node.Node;
 
 /**
  * Abstract class the defines methods for the search trees.
@@ -40,7 +42,7 @@ public abstract class Tree {
 	 * 
 	 * @return - the goal variable
 	 */
-	final int getGoal() {
+	public final int getGoal() {
 		return GOAL;
 	}
 	
@@ -49,7 +51,7 @@ public abstract class Tree {
 	 * 
 	 * @return - the root variable
 	 */
-	final Node getRoot() {
+	public final Node getRoot() {
 		return ROOT;
 	}
 	

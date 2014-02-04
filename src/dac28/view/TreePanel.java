@@ -6,7 +6,7 @@ class TreePanel extends SwingUnitTest {
 
 	public void testTreePanel() {
 		// Use the UISpec4J wrapper class panel to test JPanels
-		Panel panel = new Panel(new TreePanel()); 
+		//Panel panel = new Panel(new TreePanel()); 
 	}
 	
 }

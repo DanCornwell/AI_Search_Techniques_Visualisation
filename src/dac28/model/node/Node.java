@@ -1,4 +1,4 @@
-package dac28.model;
+package dac28.model.node;
 
 import java.util.LinkedList;
 
@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * @author Dan Cornwell
  *
  */
-class Node {
+public class Node {
 
 	/**
 	 * The value of the node.
@@ -26,7 +26,7 @@ class Node {
 	 * 
 	 * @param VALUE - the integer value of the VALUE variable
 	 */
-	Node(int VALUE) {
+	public Node(int VALUE) {
 
 		this.VALUE = VALUE;
 		children = new LinkedList<Node>();
@@ -38,7 +38,7 @@ class Node {
 	 * 
 	 * @return the VALUE variable
 	 */
-	final int getValue() {
+	public final int getValue() {
 		return VALUE;
 	}
 
@@ -47,7 +47,7 @@ class Node {
 	 * 
 	 * @return whether this node has children or not
 	 */
-	final boolean hasChild() {
+	public final boolean hasChild() {
 		return !children.isEmpty();
 	}
 
@@ -56,7 +56,7 @@ class Node {
 	 * 
 	 * @param child - node that will be added
 	 */
-	final void addChild(Node child) {
+	public final void addChild(Node child) {
 		children.add(child);
 	}
 	
@@ -65,7 +65,7 @@ class Node {
 	 * 
 	 * @return list of the child nodes for this node
 	 */
-	final LinkedList<Node> getChildren() {
+	public final LinkedList<Node> getChildren() {
 		return children;
 	}
 

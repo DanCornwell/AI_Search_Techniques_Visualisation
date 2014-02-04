@@ -1,4 +1,5 @@
-package dac28.model;
+package dac28.model.tree;
+
 
 /**
  * Interface for the tree creators.

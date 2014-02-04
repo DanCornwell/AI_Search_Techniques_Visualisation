@@ -1,6 +1,10 @@
-package dac28.model;
+package dac28.model.search_algorithm.concrete_algorithm;
 
 import java.util.LinkedList;
+
+import dac28.model.node.Node;
+import dac28.model.search_algorithm.SearchAlgorithm;
+import dac28.model.tree.Tree;
 
 /**
  * The breadth first search algorithm. 
@@ -9,7 +13,7 @@ import java.util.LinkedList;
  * @author Dan Cornwell
  *
  */
-public class BreadthFirstSearch extends SearchAlgorithm {
+class BreadthFirstSearch extends SearchAlgorithm {
 
 	/**
 	 * Breadth first search algorithm constructor.
@@ -29,7 +33,7 @@ public class BreadthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	void step() {
+	protected void step() {
 		if(getGoalReached() == false && !expanded.isEmpty()) {
 			currentNode = ((LinkedList<Node>)expanded).remove();
 			if(atGoal()) {

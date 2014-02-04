@@ -1,8 +1,9 @@
-package dac28.model;
+package dac28.model.tree;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
 
 /**
  * Tests the tree methods.

@@ -1,4 +1,5 @@
-package dac28.model;
+package dac28.model.tree;
+
 
 /**
  * Creates an instance of the Tree124 class with the given goal value.

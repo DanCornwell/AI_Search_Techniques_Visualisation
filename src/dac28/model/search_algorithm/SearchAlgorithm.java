@@ -1,7 +1,10 @@
-package dac28.model;
+package dac28.model.search_algorithm;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import dac28.model.node.Node;
+import dac28.model.tree.Tree;
 
 /**
  * Defines the interface for the search algorithms.
@@ -49,7 +52,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @param TREE - the tree which the algorithm will traverse on
 	 */
-	SearchAlgorithm(Tree TREE) {
+	protected SearchAlgorithm(Tree TREE) {
 		
 		visited = new LinkedList<Node>();
 		goalReached = false;
@@ -64,7 +67,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return true if the current node is the goal node, false otherwise
 	 */
-	final boolean atGoal() {
+	protected final boolean atGoal() {
 		return currentNode.getValue() == GOAL;
 	}
 	
@@ -73,7 +76,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @param bool - boolean the goal reached is changed to
 	 */
-	final void setGoalReached(boolean bool) {
+	protected final void setGoalReached(boolean bool) {
 		goalReached = bool;
 	}
 	
@@ -82,7 +85,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return goal reached boolean
 	 */
-	final boolean getGoalReached() {
+	protected final boolean getGoalReached() {
 		return goalReached;
 	}
 	
@@ -130,6 +133,6 @@ public abstract class SearchAlgorithm {
 	/**
 	 * Performs the next step of the algorithm.
 	 */
-	abstract void step();
+	protected abstract void step();
 	
 }

@@ -1,4 +1,6 @@
-package dac28.model;
+package dac28.model.search_algorithm;
+
+import dac28.model.tree.Tree;
 
 /**
  * Interface for the search tree creators.

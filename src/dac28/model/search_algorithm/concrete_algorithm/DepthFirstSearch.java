@@ -1,6 +1,10 @@
-package dac28.model;
+package dac28.model.search_algorithm.concrete_algorithm;
 
 import java.util.Stack;
+
+import dac28.model.node.Node;
+import dac28.model.search_algorithm.SearchAlgorithm;
+import dac28.model.tree.Tree;
 
 /**
  * The depth first search algorithm.
@@ -9,7 +13,7 @@ import java.util.Stack;
  * @author Dan Cornwell
  *
  */
-public class DepthFirstSearch extends SearchAlgorithm {
+class DepthFirstSearch extends SearchAlgorithm {
 	
 	/**
 	 * Depth first search algorithm constructor.
@@ -29,7 +33,7 @@ public class DepthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	void step() {
+	protected void step() {
 		if(getGoalReached() == false && !expanded.isEmpty()) {
 			currentNode = ((Stack<Node>) expanded).pop();
 			if(atGoal()) {

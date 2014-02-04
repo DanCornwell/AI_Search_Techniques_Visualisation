@@ -1,8 +1,9 @@
-package dac28.model;
+package dac28.model.node;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
 
 /**
  * Tests the node methods.
