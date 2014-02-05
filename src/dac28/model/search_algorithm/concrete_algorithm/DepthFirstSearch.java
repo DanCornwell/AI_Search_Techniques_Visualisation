@@ -34,7 +34,7 @@ class DepthFirstSearch extends SearchAlgorithm {
 
 	@Override
 	protected void step() {
-		if(getGoalReached() == false && !expanded.isEmpty()) {
+		if(!getGoalReached() && !expanded.isEmpty()) {
 			currentNode = ((Stack<Node>) expanded).pop();
 			if(atGoal()) {
 				setGoalReached(true);

@@ -194,4 +194,5 @@ public class SearchAlgorithmTest {
 		assertTrue("Expanded list was not empty",dfs.expanded.isEmpty());
 		assertTrue("Visited list was not empty",dfs.visited.isEmpty());
 	}
+	
 }

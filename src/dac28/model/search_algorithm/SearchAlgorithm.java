@@ -41,7 +41,7 @@ public abstract class SearchAlgorithm {
 	 * List representing the nodes the algorithm will analyse.
 	 */
 	protected List<Node> expanded;
-		
+					
 	/**
 	 * Constructor for a search algorithm.
 	 * Takes a Tree parameter, which is used to retrieve the goal node
@@ -129,10 +129,10 @@ public abstract class SearchAlgorithm {
 		expanded.clear();
 		currentNode = ROOT;
 	}
-	
+
 	/**
-	 * Performs the next step of the algorithm.
-	 */
+	 * Performs a step of the algorithm
+	 */ 
 	protected abstract void step();
 	
 }
