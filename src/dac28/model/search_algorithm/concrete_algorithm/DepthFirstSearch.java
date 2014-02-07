@@ -35,6 +35,7 @@ class DepthFirstSearch extends SearchAlgorithm {
 	@Override
 	protected void step() {
 		if(!getGoalReached() && !expanded.isEmpty()) {
+			addMemento();
 			currentNode = ((Stack<Node>) expanded).pop();
 			if(atGoal()) {
 				setGoalReached(true);
@@ -43,7 +44,7 @@ class DepthFirstSearch extends SearchAlgorithm {
 				visited.add(currentNode);
 				if(currentNode.hasChild()) {
 					for(int i=currentNode.getChildren().size()-1;i>-1;i--) {
-						((Stack<Node>)expanded).push(currentNode.getChildren().get(i));
+						((Stack<Node>) expanded).push(currentNode.getChildren().get(i));
 					}
 				}
 			}

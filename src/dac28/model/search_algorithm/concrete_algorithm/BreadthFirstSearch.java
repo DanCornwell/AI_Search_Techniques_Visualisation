@@ -35,6 +35,7 @@ class BreadthFirstSearch extends SearchAlgorithm {
 	@Override
 	protected void step() {
 		if(!getGoalReached() && !expanded.isEmpty()) {
+			addMemento();
 			currentNode = ((LinkedList<Node>)expanded).remove();
 			if(atGoal()) {
 				setGoalReached(true);

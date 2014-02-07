@@ -195,4 +195,30 @@ public class SearchAlgorithmTest {
 		assertTrue("Visited list was not empty",dfs.visited.isEmpty());
 	}
 	
+	@Test
+	public void testUndoAndMemento() {
+		//BFS test
+		bfs.step();
+		bfs.step();
+		bfs.undo();
+		assertTrue("Not back at goal node",bfs.currentNode.getValue() == 0);
+		bfs.auto();
+		assertTrue("Goal node was not reached",bfs.atGoal());
+		bfs.undo();
+		assertFalse("Did not undo",bfs.atGoal());
+		bfs.step();
+		assertTrue("Step did not go to goal node",bfs.atGoal());
+		//DFS test
+		dfs.step();
+		dfs.step();
+		dfs.undo();
+		assertTrue("Not back at goal node",dfs.currentNode.getValue() == 0);
+		dfs.auto();
+		assertTrue("Goal node was not reached",dfs.atGoal());
+		dfs.undo();
+		assertFalse("Did not undo",dfs.atGoal());
+		dfs.step();
+		assertTrue("Step did not go to goal node",dfs.atGoal());
+	}
+	
 }

@@ -2,6 +2,7 @@ package dac28.model.search_algorithm;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import dac28.model.node.Node;
 import dac28.model.tree.Tree;
@@ -41,7 +42,11 @@ public abstract class SearchAlgorithm {
 	 * List representing the nodes the algorithm will analyse.
 	 */
 	protected List<Node> expanded;
-					
+	/**
+	 * Holds a stack of mementos.
+	 */
+	private Stack<Memento> mementos;
+
 	/**
 	 * Constructor for a search algorithm.
 	 * Takes a Tree parameter, which is used to retrieve the goal node
@@ -53,15 +58,16 @@ public abstract class SearchAlgorithm {
 	 * @param TREE - the tree which the algorithm will traverse on
 	 */
 	protected SearchAlgorithm(Tree TREE) {
-		
+
 		visited = new LinkedList<Node>();
+		mementos = new Stack<Memento>();
 		goalReached = false;
-		
+
 		GOAL = TREE.getGoal();
 		ROOT = TREE.getRoot();
 
 	}
-	
+
 	/**
 	 * Checks whether the current node is the goal node.
 	 * 
@@ -70,7 +76,7 @@ public abstract class SearchAlgorithm {
 	protected final boolean atGoal() {
 		return currentNode.getValue() == GOAL;
 	}
-	
+
 	/**
 	 * Sets the goal reached boolean.
 	 * 
@@ -79,7 +85,7 @@ public abstract class SearchAlgorithm {
 	protected final void setGoalReached(boolean bool) {
 		goalReached = bool;
 	}
-	
+
 	/**
 	 * Returns the goal reached boolean.
 	 * 
@@ -88,7 +94,7 @@ public abstract class SearchAlgorithm {
 	protected final boolean getGoalReached() {
 		return goalReached;
 	}
-	
+
 	/**
 	 * Returns the visited list.
 	 * 
@@ -97,19 +103,19 @@ public abstract class SearchAlgorithm {
 	final LinkedList<Node> getVisited() {
 		return visited;
 	}
-	
+
 	/**
 	 * Repeatedly calls the step method until the goal node is reached
 	 * or the expanded queue is empty.
 	 */
 	final void auto() {
-		
+
 		while(!goalReached && !expanded.isEmpty()) {
 			step();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns the list of nodes that the algorithm is in course to evaluate.
 	 * 
@@ -118,7 +124,7 @@ public abstract class SearchAlgorithm {
 	final List<Node> getExpanded() {
 		return expanded;
 	}
-	
+
 	/**
 	 * Resets the search algorithm.
 	 * Clears the visited and expanded list.
@@ -128,11 +134,56 @@ public abstract class SearchAlgorithm {
 		visited.clear();
 		expanded.clear();
 		currentNode = ROOT;
+		mementos.clear();
 	}
 
 	/**
-	 * Performs a step of the algorithm
+	 * Undoes a step in the algorithm.
+	 */
+	final void undo() {
+		if(!mementos.isEmpty()) {
+			if(atGoal()) setGoalReached(false);
+			Memento memento = mementos.pop();
+			currentNode = memento.STATE_CURRENT_NODE;
+			expanded.clear();
+			for(int i=0;i<memento.STATE_EXPANDED.size();i++) {
+				expanded.add(memento.STATE_EXPANDED.get(i));
+			}
+			visited = memento.STATE_VISITED;
+		}
+	}
+
+	/**
+	 * Performs a step of the algorithm.
+	 * Adds a memento to the memento stack if we can.
 	 */ 
 	protected abstract void step();
+
+	/**
+	 * Adds a memento to the memento stack.
+	 */
+	protected void addMemento() {
+		mementos.push(new Memento());
+	}
 	
+	class Memento {
+
+		private final Node STATE_CURRENT_NODE;
+		private final List<Node> STATE_EXPANDED;
+		private final LinkedList<Node> STATE_VISITED;
+
+		Memento() {
+
+			STATE_CURRENT_NODE = currentNode;
+			STATE_EXPANDED = new LinkedList<Node>();
+			for(int i=0;i<expanded.size();i++) {
+				STATE_EXPANDED.add(expanded.get(i));
+			}
+			STATE_VISITED = new LinkedList<Node>(visited);
+
+		}
+
+
+	}
+
 }
