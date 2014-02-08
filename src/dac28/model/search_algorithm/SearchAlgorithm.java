@@ -31,10 +31,6 @@ public abstract class SearchAlgorithm {
 	 */
 	private final int GOAL;
 	/**
-	 * Boolean representing whether we have reached the goal node.
-	 */
-	private boolean goalReached;
-	/**
 	 * List representing the nodes the algorithm has traversed.
 	 */
 	protected LinkedList<Node> visited;
@@ -61,10 +57,11 @@ public abstract class SearchAlgorithm {
 
 		visited = new LinkedList<Node>();
 		mementos = new Stack<Memento>();
-		goalReached = false;
 
 		GOAL = TREE.getGoal();
 		ROOT = TREE.getRoot();
+		
+		currentNode = ROOT;
 
 	}
 
@@ -75,24 +72,6 @@ public abstract class SearchAlgorithm {
 	 */
 	protected final boolean atGoal() {
 		return currentNode.getValue() == GOAL;
-	}
-
-	/**
-	 * Sets the goal reached boolean.
-	 * 
-	 * @param bool - boolean the goal reached is changed to
-	 */
-	protected final void setGoalReached(boolean bool) {
-		goalReached = bool;
-	}
-
-	/**
-	 * Returns the goal reached boolean.
-	 * 
-	 * @return goal reached boolean
-	 */
-	protected final boolean getGoalReached() {
-		return goalReached;
 	}
 
 	/**
@@ -110,7 +89,7 @@ public abstract class SearchAlgorithm {
 	 */
 	final void auto() {
 
-		while(!goalReached && !expanded.isEmpty()) {
+		while(!atGoal() && !expanded.isEmpty()) {
 			step();
 		}
 
@@ -142,9 +121,10 @@ public abstract class SearchAlgorithm {
 	 */
 	final void undo() {
 		if(!mementos.isEmpty()) {
-			if(atGoal()) setGoalReached(false);
 			Memento memento = mementos.pop();
 			currentNode = memento.STATE_CURRENT_NODE;
+			// As expanded list is determined by the subclass, clear the expanded list
+			// and add the elements from the state expanded list
 			expanded.clear();
 			for(int i=0;i<memento.STATE_EXPANDED.size();i++) {
 				expanded.add(memento.STATE_EXPANDED.get(i));
@@ -157,28 +137,54 @@ public abstract class SearchAlgorithm {
 	 * Performs a step of the algorithm.
 	 * Adds a memento to the memento stack if we can.
 	 */ 
-	protected abstract void step();
+	final void step() {
+		if(!atGoal() && !expanded.isEmpty()) {
+			mementos.push(new Memento());
+			algorithmLogic();
+		}
 
-	/**
-	 * Adds a memento to the memento stack.
-	 */
-	protected void addMemento() {
-		mementos.push(new Memento());
 	}
 	
-	class Memento {
+	/**
+	 * Defines the logic that the algorithm uses to carry out a step.
+	 */
+	protected abstract void algorithmLogic();
+	
+	/**
+	 * Inner class for a search algorithm memento.
+	 * Stores the current node, visited list and expanded list.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
+	private class Memento {
 
+		/**
+		 * Current node that will be stored.
+		 */
 		private final Node STATE_CURRENT_NODE;
+		/**
+		 * Expanded list that will be stored.
+		 */
 		private final List<Node> STATE_EXPANDED;
+		/**
+		 * Visited list that will be stored.
+		 */
 		private final LinkedList<Node> STATE_VISITED;
 
+		/**
+		 * Builds a memento based on the current search algorithm data.
+		 */
 		Memento() {
 
 			STATE_CURRENT_NODE = currentNode;
+			// As expanded list is determined by the subclass, add all expanded elements into a 
+			// new linked list
 			STATE_EXPANDED = new LinkedList<Node>();
 			for(int i=0;i<expanded.size();i++) {
 				STATE_EXPANDED.add(expanded.get(i));
 			}
+			// Use a copy constructor to get the state visited list
 			STATE_VISITED = new LinkedList<Node>(visited);
 
 		}

@@ -14,7 +14,7 @@ import dac28.model.tree.Tree;
  *
  */
 class DepthFirstSearch extends SearchAlgorithm {
-	
+
 	/**
 	 * Depth first search algorithm constructor.
 	 * Creates the expanded node list and adds the root node to it.
@@ -23,29 +23,28 @@ class DepthFirstSearch extends SearchAlgorithm {
 	 * @param TREE - the tree the algorithm will be using
 	 */
 	DepthFirstSearch(Tree TREE) {
-		
+
 		super(TREE);
 		// Depth first search uses a stack data structure
 		expanded = new Stack<Node>();
 		// Add root to expanded list to allow algorithm to start
 		((Stack<Node>) expanded).push(ROOT);
-		
+
 	}
 
 	@Override
-	protected void step() {
-		if(!getGoalReached() && !expanded.isEmpty()) {
-			addMemento();
-			currentNode = ((Stack<Node>) expanded).pop();
-			if(atGoal()) {
-				setGoalReached(true);
-			}
-			else {
-				visited.add(currentNode);
-				if(currentNode.hasChild()) {
-					for(int i=currentNode.getChildren().size()-1;i>-1;i--) {
-						((Stack<Node>) expanded).push(currentNode.getChildren().get(i));
-					}
+	protected void algorithmLogic() {
+
+		currentNode = ((Stack<Node>) expanded).pop();
+		if(atGoal()) {
+			// Goal reached so stop
+			return;
+		}
+		else {
+			visited.add(currentNode);
+			if(currentNode.hasChild()) {
+				for(int i=currentNode.getChildren().size()-1;i>-1;i--) {
+					((Stack<Node>) expanded).push(currentNode.getChildren().get(i));
 				}
 			}
 		}

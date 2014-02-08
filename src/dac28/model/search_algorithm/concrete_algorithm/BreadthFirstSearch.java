@@ -33,22 +33,22 @@ class BreadthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected void step() {
-		if(!getGoalReached() && !expanded.isEmpty()) {
-			addMemento();
-			currentNode = ((LinkedList<Node>)expanded).remove();
-			if(atGoal()) {
-				setGoalReached(true);
-			}
-			else {
-				visited.add(currentNode);
-				if(currentNode.hasChild()) {
-					for(int i=0;i<currentNode.getChildren().size();i++) {
-						expanded.add(currentNode.getChildren().get(i));
-					}
+	protected void algorithmLogic() {
+
+		currentNode = ((LinkedList<Node>)expanded).remove();
+		if(atGoal()) {
+			// Goal reached so stop
+			return;
+		}
+		else {
+			visited.add(currentNode);
+			if(currentNode.hasChild()) {
+				for(int i=0;i<currentNode.getChildren().size();i++) {
+					expanded.add(currentNode.getChildren().get(i));
 				}
 			}
 		}
 	}
+
 
 }

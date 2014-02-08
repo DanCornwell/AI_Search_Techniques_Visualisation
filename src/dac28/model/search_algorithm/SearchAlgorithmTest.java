@@ -56,18 +56,6 @@ public class SearchAlgorithmTest {
 	}
 
 	@Test
-	public void testSetAndGetForGoalReached() {
-		//BFS test
-		assertFalse("boolean was incorrect upon initialisation",bfs.getGoalReached());
-		bfs.setGoalReached(true);
-		assertTrue("boolean did not change on setter",bfs.getGoalReached());
-		//DFS test
-		assertFalse("boolean was incorrect upon initialisation",dfs.getGoalReached());
-		dfs.setGoalReached(true);
-		assertTrue("boolean did not change on setter",dfs.getGoalReached());
-	}
-
-	@Test
 	public void testAlgorithmsStopWhenNoNodesLeft() {
 		TreeCreator creator = new Tree124Creator();
 		Tree bad_tree = creator.getTree(10);
@@ -202,23 +190,35 @@ public class SearchAlgorithmTest {
 		bfs.step();
 		bfs.undo();
 		assertTrue("Not back at goal node",bfs.currentNode.getValue() == 0);
+		bfs.undo();
+		assertTrue("Undo at root node doesn't do anything",bfs.currentNode.getValue() == 0);
 		bfs.auto();
 		assertTrue("Goal node was not reached",bfs.atGoal());
 		bfs.undo();
 		assertFalse("Did not undo",bfs.atGoal());
 		bfs.step();
 		assertTrue("Step did not go to goal node",bfs.atGoal());
+		for(int i=0;i<10;i++) {
+			bfs.undo();
+		}
+		assertTrue("undo did not go back to root node",bfs.currentNode.getValue()==0);
 		//DFS test
 		dfs.step();
 		dfs.step();
 		dfs.undo();
 		assertTrue("Not back at goal node",dfs.currentNode.getValue() == 0);
+		dfs.undo();
+		assertTrue("Undo at root node doesn't do anything",dfs.currentNode.getValue() == 0);
 		dfs.auto();
 		assertTrue("Goal node was not reached",dfs.atGoal());
 		dfs.undo();
 		assertFalse("Did not undo",dfs.atGoal());
 		dfs.step();
 		assertTrue("Step did not go to goal node",dfs.atGoal());
+		for(int i=0;i<10;i++) {
+			dfs.undo();
+		}
+		assertTrue("undo did not go back to root node",dfs.currentNode.getValue()==0);
 	}
 	
 }
