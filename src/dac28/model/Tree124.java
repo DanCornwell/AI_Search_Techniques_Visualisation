@@ -1,6 +1,5 @@
-package dac28.model.tree;
+package dac28.model;
 
-import dac28.model.node.Node;
 
 /**
  * The Tree124 class. Implements the tree interface.

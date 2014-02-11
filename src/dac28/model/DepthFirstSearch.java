@@ -1,10 +1,7 @@
-package dac28.model.search_algorithm.concrete_algorithm;
+package dac28.model;
 
 import java.util.Stack;
 
-import dac28.model.node.Node;
-import dac28.model.search_algorithm.SearchAlgorithm;
-import dac28.model.tree.Tree;
 
 /**
  * The depth first search algorithm.

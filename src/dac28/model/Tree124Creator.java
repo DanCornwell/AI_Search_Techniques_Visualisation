@@ -1,4 +1,5 @@
-package dac28.model.tree;
+package dac28.model;
+
 
 
 /**

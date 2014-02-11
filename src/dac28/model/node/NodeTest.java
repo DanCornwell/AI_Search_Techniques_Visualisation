@@ -1,9 +1,11 @@
 package dac28.model.node;
 
+
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import dac28.model.Node;
 
 /**
  * Tests the node methods.
@@ -12,7 +14,8 @@ import org.junit.Test;
  *
  */
 public class NodeTest {
-
+	/**
+}
 	@Test
 	public void testConstructorAssignsValueAndNodeGetValue() {
 		Node node = new Node(0);
@@ -41,7 +44,6 @@ public class NodeTest {
 		assertEquals("Node did not equal expected node",one,root.getChildren().get(0));
 		assertEquals("Node did not equal expected node",two,root.getChildren().get(1));
 		assertEquals("Node did not equal expected node",three,two.getChildren().get(0));
-	
 	}
-
+ **/
 }

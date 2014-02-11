@@ -1,4 +1,4 @@
-package dac28.view;
+package dac28.view.test;
 
 import org.uispec4j.Panel;
 

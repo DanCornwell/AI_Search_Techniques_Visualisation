@@ -1,11 +1,9 @@
-package dac28.model.search_algorithm;
+package dac28.model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-
-import dac28.model.node.Node;
-import dac28.model.tree.Tree;
 
 /**
  * Defines the interface for the search algorithms.
@@ -66,11 +64,20 @@ public abstract class SearchAlgorithm {
 	}
 
 	/**
+	 * Returns a copy of the current node.
+	 * 
+	 * @return node representing the current node
+	 */
+	public final Node getCurrentNode() {
+		return new Node(currentNode.getValue());
+	}
+	
+	/**
 	 * Checks whether the current node is the goal node.
 	 * 
 	 * @return true if the current node is the goal node, false otherwise
 	 */
-	protected final boolean atGoal() {
+	public final boolean atGoal() {
 		return currentNode.getValue() == GOAL;
 	}
 
@@ -79,15 +86,15 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return list represented the visited nodes
 	 */
-	final LinkedList<Node> getVisited() {
-		return visited;
+	public final LinkedList<Node> getVisited() {
+		return new LinkedList<Node>(visited);
 	}
 
 	/**
 	 * Repeatedly calls the step method until the goal node is reached
 	 * or the expanded queue is empty.
 	 */
-	final void auto() {
+	public final void auto() {
 
 		while(!atGoal() && !expanded.isEmpty()) {
 			step();
@@ -100,26 +107,27 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @return list representing the nodes ready to be evaluated
 	 */
-	final List<Node> getExpanded() {
-		return expanded;
+	public final List<Node> getExpanded() {
+		return Collections.unmodifiableList(expanded);
 	}
 
 	/**
 	 * Resets the search algorithm.
 	 * Clears the visited and expanded list.
-	 * Sets the current node to the root.
+	 * Sets the current node to the root and adds it to the expanded list.
 	 */
-	final void reset() {
+	public final void reset() {
 		visited.clear();
 		expanded.clear();
 		currentNode = ROOT;
+		expanded.add(currentNode);
 		mementos.clear();
 	}
 
 	/**
 	 * Undoes a step in the algorithm.
 	 */
-	final void undo() {
+	public final void undo() {
 		if(!mementos.isEmpty()) {
 			Memento memento = mementos.pop();
 			currentNode = memento.STATE_CURRENT_NODE;
@@ -137,7 +145,7 @@ public abstract class SearchAlgorithm {
 	 * Performs a step of the algorithm.
 	 * Adds a memento to the memento stack if we can.
 	 */ 
-	final void step() {
+	public final void step() {
 		if(!atGoal() && !expanded.isEmpty()) {
 			mementos.push(new Memento());
 			algorithmLogic();
@@ -185,10 +193,9 @@ public abstract class SearchAlgorithm {
 				STATE_EXPANDED.add(expanded.get(i));
 			}
 			// Use a copy constructor to get the state visited list
-			STATE_VISITED = new LinkedList<Node>(visited);
+			STATE_VISITED = getVisited();
 
 		}
-
 
 	}
 

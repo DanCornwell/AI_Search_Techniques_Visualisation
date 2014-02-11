@@ -12,7 +12,7 @@ import org.junit.Test;
  *
  */
 public class TreeTest {
-
+/**
 	@Test
 	public void testConstructorAssignsGoalValueAndGetRoot() {
 
@@ -57,5 +57,5 @@ public class TreeTest {
 		assertFalse("Leaf node has a child",tree124.getRoot().getChildren().get(1).getChildren().get(1).hasChild());
 		
 	}
-
+**/
 }

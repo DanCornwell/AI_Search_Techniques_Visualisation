@@ -1,6 +1,5 @@
-package dac28.model.tree;
+package dac28.model;
 
-import dac28.model.node.Node;
 
 /**
  * Abstract class the defines methods for the search trees.
@@ -10,8 +9,8 @@ import dac28.model.node.Node;
  * @author Dan Cornwell
  *
  */
-public abstract class Tree {
-	
+abstract class Tree {
+
 	/**
 	 * The goal value.
 	 */
@@ -20,7 +19,7 @@ public abstract class Tree {
 	 * The root node, any tree will always have a root node.
 	 */
 	protected final Node ROOT;
-	
+
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.
@@ -30,13 +29,13 @@ public abstract class Tree {
 	 * @param GOAL - integer to set the goal node
 	 */
 	Tree(int GOAL) {
-		
+
 		this.GOAL = GOAL;
 		ROOT = new Node(0);
 		construct();
-		
+
 	}
-	
+
 	/**
 	 * Returns the goal value.
 	 * 
@@ -45,7 +44,7 @@ public abstract class Tree {
 	public final int getGoal() {
 		return GOAL;
 	}
-	
+
 	/**
 	 * Returns the root node.
 	 * 
@@ -54,7 +53,7 @@ public abstract class Tree {
 	public final Node getRoot() {
 		return ROOT;
 	}
-	
+
 	/**
 	 * Creates nodes and connects them to the root node.
 	 */

@@ -1,4 +1,5 @@
-package dac28.model.tree;
+package dac28.model;
+
 
 
 /**
@@ -7,7 +8,7 @@ package dac28.model.tree;
  * @author Dan Cornwell
  *
  */
-public abstract class TreeCreator {
+abstract class TreeCreator {
 
 	/**
 	 * Factory method for the tree creators. 

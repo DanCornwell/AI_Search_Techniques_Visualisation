@@ -1,6 +1,5 @@
-package dac28.model.search_algorithm;
+package dac28.model;
 
-import dac28.model.tree.Tree;
 
 /**
  * Interface for the search tree creators.
@@ -8,7 +7,7 @@ import dac28.model.tree.Tree;
  * @author Dan Cornwell
  *
  */
-public abstract class SearchAlgorithmCreator {
+abstract class SearchAlgorithmCreator {
 	
 	/**
 	 * Factory method for the search algorithm creators.

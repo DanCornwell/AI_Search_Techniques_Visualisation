@@ -1,8 +1,5 @@
-package dac28.model.search_algorithm.concrete_algorithm;
+package dac28.model;
 
-import dac28.model.search_algorithm.SearchAlgorithm;
-import dac28.model.search_algorithm.SearchAlgorithmCreator;
-import dac28.model.tree.Tree;
 
 
 /**
