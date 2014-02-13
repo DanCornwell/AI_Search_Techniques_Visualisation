@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 class AlgorithmDisplay {
 
 	private JButton step,auto,reset,undo;
+	private JLabel node;
 
 	JPanel initialiseAlgorithm(int WIDTH, int HEIGHT) {
 
@@ -31,10 +32,10 @@ class AlgorithmDisplay {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 
-		JLabel expanded = new JLabel("Expanded");
-		JLabel visited = new JLabel("Visited");
-		JLabel currentNode = new JLabel("Current Node: ");
-		JLabel node = new JLabel("");
+		final JLabel expandedLabel = new JLabel("Expanded");
+		final JLabel visitedLabel = new JLabel("Visited");
+		final JLabel currentNode = new JLabel("Current Node: ");
+		node = new JLabel("");
 		node.setBorder(BorderFactory.createLineBorder(Color.black));
 		node.setPreferredSize(new Dimension(30,30));
 
@@ -48,10 +49,10 @@ class AlgorithmDisplay {
 		reset.addActionListener(bListener);
 		undo = new JButton("Undo");
 		undo.addActionListener(bListener);
-
-		algorithmPanel.add(expanded,gbc);
+		
+		algorithmPanel.add(expandedLabel,gbc);
 		gbc.gridy++;
-		algorithmPanel.add(visited,gbc);
+		algorithmPanel.add(visitedLabel,gbc);
 		gbc.gridy++;
 		algorithmPanel.add(currentNode,gbc);
 		gbc.gridx++;
