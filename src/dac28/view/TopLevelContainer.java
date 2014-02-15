@@ -16,7 +16,7 @@ class TopLevelContainer implements ActionListener {
 
 	private AlgorithmDisplay algorithmDisplay;
 	
-	public TopLevelContainer() {
+	TopLevelContainer() {
 		algorithmDisplay = new AlgorithmDisplay();
 		initialiseBase();
 	}

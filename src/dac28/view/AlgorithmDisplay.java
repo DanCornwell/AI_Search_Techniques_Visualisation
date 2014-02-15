@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class AlgorithmDisplay {
+public class AlgorithmDisplay {
 
 	/**
 	 * JButtons that will be used to control the search algorithm
@@ -56,16 +55,15 @@ class AlgorithmDisplay {
 		expandedList = new LinkedList<ListCell>();
 		visitedList = new LinkedList<ListCell>();
 
-		// Buttons and their listener
-		ButtonListener bListener = this.new ButtonListener();
+		// Buttons
 		step = new JButton("Step");
-		step.addActionListener(bListener);
+		step.setEnabled(false);
 		auto = new JButton("Auto");
-		auto.addActionListener(bListener);
+		auto.setEnabled(false);
 		reset = new JButton("Reset");
-		reset.addActionListener(bListener);
+		reset.setEnabled(false);
 		undo = new JButton("Undo");
-		undo.addActionListener(bListener);
+		undo.setEnabled(false);
 
 		// Create holding panels and add items to them
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
@@ -124,13 +122,22 @@ class AlgorithmDisplay {
 
 	}
 
+	public LinkedList<ListCell> getExpandedList() {
+		return expandedList;
+	}
+	
+	public LinkedList<ListCell> getVisitedList() {
+		return visitedList;
+	}
+	
+	
 	/**
 	 * Sets cell values of a given list of ListCells to be the integers from a given list.
 	 * 
 	 * @param list - the integer values that the cell values will become
 	 * @param targetList - ListCell list whose values will be changed
 	 */
-	void setListLabels(List<Integer> list,LinkedList<ListCell> targetList) {
+	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
 
 		// Adds more ListCells if the list isn't big enough
 		// NOTE: this will not change anything visually
@@ -187,31 +194,54 @@ class AlgorithmDisplay {
 	}
 
 	/**
-	 * A listener used to handle button clicks.
-	 * 
-	 * @author Dan Cornwell
-	 *
+	 * Resets the display
 	 */
-	private class ButtonListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == step) {
-				System.out.println("this is step");
-			}
-			else if(e.getSource() == auto) {
-
-			}
-			else if(e.getSource() == reset) {
-
-			}
-			else if(e.getSource() == undo) {
-
-			}
+	public void reset() {
+		for(ListCell cell: expandedList) {
+			cell.setCellBackground(Color.white);
+			cell.setLabelValue("");
 		}
-
+		for(ListCell cell: visitedList) {
+			cell.setCellBackground(Color.white);
+			cell.setLabelValue("");
+		}
+		node.setText("");
+		atGoal.setText("");
 	}
-
+	
+	/**
+	 * Registers the step button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerStepListener(ActionListener act) {
+		step.addActionListener(act);
+	}
+	/**
+	 * Registers the auto button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerAutoListener(ActionListener act) {
+		auto.addActionListener(act);
+	}
+	/**
+	 * Registers the undo button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerUndoListener(ActionListener act) {
+		undo.addActionListener(act);
+	}
+	/**
+	 * Registers the reset button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerResetListener(ActionListener act) {
+		reset.addActionListener(act);
+	}
+	
 	/**
 	 * Class used to display nodes within a search algorithm expanded and visited lists.
 	 * 
