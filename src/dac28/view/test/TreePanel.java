@@ -1,6 +1,6 @@
 package dac28.view.test;
 
-import org.uispec4j.Panel;
+//import org.uispec4j.Panel;
 
 class TreePanel extends SwingUnitTest {
 

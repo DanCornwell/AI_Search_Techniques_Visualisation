@@ -8,7 +8,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-abstract class TreeCreator {
+interface TreeCreator {
 
 	/**
 	 * Factory method for the tree creators. 
@@ -18,6 +18,6 @@ abstract class TreeCreator {
 	 * @param GOAL - value the corresponds to the goal node
 	 * @return a search tree
 	 */
-	public abstract Tree getTree(int GOAL);
+	public Tree getTree(int GOAL);
 
 }

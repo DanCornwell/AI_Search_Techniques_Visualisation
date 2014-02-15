@@ -7,7 +7,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-public class DepthFirstSearchCreator extends SearchAlgorithmCreator {
+public class DepthFirstSearchCreator implements SearchAlgorithmCreator {
 
 	@Override
 	public SearchAlgorithm getSearchAlgorithm(Tree tree) {

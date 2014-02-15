@@ -7,7 +7,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-abstract class SearchAlgorithmCreator {
+interface SearchAlgorithmCreator {
 	
 	/**
 	 * Factory method for the search algorithm creators.
@@ -16,6 +16,6 @@ abstract class SearchAlgorithmCreator {
 	 * @param tree - search tree the search algorithm will iterate over
 	 * @return a search algorithm
 	 */
-	public abstract SearchAlgorithm getSearchAlgorithm(Tree tree);
+	public SearchAlgorithm getSearchAlgorithm(Tree tree);
 	
 }
