@@ -40,7 +40,6 @@ public class AlgorithmDisplay {
 
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));
-		//	algorithmPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		// Initialise the display components
 		final JLabel expandedLabel = new JLabel("Expanded");
@@ -119,13 +118,58 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(p7);
 
 		return algorithmPanel;
-
 	}
 
+	/**
+	 * Enables or disables the step button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void toggleStep(boolean bool) {
+		step.setEnabled(bool);
+	}
+	
+	/**
+	 * Enables or disables the auto button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void toggleAuto(boolean bool) {
+		auto.setEnabled(bool);
+	}
+	
+	/**
+	 * Enables or disables the undo button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void toggleUndo(boolean bool) {
+		undo.setEnabled(bool);
+	}
+	
+	/**
+	 * Enables or disables the reset button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void toggleReset(boolean bool) {
+		reset.setEnabled(bool);
+	}
+	
+	/**
+	 * Returns the expanded list
+	 * 
+	 * @return a ListCell list
+	 */
 	public LinkedList<ListCell> getExpandedList() {
 		return expandedList;
 	}
 	
+	/**
+	 * Returns the visited list
+	 * 
+	 * @return a ListCell list
+	 */
 	public LinkedList<ListCell> getVisitedList() {
 		return visitedList;
 	}

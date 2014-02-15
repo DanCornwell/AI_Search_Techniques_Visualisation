@@ -7,33 +7,52 @@ import java.util.LinkedList;
 import dac28.model.SearchAlgorithm;
 import dac28.view.AlgorithmDisplay;
 
+/**
+ * Controller for the algorithm display. 
+ * Defines the listeners for algorithm display panels buttons.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class AlgorithmController {
 
+	/**
+	 * The algorithm display panel.
+	 */
 	private AlgorithmDisplay algorithmDisplay;
+	/**
+	 * The search algorithm being used.
+	 */
 	private SearchAlgorithm searchAlgorithm;
 	
 	AlgorithmController(SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 		
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
+		algorithmDisplay.toggleAuto(true);
+		algorithmDisplay.toggleReset(true);
+		algorithmDisplay.toggleStep(true);
 		algorithmDisplay.registerStepListener(new StepListener());
 		algorithmDisplay.registerAutoListener(new AutoListener());
 		algorithmDisplay.registerUndoListener(new UndoListener());
 		algorithmDisplay.registerResetListener(new ResetListener());
 	}
-	
+	 
 	/**
-	 * Listener for the step button.
-	 * Listens to the step button and responds accordingly.
+	 * Defines a listener for the algorithm display panel.
+	 * Calls a button specific method, then gets the expanded and visited lists 
+	 * from the search algorithm and updates the display with them.
 	 * 
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class StepListener implements ActionListener {
-
+	private abstract class DisplayListener implements ActionListener {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			searchAlgorithm.step();
+			
+			buttonLogic();
+			
 			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -43,55 +62,91 @@ public class AlgorithmController {
 			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
-			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());
+			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());	
+			
+			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
+				algorithmDisplay.toggleAuto(false);
+				algorithmDisplay.toggleStep(false);
+			}
+			else {
+				algorithmDisplay.toggleAuto(true);
+				algorithmDisplay.toggleStep(true);
+			}
+			if(searchAlgorithm.canUndo()) {
+				algorithmDisplay.toggleUndo(true);
+			}
+			else {
+				algorithmDisplay.toggleUndo(false);
+			}
+		}
+		
+		/**
+		 * Performs the logic associated with the button being pressed
+		 */
+		protected abstract void buttonLogic();
+		
+	}
+	
+	/**
+	 * Step button listener.
+	 * Calls the search algorithms step method.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
+	private class StepListener extends DisplayListener {
+
+		@Override
+		protected void buttonLogic() {
+			searchAlgorithm.step();
+		}
+		
+	}
+	
+	/**
+	 * Auto button listener.
+	 * Calls the search algorithms auto method.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
+	private class AutoListener extends DisplayListener {
+
+		@Override
+		protected void buttonLogic() {
+			searchAlgorithm.auto();
 		}
 
 	}
 	
 	/**
-	 * Listener for the auto button.
-	 * Listens to the auto button and responds accordingly.
+	 * Undo button listener.
+	 * Calls the search algorithms undo method.
 	 * 
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class AutoListener implements ActionListener {
+	private class UndoListener extends DisplayListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			
+		protected void buttonLogic() {
+			searchAlgorithm.undo();
 		}
 
 	}
 	
 	/**
-	 * Listener for the undo button.
-	 * Listens to the undo button and responds accordingly.
+	 * Reset button listener.
+	 * Calls the search algorithms reset method.
 	 * 
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class UndoListener implements ActionListener {
+	private class ResetListener extends DisplayListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-		}
-
-	}
-	
-	/**
-	 * Listener for the reset button.
-	 * Listens to the reset button and responds accordingly.
-	 * 
-	 * @author Dan Cornwell
-	 *
-	 */
-	private class ResetListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
+		protected void buttonLogic() {
+			searchAlgorithm.reset();
 		}
 
 	}
