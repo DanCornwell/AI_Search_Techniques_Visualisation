@@ -17,16 +17,33 @@ import javax.swing.JPanel;
 
 class AlgorithmDisplay {
 
+	/**
+	 * JButtons that will be used to control the search algorithm
+	 */
 	private JButton step,auto,reset,undo;
+	/**
+	 * Labels representing the current node and whether it is the goal node
+	 */
 	private JLabel node,atGoal;
+	/**
+	 * Lists containing elements that visualise a search algorithms expanded and visited lists
+	 */
 	private LinkedList<ListCell> expandedList, visitedList;
 
+	/**
+	 * Initialises the JPanel displaying algorithm data and returns it.
+	 * 
+	 * @param WIDTH - width of the whole application
+	 * @param HEIGHT - height of the whole application
+	 * @return JPanel containing fields to display a search algorithm's data
+	 */
 	JPanel initialiseAlgorithm(int WIDTH, int HEIGHT) {
 
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));
-	//	algorithmPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		//	algorithmPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
+		// Initialise the display components
 		final JLabel expandedLabel = new JLabel("Expanded");
 		final JLabel visitedLabel = new JLabel("Visited");
 		final JLabel currentNode = new JLabel("Current Node: ");
@@ -49,8 +66,9 @@ class AlgorithmDisplay {
 		reset.addActionListener(bListener);
 		undo = new JButton("Undo");
 		undo.addActionListener(bListener);
-		
+
 		// Create holding panels and add items to them
+		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH/2)-20;
 		final int panelHeight = (HEIGHT-40)/7;
 		// Panel 1 - holds the expanded label
@@ -92,7 +110,7 @@ class AlgorithmDisplay {
 		// Panel 7 - holds the reset button
 		JPanel p7 = getHoldingPanel(panelWidth,panelHeight);
 		p7.add(reset);
-		
+
 		// Add the holding panels to the algorithm panel
 		algorithmPanel.add(p1);
 		algorithmPanel.add(p2);
@@ -105,27 +123,47 @@ class AlgorithmDisplay {
 		return algorithmPanel;
 
 	}
-	
+
+	/**
+	 * Sets cell values of a given list of ListCells to be the integers from a given list.
+	 * 
+	 * @param list - the integer values that the cell values will become
+	 * @param targetList - ListCell list whose values will be changed
+	 */
 	void setListLabels(List<Integer> list,LinkedList<ListCell> targetList) {
 
+		// Adds more ListCells if the list isn't big enough
+		// NOTE: this will not change anything visually
+		if(targetList.size() < list.size()) {
+			while(targetList.size()< list.size()) {
+				ListCell listCell = this.new ListCell();
+				targetList.add(listCell);
+			}
+		}
+
+		// List containing any elements which will be new to the target list
 		LinkedList<String> newElements = new LinkedList<String>();
+		// The values retrieved from the targetList's ListCells, in a string format
 		LinkedList<String> listValues = new LinkedList<String>();
-		
+
 		for(ListCell cell: targetList) {
 			listValues.add(cell.value.getText().toString());
-			System.out.println(cell.value.getText().toString());
 		}
-		
+
+		// If item in integer list is not in the list values list then add it to new elements list
 		for(int k=0;k<list.size();k++) {
 			if(!listValues.contains(list.get(k).toString())) {
 				newElements.add(list.get(k).toString());
 			}
-		}		
+		}
+		// Reset all ListCell values to be blank
 		for(ListCell cell: targetList) {
 			cell.setLabelValue("");
 		}
+		// Sets all the cell values to their new values
 		for(int i=0;i<list.size();i++) {
 			targetList.get(i).setLabelValue(list.get(i).toString());
+			// If a cell value is new to the target list, set background to yellow else white
 			if(newElements.contains(list.get(i).toString())) {
 				targetList.get(i).setCellBackground(Color.yellow);
 			}
@@ -134,13 +172,26 @@ class AlgorithmDisplay {
 			}
 		}
 	}
-	
+
+	/**
+	 * Returns a panel used to hold components.
+	 * 
+	 * @param width - width of the holding panel
+	 * @param height - height of the holding panel
+	 * @return a specified sized JPanel
+	 */
 	private JPanel getHoldingPanel(int width,int height) {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(width,height));
 		return panel;
 	}
 
+	/**
+	 * A listener used to handle button clicks.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class ButtonListener implements ActionListener {
 
 		@Override
@@ -160,17 +211,34 @@ class AlgorithmDisplay {
 		}
 
 	}
-	
+
+	/**
+	 * Class used to display nodes within a search algorithm expanded and visited lists.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class ListCell {
 
+		/**
+		 * Value of the node
+		 */
 		private JLabel value;
+		/**
+		 * Panel the value is contained in
+		 */
 		private JPanel panel;
-		
+
 		ListCell() {
 			value = new JLabel("");
 			panel = new JPanel(new BorderLayout());
 		}
-		
+
+		/**
+		 * Returns a panel with its value.
+		 * 
+		 * @return JPanel with a JLabel in it
+		 */
 		JPanel getListCell() {
 			value.setPreferredSize(new Dimension(10,10));
 			panel.setBackground(Color.white);
@@ -178,17 +246,27 @@ class AlgorithmDisplay {
 			panel.setBorder(BorderFactory.createLineBorder(Color.black));
 			panel.add(value,BorderLayout.EAST);
 			return panel;
-			
+
 		}
-		
+
+		/**
+		 * Sets the ListCell's JLabel
+		 * 
+		 * @param value - new value the JLabel will take
+		 */
 		void setLabelValue(String value) {
 			this.value.setText(value);
 		}
-		
+
+		/**
+		 * Sets the JPanels background colour.
+		 * 
+		 * @param color - colour to set the background to
+		 */
 		void setCellBackground(Color color) {
 			panel.setBackground(color);
 		}
-		
+
 	}
 
 
