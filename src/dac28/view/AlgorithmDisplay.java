@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -27,6 +28,8 @@ public class AlgorithmDisplay {
 	 * Lists containing elements that visualise a search algorithms expanded and visited lists
 	 */
 	private LinkedList<ListCell> expandedList, visitedList;
+
+	private Stack<LinkedList<ListCell>> expandedMementos, visitedMementos;
 
 	/**
 	 * Initialises the JPanel displaying algorithm data and returns it.
@@ -52,6 +55,10 @@ public class AlgorithmDisplay {
 		node.setPreferredSize(new Dimension(30,30));
 		expandedList = new LinkedList<ListCell>();
 		visitedList = new LinkedList<ListCell>();
+
+		// Initialise mementos
+		expandedMementos = new Stack<LinkedList<ListCell>>();
+		visitedMementos = new Stack<LinkedList<ListCell>>();
 
 		// Buttons
 		step = new JButton("Step");
@@ -127,7 +134,7 @@ public class AlgorithmDisplay {
 	public void toggleStep(boolean bool) {
 		step.setEnabled(bool);
 	}
-	
+
 	/**
 	 * Enables or disables the auto button
 	 * 
@@ -136,7 +143,7 @@ public class AlgorithmDisplay {
 	public void toggleAuto(boolean bool) {
 		auto.setEnabled(bool);
 	}
-	
+
 	/**
 	 * Enables or disables the undo button
 	 * 
@@ -145,7 +152,7 @@ public class AlgorithmDisplay {
 	public void toggleUndo(boolean bool) {
 		undo.setEnabled(bool);
 	}
-	
+
 	/**
 	 * Enables or disables the reset button
 	 * 
@@ -154,25 +161,44 @@ public class AlgorithmDisplay {
 	public void toggleReset(boolean bool) {
 		reset.setEnabled(bool);
 	}
-	
+
 	/**
 	 * Returns the expanded list
 	 * 
 	 * @return a ListCell list
 	 */
 	public LinkedList<ListCell> getExpandedList() {
-		return expandedList;
+		return new LinkedList<ListCell>(expandedList);
 	}
-	
+
 	/**
 	 * Returns the visited list
 	 * 
 	 * @return a ListCell list
 	 */
 	public LinkedList<ListCell> getVisitedList() {
-		return visitedList;
+		return new LinkedList<ListCell>(visitedList);
+	}
+
+	/**
+	 * Adds mementos to the appropriate lists
+	 */
+	public void addDisplayListMemento() {
+		expandedMementos.add(new LinkedList<ListCell>(expandedList));
+		visitedMementos.add(new LinkedList<ListCell>(visitedList));
 	}
 	
+	/**
+	 * Sets the expanded and visited list to their most recent 
+	 * memento, assuming they have one
+	 */
+	public void getDisplayListMemento() {
+		if(!visitedMementos.isEmpty() && !expandedMementos.isEmpty()) {
+			expandedList = expandedMementos.pop();
+			visitedList = visitedMementos.pop();
+		}
+	}
+
 	/**
 	 * Sets the current node label 
 	 * 
@@ -181,7 +207,7 @@ public class AlgorithmDisplay {
 	public void setCurrentNodeLabel(String value) {
 		node.setText(value);
 	}
-	
+
 	/**
 	 * Sets the at label based on a boolean value. Yes if true, no if false.
 	 * 
@@ -191,14 +217,14 @@ public class AlgorithmDisplay {
 		if(bool) atGoal.setText("Yes");
 		else atGoal.setText("No");
 	}
-	
+
 	/**
 	 * Sets cell values of a given list of ListCells to be the integers from a given list.
 	 * 
 	 * @param list - the integer values that the cell values will become
 	 * @param targetList - ListCell list whose values will be changed
 	 */
- 	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
+	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
 
 		// Adds more ListCells if the list isn't big enough
 		// NOTE: this will not change anything visually
@@ -233,21 +259,16 @@ public class AlgorithmDisplay {
 			targetList.get(i).setLabelValue(list.get(i).toString());
 			// If a cell value is new to the target list, set background to yellow else white
 			if(newElements.contains(list.get(i).toString())) {
-				targetList.get(i).setCellBackground(Color.yellow);
+				targetList.get(i).panel.setBackground(Color.yellow);
 			}
 			else {
-				targetList.get(i).setCellBackground(Color.white);
+				targetList.get(i).panel.setBackground(Color.white);
 			}
 		}
 		// Set empty to cells to white
-		for(ListCell cell: expandedList) {
+		for(ListCell cell: targetList) {
 			if(cell.value.getText()=="") {
-				cell.setCellBackground(Color.white);
-			}
-		}
-		for(ListCell cell: visitedList) {
-			if(cell.value.getText()=="") {
-				cell.setCellBackground(Color.white);
+				cell.panel.setBackground(Color.white);
 			}
 		}
 	}
@@ -270,17 +291,17 @@ public class AlgorithmDisplay {
 	 */
 	public void reset() {
 		for(ListCell cell: expandedList) {
-			cell.setCellBackground(Color.white);
+			cell.panel.setBackground(Color.white);
 			cell.setLabelValue("");
 		}
 		for(ListCell cell: visitedList) {
-			cell.setCellBackground(Color.white);
+			cell.panel.setBackground(Color.white);
 			cell.setLabelValue("");
 		}
 		node.setText("");
 		atGoal.setText("");
 	}
-	
+
 	/**
 	 * Registers the step button to its action listener
 	 * 
@@ -313,7 +334,7 @@ public class AlgorithmDisplay {
 	public void registerResetListener(ActionListener act) {
 		reset.addActionListener(act);
 	}
-	
+
 	/**
 	 * Class used to display nodes within a search algorithm expanded and visited lists.
 	 * 
@@ -358,15 +379,6 @@ public class AlgorithmDisplay {
 		 */
 		void setLabelValue(String value) {
 			this.value.setText(value);
-		}
-
-		/**
-		 * Sets the JPanels background colour.
-		 * 
-		 * @param color - colour to set the background to
-		 */
-		void setCellBackground(Color color) {
-			panel.setBackground(color);
 		}
 
 	}
