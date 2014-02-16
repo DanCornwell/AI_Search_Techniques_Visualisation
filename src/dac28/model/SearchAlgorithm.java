@@ -127,17 +127,17 @@ public abstract class SearchAlgorithm {
 	/**
 	 * Returns whether we can undo a step.
 	 * 
-	 * @return true if the mementos list is empty, false otherwise
+	 * @return true if the mementos list is not empty, false otherwise
 	 */
 	public final boolean canUndo() {
-		return mementos.isEmpty();
+		return !mementos.isEmpty();
 	}
 	
 	/**
 	 * Undoes a step in the algorithm.
 	 */
 	public final void undo() {
-		if(!canUndo()) {
+		if(canUndo()) {
 			Memento memento = mementos.pop();
 			currentNode = memento.STATE_CURRENT_NODE;
 			// As expanded list is determined by the subclass, clear the expanded list

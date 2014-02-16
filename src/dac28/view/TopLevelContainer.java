@@ -12,6 +12,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import dac28.controller.AlgorithmController;
+import dac28.model.BreadthFirstSearchCreator;
+import dac28.model.Tree124Creator;
+
 class TopLevelContainer implements ActionListener {
 
 	private AlgorithmDisplay algorithmDisplay;
@@ -19,6 +23,8 @@ class TopLevelContainer implements ActionListener {
 	TopLevelContainer() {
 		algorithmDisplay = new AlgorithmDisplay();
 		initialiseBase();
+		
+		new AlgorithmController(new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4)),algorithmDisplay);
 	}
 	
 	/**

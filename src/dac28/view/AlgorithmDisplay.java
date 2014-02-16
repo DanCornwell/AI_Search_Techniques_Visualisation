@@ -1,6 +1,5 @@
 package dac28.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -46,8 +45,8 @@ public class AlgorithmDisplay {
 		final JLabel visitedLabel = new JLabel("Visited");
 		final JLabel currentNode = new JLabel("Current Node: ");
 		final JLabel goalLabel = new JLabel("At Goal? : ");
-		node = new JLabel("");
-		atGoal = new JLabel("");
+		node = new JLabel("",JLabel.CENTER);
+		atGoal = new JLabel("",JLabel.CENTER);
 		atGoal.setPreferredSize(new Dimension(30,30));
 		node.setBorder(BorderFactory.createLineBorder(Color.black));
 		node.setPreferredSize(new Dimension(30,30));
@@ -174,6 +173,24 @@ public class AlgorithmDisplay {
 		return visitedList;
 	}
 	
+	/**
+	 * Sets the current node label 
+	 * 
+	 * @param value - new value of the current node label
+	 */
+	public void setCurrentNodeLabel(String value) {
+		node.setText(value);
+	}
+	
+	/**
+	 * Sets the at label based on a boolean value. Yes if true, no if false.
+	 * 
+	 * @param bool - true or false, depending on whether we are at the goal node
+	 */
+	public void setAtGoalLabel(boolean bool) {
+		if(bool) atGoal.setText("Yes");
+		else atGoal.setText("No");
+	}
 	
 	/**
 	 * Sets cell values of a given list of ListCells to be the integers from a given list.
@@ -181,7 +198,7 @@ public class AlgorithmDisplay {
 	 * @param list - the integer values that the cell values will become
 	 * @param targetList - ListCell list whose values will be changed
 	 */
-	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
+ 	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
 
 		// Adds more ListCells if the list isn't big enough
 		// NOTE: this will not change anything visually
@@ -220,6 +237,17 @@ public class AlgorithmDisplay {
 			}
 			else {
 				targetList.get(i).setCellBackground(Color.white);
+			}
+		}
+		// Set empty to cells to white
+		for(ListCell cell: expandedList) {
+			if(cell.value.getText()=="") {
+				cell.setCellBackground(Color.white);
+			}
+		}
+		for(ListCell cell: visitedList) {
+			if(cell.value.getText()=="") {
+				cell.setCellBackground(Color.white);
 			}
 		}
 	}
@@ -304,8 +332,8 @@ public class AlgorithmDisplay {
 		private JPanel panel;
 
 		ListCell() {
-			value = new JLabel("");
-			panel = new JPanel(new BorderLayout());
+			value = new JLabel("",JLabel.CENTER);
+			panel = new JPanel();
 		}
 
 		/**
@@ -318,7 +346,7 @@ public class AlgorithmDisplay {
 			panel.setBackground(Color.white);
 			panel.setPreferredSize(new Dimension(30,30));
 			panel.setBorder(BorderFactory.createLineBorder(Color.black));
-			panel.add(value,BorderLayout.EAST);
+			panel.add(value);
 			return panel;
 
 		}

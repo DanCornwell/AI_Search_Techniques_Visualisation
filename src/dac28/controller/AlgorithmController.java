@@ -25,10 +25,18 @@ public class AlgorithmController {
 	 */
 	private SearchAlgorithm searchAlgorithm;
 	
-	AlgorithmController(SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
+	public AlgorithmController(SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 		
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
+
+		LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+			expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
+		}
+		algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
+		algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
+		algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
 		algorithmDisplay.toggleAuto(true);
 		algorithmDisplay.toggleReset(true);
 		algorithmDisplay.toggleStep(true);
@@ -63,7 +71,8 @@ public class AlgorithmController {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
 			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());	
-			
+			algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
+			algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
