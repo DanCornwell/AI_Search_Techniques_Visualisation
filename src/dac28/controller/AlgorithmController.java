@@ -24,17 +24,12 @@ public class AlgorithmController {
 	 * The search algorithm being used.
 	 */
 	private SearchAlgorithm searchAlgorithm;
-	
+
 	public AlgorithmController(SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
-		
+
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
 
-		LinkedList<Integer> expandedValues = new LinkedList<Integer>();
-		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-			expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
-		}
-		algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
 		algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
 		algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
 		algorithmDisplay.toggleAuto(true);
@@ -45,7 +40,7 @@ public class AlgorithmController {
 		algorithmDisplay.registerUndoListener(new UndoListener());
 		algorithmDisplay.registerResetListener(new ResetListener());
 	}
-	 
+
 	/**
 	 * Defines a listener for the algorithm display panel.
 	 * Calls a button specific method, then gets the expanded and visited lists 
@@ -55,12 +50,25 @@ public class AlgorithmController {
 	 *
 	 */
 	private abstract class DisplayListener implements ActionListener {
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			buttonLogic();
 			
+			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
+			}
+			algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
+			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
+				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
+			}
+			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());
+			algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
+			algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
+
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
@@ -76,14 +84,14 @@ public class AlgorithmController {
 				algorithmDisplay.toggleUndo(false);
 			}
 		}
-		
+
 		/**
 		 * Performs the logic associated with the button being pressed
 		 */
 		protected abstract void buttonLogic();
-		
+
 	}
-	
+
 	/**
 	 * Step button listener.
 	 * Calls the search algorithms step method.
@@ -94,26 +102,13 @@ public class AlgorithmController {
 	private class StepListener extends DisplayListener {
 
 		@Override
-		protected void buttonLogic() {
-			algorithmDisplay.addDisplayListMemento();
+		protected void buttonLogic() {	
+			algorithmDisplay.addMemento();
 			searchAlgorithm.step();
-
-			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
-			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
-			}
-			algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
-			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
-			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
-				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
-			}
-			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());	
-			algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
-			algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
 		}
-		
+
 	}
-	
+
 	/**
 	 * Auto button listener.
 	 * Calls the search algorithms auto method.
@@ -129,7 +124,7 @@ public class AlgorithmController {
 		}
 
 	}
-	
+
 	/**
 	 * Undo button listener.
 	 * Calls the search algorithms undo method.
@@ -141,12 +136,12 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
+			algorithmDisplay.restoreMemento();
 			searchAlgorithm.undo();
-			algorithmDisplay.getDisplayListMemento();
 		}
 
 	}
-	
+
 	/**
 	 * Reset button listener.
 	 * Calls the search algorithms reset method.
@@ -159,21 +154,8 @@ public class AlgorithmController {
 		@Override
 		protected void buttonLogic() {
 			searchAlgorithm.reset();
-			
-			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
-			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
-			}
-			algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
-			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
-			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
-				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
-			}
-			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());	
-			algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
-			algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
 		}
 
 	}
-	
+
 }
