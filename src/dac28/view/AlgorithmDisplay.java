@@ -19,7 +19,7 @@ public class AlgorithmDisplay {
 	/**
 	 * JButtons that will be used to control the search algorithm
 	 */
-	private JButton step,auto,reset,undo;
+	private JButton step,auto,reset,undo,pause,skip;
 	/**
 	 * Labels representing the current node and whether it is the goal node
 	 */
@@ -44,7 +44,7 @@ public class AlgorithmDisplay {
 
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));
-		
+
 		expandedMementos = new Stack<LinkedList<ListElementMemento>>();
 		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
 
@@ -75,6 +75,10 @@ public class AlgorithmDisplay {
 		reset.setEnabled(false);
 		undo = new JButton("Undo");
 		undo.setEnabled(false);
+		pause = new JButton("Pause");
+		pause.setEnabled(false);
+		skip = new JButton("Skip to End");
+		skip.setEnabled(false);
 
 		// Create holding panels and add items to them
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
@@ -124,8 +128,10 @@ public class AlgorithmDisplay {
 		p6.add(step);
 		p6.add(auto);
 		p6.add(undo);
+		p6.add(pause);
 		// Panel 7 - holds the reset button
 		JPanel p7 = getHoldingPanel(panelWidth,panelHeight);
+		p7.add(skip);
 		p7.add(reset);
 
 		// Add the holding panels to the algorithm panel
@@ -136,7 +142,7 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(p5);
 		algorithmPanel.add(p6);
 		algorithmPanel.add(p7);
-		
+
 		return algorithmPanel;
 	}
 
@@ -174,6 +180,24 @@ public class AlgorithmDisplay {
 	 */
 	public void toggleReset(boolean bool) {
 		reset.setEnabled(bool);
+	}
+
+	/**
+	 * Enables or disables the skip button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void toggleSkip(boolean bool) {
+		skip.setEnabled(bool);
+	}
+
+	/**
+	 * Enables or disables the pause button
+	 * 
+	 * @param bool - true or false
+	 */
+	public void togglePause(boolean bool) {
+		pause.setEnabled(bool);
 	}
 
 	/**
@@ -279,7 +303,23 @@ public class AlgorithmDisplay {
 	public void registerResetListener(ActionListener act) {
 		reset.addActionListener(act);
 	}
-	
+	/**
+	 * Registers the skip button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerSkipListener(ActionListener act) {
+		skip.addActionListener(act);
+	}
+	/**
+	 * Registers the pause button to its action listener
+	 * 
+	 * @param act - ActionListener subclass
+	 */
+	public void registerPauseListener(ActionListener act) {
+		pause.addActionListener(act);
+	}
+
 	/**
 	 * Creates mementos for both lists, and adds them to the appropriate
 	 * memento list.
@@ -298,7 +338,7 @@ public class AlgorithmDisplay {
 		}
 		visitedMementos.push(vMemento);
 	}
-	
+
 	/**
 	 * Restores the most recent memento, assuming one exists
 	 */
@@ -318,45 +358,71 @@ public class AlgorithmDisplay {
 			}
 		}
 	}
-	
-	/**
-	 * Uses a list of integers to set the target list.
-	 * If a value is new to the list (compared with the previous list)
-	 * then set that JLabels background to yellow.
-	 * 
-	 * @param newList - new values to set the target list to
-	 * @param targetList
-	 */
-	public void setDisplayList(List<Integer> newList,LinkedList<JLabel> targetList) {
 
-		LinkedList<String> newElements = new LinkedList<String>();
-		LinkedList<String> listValues = new LinkedList<String>();
-		
-		for(JLabel label: targetList) {
-			listValues.add(label.getText().toString());
+	/**
+	 * Sets the target list's JLabels text to equal the values in 
+	 * the given integers list.
+	 * 
+	 * @param values - the new labels values
+	 * @param targetList - the list of JLabels that we will set
+	 */
+	public void setLabelValues(List<Integer> expandedValues, LinkedList<Integer> visitedValues) {
+
+		// Length check
+		if(expandedValues.size() > expandedList.size() || visitedValues.size() > visitedList.size()) {
+			return;
 		}
+
+		// Reset the list labels
+		resetLabels(expandedList);
+		resetLabels(visitedList);
 		
-		// Find the new elements
-		for(int k=0;k<newList.size();k++) {
-			if(!listValues.contains(newList.get(k).toString())) {
-				newElements.add(newList.get(k).toString());
-			}
-		}		
-		// Reset the list
-		for(JLabel label: targetList) {
-			label.setText("");
-			label.setBackground(Color.white);
-		}
 		// Sets the lists elements to the new values
-		// If it a new element change background to yellow
-		for(int i=0;i<newList.size();i++) {
-			targetList.get(i).setText(newList.get(i).toString());
-			if(newElements.contains(newList.get(i).toString())) {
-				targetList.get(i).setBackground(Color.yellow);
-			}
+		for(int i=0;i<expandedValues.size();i++) {
+			expandedList.get(i).setText(String.valueOf(expandedValues.get(i)));
+		}
+		for(int i=0;i<visitedValues.size();i++) {
+			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
 	}
 	
+	public void setLabelBackgrounds() {
+
+		if(expandedMementos.isEmpty() || visitedMementos.isEmpty()) {
+			return;
+		}
+
+		LinkedList<String> previousExpandedValues = new LinkedList<String>();
+		for(ListElementMemento element: expandedMementos.peek()) {
+			previousExpandedValues.add(element.VALUE);
+		}
+		LinkedList<String> previousVisitedValues = new LinkedList<String>();
+		for(ListElementMemento element: visitedMementos.peek()) {
+			previousVisitedValues.add(element.VALUE);
+		}
+		
+		for(JLabel label: expandedList) {
+			if(!previousExpandedValues.contains(label.getText())) {
+				label.setBackground(Color.yellow);
+			}
+		}
+
+		for(JLabel label: visitedList) {
+			if(!previousVisitedValues.contains(label.getText())) {
+				label.setBackground(Color.yellow);
+			}
+		}
+
+	}
+	
+	public void resetLabels(LinkedList<JLabel> targetList) {
+		
+		for(int i=0;i<targetList.size();i++) {
+			targetList.get(i).setText("");
+			targetList.get(i).setBackground(Color.white);
+		}
+	}
+
 	/**
 	 * Memento class for the list elements.
 	 * Holds a colour instance and a string.
@@ -367,7 +433,7 @@ public class AlgorithmDisplay {
 	 *
 	 */
 	private class ListElementMemento {
-		
+
 		/**
 		 * A colour relating to a JLabel background
 		 */
@@ -376,7 +442,7 @@ public class AlgorithmDisplay {
 		 * A string relating to a JLabel text
 		 */
 		private final String VALUE;
-		
+
 		ListElementMemento(JLabel listElement) {
 			COLOR = listElement.getBackground();
 			VALUE = listElement.getText();

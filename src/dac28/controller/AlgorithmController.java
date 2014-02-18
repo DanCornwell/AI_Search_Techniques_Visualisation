@@ -1,5 +1,6 @@
 package dac28.controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
@@ -34,13 +35,16 @@ public class AlgorithmController {
 
 		initialiseExpandedList();
 
-		algorithmDisplay.toggleAuto(true);
-		algorithmDisplay.toggleReset(true);
-		algorithmDisplay.toggleStep(true);
-		algorithmDisplay.registerStepListener(new StepListener());
-		algorithmDisplay.registerAutoListener(new AutoListener());
-		algorithmDisplay.registerUndoListener(new UndoListener());
-		algorithmDisplay.registerResetListener(new ResetListener());
+		this.algorithmDisplay.toggleAuto(true);
+		this.algorithmDisplay.toggleReset(true);
+		this.algorithmDisplay.toggleStep(true);
+		this.algorithmDisplay.toggleSkip(true);
+		this.algorithmDisplay.registerStepListener(new StepListener());
+		this.algorithmDisplay.registerAutoListener(new AutoListener());
+		this.algorithmDisplay.registerUndoListener(new UndoListener());
+		this.algorithmDisplay.registerResetListener(new ResetListener());
+	//	this.algorithmDisplay.registerPauseListener(new PauseListener());
+		this.algorithmDisplay.registerSkipListener(new SkipListener());
 	}
 
 	/**
@@ -49,12 +53,15 @@ public class AlgorithmController {
 	 * A visited list equivalent is not needed due to that list being empty on start. 
 	 */
 	private void initialiseExpandedList() {
-		LinkedList<Integer> initial = new LinkedList<Integer>();
+		
+		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
+			return;
+		}
+				
 		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-			initial.add(searchAlgorithm.getExpanded().get(i).getValue());
-
-		}		
-		algorithmDisplay.setDisplayList(initial, algorithmDisplay.getExpandedList());
+			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
+			algorithmDisplay.getExpandedList().get(i).setBackground(Color.yellow);
+		}
 	}
 
 	/**
@@ -112,12 +119,12 @@ public class AlgorithmController {
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
 			}
-			algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
 			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
 			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
-			algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());
+			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+			algorithmDisplay.setLabelBackgrounds();
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
 
@@ -156,17 +163,19 @@ public class AlgorithmController {
 
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
+								algorithmDisplay.addMemento();
 								searchAlgorithm.step();
 								LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 								for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 									expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
 								}
-								algorithmDisplay.setDisplayList(expandedValues, algorithmDisplay.getExpandedList());
 								LinkedList<Integer> visitedValues = new LinkedList<Integer>();
 								for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 									visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 								}
-								algorithmDisplay.setDisplayList(visitedValues, algorithmDisplay.getVisitedList());
+
+								algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+								algorithmDisplay.setLabelBackgrounds();
 								algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
 
 							}
@@ -226,6 +235,26 @@ public class AlgorithmController {
 			initialiseExpandedList();
 		}
 
+	}
+	
+	private class SkipListener extends DisplayListener {
+
+		@Override
+		protected void buttonLogic() {
+			searchAlgorithm.auto();
+			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
+			}
+			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
+				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
+			}
+			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
+			
+		}
+		
 	}
 
 }
