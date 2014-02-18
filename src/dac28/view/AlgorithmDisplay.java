@@ -28,7 +28,9 @@ public class AlgorithmDisplay {
 	 * Lists containing elements that visualise a search algorithms expanded and visited lists
 	 */
 	private LinkedList<JLabel> expandedList, visitedList;
-	
+	/**
+	 * Stack to hold the list mementos
+	 */
 	private Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
 
 	/**
@@ -240,7 +242,9 @@ public class AlgorithmDisplay {
 			label.setText("");
 		}
 		node.setText("");
+		node.setBackground(Color.white);
 		atGoal.setText("");
+		atGoal.setBackground(Color.white);
 	}
 
 	/**

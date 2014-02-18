@@ -153,7 +153,7 @@ public abstract class SearchAlgorithm {
 	/**
 	 * Returns whether we have nodes left to expanded
 	 * 
-	 * @return true if expanded list, false otherwise
+	 * @return true if expanded list is empty, false otherwise
 	 */
 	public final boolean nodesUnexplored() {
 		return expanded.isEmpty();
