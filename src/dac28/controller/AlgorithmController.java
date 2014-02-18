@@ -29,9 +29,14 @@ public class AlgorithmController {
 
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
+		
+		LinkedList<Integer> initial = new LinkedList<Integer>();
+		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+			initial.add(searchAlgorithm.getExpanded().get(i).getValue());
 
-		algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
-		algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
+		}		
+		algorithmDisplay.setDisplayList(initial, algorithmDisplay.getExpandedList());
+		algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		algorithmDisplay.toggleAuto(true);
 		algorithmDisplay.toggleReset(true);
 		algorithmDisplay.toggleStep(true);
@@ -55,10 +60,9 @@ public class AlgorithmController {
 		public void actionPerformed(ActionEvent e) {
 
 			buttonLogic();
+	
+			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 			
-			algorithmDisplay.setCurrentNodeLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()));
-			algorithmDisplay.setAtGoalLabel(searchAlgorithm.atGoal());
-
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);

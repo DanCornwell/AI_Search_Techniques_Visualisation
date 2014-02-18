@@ -27,9 +27,9 @@ public class AlgorithmDisplay {
 	/**
 	 * Lists containing elements that visualise a search algorithms expanded and visited lists
 	 */
-	private LinkedList<ListCell> expandedList, visitedList;
+	private LinkedList<JLabel> expandedList, visitedList;
 	
-	private Stack<LinkedList<ListCellMemento>> expandedMementos, visitedMementos;
+	private Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
 
 	/**
 	 * Initialises the JPanel displaying algorithm data and returns it.
@@ -43,8 +43,8 @@ public class AlgorithmDisplay {
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));
 		
-		expandedMementos = new Stack<LinkedList<ListCellMemento>>();
-		visitedMementos = new Stack<LinkedList<ListCellMemento>>();
+		expandedMementos = new Stack<LinkedList<ListElementMemento>>();
+		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
 
 		// Initialise the display components
 		final JLabel expandedLabel = new JLabel("Expanded");
@@ -52,12 +52,17 @@ public class AlgorithmDisplay {
 		final JLabel currentNode = new JLabel("Current Node: ");
 		final JLabel goalLabel = new JLabel("At Goal? : ");
 		node = new JLabel("",JLabel.CENTER);
-		atGoal = new JLabel("",JLabel.CENTER);
-		atGoal.setPreferredSize(new Dimension(30,30));
+		node.setOpaque(true);
+		node.setBackground(Color.white);
 		node.setBorder(BorderFactory.createLineBorder(Color.black));
 		node.setPreferredSize(new Dimension(30,30));
-		expandedList = new LinkedList<ListCell>();
-		visitedList = new LinkedList<ListCell>();
+		atGoal = new JLabel("",JLabel.CENTER);
+		atGoal.setOpaque(true);
+		atGoal.setBackground(Color.white);
+		atGoal.setBorder(BorderFactory.createLineBorder(Color.black));
+		atGoal.setPreferredSize(new Dimension(30,30));
+		expandedList = new LinkedList<JLabel>();
+		visitedList = new LinkedList<JLabel>();
 
 		// Buttons
 		step = new JButton("Step");
@@ -81,9 +86,13 @@ public class AlgorithmDisplay {
 		JPanel p2 = getHoldingPanel(panelWidth,panelHeight);
 		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
-			ListCell listCell = this.new ListCell();
-			expandedList.add(listCell);
-			p2.add(listCell.getListCell());
+			JLabel label = new JLabel("",JLabel.CENTER);
+			label.setOpaque(true);
+			label.setPreferredSize(new Dimension(30,30));
+			label.setBorder(BorderFactory.createLineBorder(Color.black));
+			label.setBackground(Color.white);
+			expandedList.add(label);
+			p2.add(label);
 		}
 		// Panel 3 - holds the visited label
 		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-20);
@@ -93,9 +102,13 @@ public class AlgorithmDisplay {
 		JPanel p4 = getHoldingPanel(panelWidth,panelHeight);
 		p4.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
-			ListCell listCell = this.new ListCell();
-			visitedList.add(listCell);
-			p4.add(listCell.getListCell());
+			JLabel label = new JLabel("",JLabel.CENTER);
+			label.setOpaque(true);
+			label.setPreferredSize(new Dimension(30,30));
+			label.setBorder(BorderFactory.createLineBorder(Color.black));
+			label.setBackground(Color.white);		
+			visitedList.add(label);
+			p4.add(label);
 		}
 		// Panel 5 - holds the current node labels and at goal labels
 		JPanel p5 = getHoldingPanel(panelWidth,panelHeight);
@@ -164,38 +177,41 @@ public class AlgorithmDisplay {
 	/**
 	 * Returns the expanded list
 	 * 
-	 * @return a ListCell list
+	 * @return a list of JLabels
 	 */
-	public LinkedList<ListCell> getExpandedList() {
-		return new LinkedList<ListCell>(expandedList);
+	public LinkedList<JLabel> getExpandedList() {
+		return new LinkedList<JLabel>(expandedList);
 	}
 
 	/**
 	 * Returns the visited list
 	 * 
-	 * @return a ListCell list
+	 * @return a list of JLabels
 	 */
-	public LinkedList<ListCell> getVisitedList() {
-		return new LinkedList<ListCell>(visitedList);
+	public LinkedList<JLabel> getVisitedList() {
+		return new LinkedList<JLabel>(visitedList);
 	}
 
 	/**
-	 * Sets the current node label 
+	 * Sets the current node and at goal labels.
+	 * Changes the background colour if we are at the goal.
 	 * 
 	 * @param value - new value of the current node label
-	 */
-	public void setCurrentNodeLabel(String value) {
-		node.setText(value);
-	}
-
-	/**
-	 * Sets the at label based on a boolean value. Yes if true, no if false.
-	 * 
 	 * @param bool - true or false, depending on whether we are at the goal node
+
 	 */
-	public void setAtGoalLabel(boolean bool) {
-		if(bool) atGoal.setText("Yes");
-		else atGoal.setText("No");
+	public void setNodeAndGoalLabel(String value,boolean bool) {
+		node.setText(value);
+		if(bool) {
+			atGoal.setText("Yes");
+			atGoal.setBackground(Color.yellow);
+			node.setBackground(Color.yellow);
+		}
+		else {
+			atGoal.setText("No");
+			atGoal.setBackground(Color.white);
+			node.setBackground(Color.white);
+		}
 	}
 
 	/**
@@ -215,13 +231,13 @@ public class AlgorithmDisplay {
 	 * Resets the display
 	 */
 	public void reset() {
-		for(ListCell cell: expandedList) {
-			cell.panel.setBackground(Color.white);
-			cell.value.setText("");
+		for(JLabel label: expandedList) {
+			label.setBackground(Color.white);
+			label.setText("");
 		}
-		for(ListCell cell: visitedList) {
-			cell.panel.setBackground(Color.white);
-			cell.value.setText("");
+		for(JLabel label: visitedList) {
+			label.setBackground(Color.white);
+			label.setText("");
 		}
 		node.setText("");
 		atGoal.setText("");
@@ -260,109 +276,106 @@ public class AlgorithmDisplay {
 		reset.addActionListener(act);
 	}
 	
+	/**
+	 * Creates mementos for both lists, and adds them to the appropriate
+	 * memento list.
+	 */
 	public void addMemento() {
-		LinkedList<ListCellMemento> eMemento = new LinkedList<ListCellMemento>();
-		for(ListCell cell: expandedList) {
-			eMemento.add(new ListCellMemento(cell));
+		// Expanded list memento
+		LinkedList<ListElementMemento> eMemento = new LinkedList<ListElementMemento>();
+		for(JLabel label: expandedList) {
+			eMemento.add(new ListElementMemento(label));
 		}
 		expandedMementos.push(eMemento);
-		LinkedList<ListCellMemento> vMemento = new LinkedList<ListCellMemento>();
-		for(ListCell cell: visitedList) {
-			vMemento.add(new ListCellMemento(cell));
+		// Visited list memento
+		LinkedList<ListElementMemento> vMemento = new LinkedList<ListElementMemento>();
+		for(JLabel label: visitedList) {
+			vMemento.add(new ListElementMemento(label));
 		}
 		visitedMementos.push(vMemento);
 	}
 	
+	/**
+	 * Restores the most recent memento, assuming one exists
+	 */
 	public void restoreMemento() {
 		if(!expandedMementos.isEmpty() && !visitedMementos.isEmpty()) {
-			LinkedList<ListCellMemento> eMemento = expandedMementos.pop();
+			// Restore expanded list to its most recent memento
+			LinkedList<ListElementMemento> eMemento = expandedMementos.pop();
 			for(int i=0;i<expandedList.size();i++) {
-				expandedList.get(i).panel.setBackground(eMemento.get(i).COLOR);
-				expandedList.get(i).value.setText(eMemento.get(i).VALUE);
+				expandedList.get(i).setBackground(eMemento.get(i).COLOR);
+				expandedList.get(i).setText(eMemento.get(i).VALUE);
 			}
-			LinkedList<ListCellMemento> vMemento = visitedMementos.pop();
+			// Restore visited list to its most recent memento
+			LinkedList<ListElementMemento> vMemento = visitedMementos.pop();
 			for(int i=0;i<visitedList.size();i++) {
-				visitedList.get(i).panel.setBackground(vMemento.get(i).COLOR);
-				visitedList.get(i).value.setText(vMemento.get(i).VALUE);
+				visitedList.get(i).setBackground(vMemento.get(i).COLOR);
+				visitedList.get(i).setText(vMemento.get(i).VALUE);
 			}
 		}
 	}
 	
-	public void setDisplayList(List<Integer> list,LinkedList<ListCell> targetList) {
+	/**
+	 * Uses a list of integers to set the target list.
+	 * If a value is new to the list (compared with the previous list)
+	 * then set that JLabels background to yellow.
+	 * 
+	 * @param newList - new values to set the target list to
+	 * @param targetList
+	 */
+	public void setDisplayList(List<Integer> newList,LinkedList<JLabel> targetList) {
 
 		LinkedList<String> newElements = new LinkedList<String>();
 		LinkedList<String> listValues = new LinkedList<String>();
 		
-		for(ListCell cell: targetList) {
-			listValues.add(cell.value.getText().toString());
+		for(JLabel label: targetList) {
+			listValues.add(label.getText().toString());
 		}
 		
-		for(int k=0;k<list.size();k++) {
-			if(!listValues.contains(list.get(k).toString())) {
-				newElements.add(list.get(k).toString());
+		// Find the new elements
+		for(int k=0;k<newList.size();k++) {
+			if(!listValues.contains(newList.get(k).toString())) {
+				newElements.add(newList.get(k).toString());
 			}
 		}		
-		for(ListCell cell: targetList) {
-			cell.value.setText("");
-			cell.panel.setBackground(Color.white);
+		// Reset the list
+		for(JLabel label: targetList) {
+			label.setText("");
+			label.setBackground(Color.white);
 		}
-		for(int i=0;i<list.size();i++) {
-			targetList.get(i).value.setText(list.get(i).toString());
-			if(newElements.contains(list.get(i).toString())) {
-				targetList.get(i).panel.setBackground(Color.yellow);
+		// Sets the lists elements to the new values
+		// If it a new element change background to yellow
+		for(int i=0;i<newList.size();i++) {
+			targetList.get(i).setText(newList.get(i).toString());
+			if(newElements.contains(newList.get(i).toString())) {
+				targetList.get(i).setBackground(Color.yellow);
 			}
 		}
 	}
-
 	
 	/**
-	 * Class used to display nodes within a search algorithm expanded and visited lists.
+	 * Memento class for the list elements.
+	 * Holds a colour instance and a string.
+	 * When restoring a memento the JLabel's background
+	 * becomes COLOR and its text becomes VALUE.
 	 * 
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class ListCell {
-
-		/**
-		 * Value of the node
-		 */
-		private JLabel value;
-		/**
-		 * Panel the value is contained in
-		 */
-		private JPanel panel;
-
-		ListCell() {
-			value = new JLabel("",JLabel.CENTER);
-			panel = new JPanel();
-		}
-
-		/**
-		 * Returns a panel with its value.
-		 * 
-		 * @return JPanel with a JLabel in it
-		 */
-		JPanel getListCell() {
-			value.setPreferredSize(new Dimension(10,10));
-			panel.setBackground(Color.white);
-			panel.setPreferredSize(new Dimension(30,30));
-			panel.setBorder(BorderFactory.createLineBorder(Color.black));
-			panel.add(value);
-			
-			return panel;
-
-		}
-
-	}
-	
-	private class ListCellMemento {
+	private class ListElementMemento {
 		
+		/**
+		 * A colour relating to a JLabel background
+		 */
 		private final Color COLOR;
+		/**
+		 * A string relating to a JLabel text
+		 */
 		private final String VALUE;
 		
-		ListCellMemento(ListCell listCell) {
-			COLOR = listCell.panel.getBackground();
-			VALUE = listCell.value.getText();
+		ListElementMemento(JLabel listElement) {
+			COLOR = listElement.getBackground();
+			VALUE = listElement.getText();
 		}
 	}
 
