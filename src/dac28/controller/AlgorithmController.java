@@ -71,7 +71,7 @@ public class AlgorithmController {
 		public void actionPerformed(ActionEvent e) {
 
 			buttonLogic();
-
+			
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
@@ -133,6 +133,11 @@ public class AlgorithmController {
 	private class AutoListener extends DisplayListener {
 
 		@Override
+		public void actionPerformed(ActionEvent e) {
+			buttonLogic();
+		}
+		
+		@Override
 		protected void buttonLogic() {
 			new Thread(){
 
@@ -146,8 +151,7 @@ public class AlgorithmController {
 						try {
 							sleep(1000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							return;
 						}
 
 						SwingUtilities.invokeLater(new Runnable() {
@@ -168,7 +172,21 @@ public class AlgorithmController {
 							}
 						});
 					}
-					interrupt();
+					if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
+						algorithmDisplay.toggleAuto(false);
+						algorithmDisplay.toggleStep(false);
+					}
+					else {
+						algorithmDisplay.toggleAuto(true);
+						algorithmDisplay.toggleStep(true);
+					}
+					if(searchAlgorithm.canUndo()) {
+						algorithmDisplay.toggleUndo(true);
+					}
+					else {
+						algorithmDisplay.toggleUndo(false);
+					}
+					algorithmDisplay.toggleReset(true);
 				}
 			}.start();	
 		}
