@@ -257,14 +257,7 @@ public class AlgorithmDisplay {
 	 * Resets the display
 	 */
 	public void reset() {
-		for(JLabel label: expandedList) {
-			label.setBackground(Color.white);
-			label.setText("");
-		}
-		for(JLabel label: visitedList) {
-			label.setBackground(Color.white);
-			label.setText("");
-		}
+		resetLabels();
 		node.setText("");
 		node.setBackground(Color.white);
 		atGoal.setText("");
@@ -360,11 +353,10 @@ public class AlgorithmDisplay {
 	}
 
 	/**
-	 * Sets the target list's JLabels text to equal the values in 
-	 * the given integers list.
+	 * Updates the two lists values with two given lists of integers.
 	 * 
-	 * @param values - the new labels values
-	 * @param targetList - the list of JLabels that we will set
+	 * @param expandedValues - new values for the expanded list
+	 * @param visitedValues - new values for the visited list
 	 */
 	public void setLabelValues(List<Integer> expandedValues, LinkedList<Integer> visitedValues) {
 
@@ -374,8 +366,7 @@ public class AlgorithmDisplay {
 		}
 
 		// Reset the list labels
-		resetLabels(expandedList);
-		resetLabels(visitedList);
+		resetLabels();
 		
 		// Sets the lists elements to the new values
 		for(int i=0;i<expandedValues.size();i++) {
@@ -386,12 +377,18 @@ public class AlgorithmDisplay {
 		}
 	}
 	
+	/**
+	 * Sets the label backgrounds of the lists. If an element is new to the list,
+	 * (by comparing with a memento) then set background to yellow.
+	 */
 	public void setLabelBackgrounds() {
 
+		// Memento not empty check
 		if(expandedMementos.isEmpty() || visitedMementos.isEmpty()) {
 			return;
 		}
 
+		// Create list of integers from the mementos
 		LinkedList<String> previousExpandedValues = new LinkedList<String>();
 		for(ListElementMemento element: expandedMementos.peek()) {
 			previousExpandedValues.add(element.VALUE);
@@ -401,12 +398,14 @@ public class AlgorithmDisplay {
 			previousVisitedValues.add(element.VALUE);
 		}
 		
+		// Check the the label values against the memento values
+		// If the label values is contained within the memento values
+		// Set background to yellow
 		for(JLabel label: expandedList) {
 			if(!previousExpandedValues.contains(label.getText())) {
 				label.setBackground(Color.yellow);
 			}
 		}
-
 		for(JLabel label: visitedList) {
 			if(!previousVisitedValues.contains(label.getText())) {
 				label.setBackground(Color.yellow);
@@ -415,11 +414,18 @@ public class AlgorithmDisplay {
 
 	}
 	
-	public void resetLabels(LinkedList<JLabel> targetList) {
+	/**
+	 * Resets the list labels
+	*/
+	public void resetLabels() {
 		
-		for(int i=0;i<targetList.size();i++) {
-			targetList.get(i).setText("");
-			targetList.get(i).setBackground(Color.white);
+		for(int i=0;i<expandedList.size();i++) {
+			expandedList.get(i).setText("");
+			expandedList.get(i).setBackground(Color.white);
+		}
+		for(int i=0;i<visitedList.size();i++) {
+			visitedList.get(i).setText("");
+			visitedList.get(i).setBackground(Color.white);
 		}
 	}
 

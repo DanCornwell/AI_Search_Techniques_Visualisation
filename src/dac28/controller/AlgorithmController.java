@@ -43,9 +43,9 @@ public class AlgorithmController {
 		this.algorithmDisplay.registerAutoListener(new AutoListener());
 		this.algorithmDisplay.registerUndoListener(new UndoListener());
 		this.algorithmDisplay.registerResetListener(new ResetListener());
-	//	this.algorithmDisplay.registerPauseListener(new PauseListener());
+		this.algorithmDisplay.registerPauseListener(new PauseListener());
 		this.algorithmDisplay.registerSkipListener(new SkipListener());
-	}
+	} 
 
 	/**
 	 * Initialise the expanded list with its values.
@@ -53,11 +53,11 @@ public class AlgorithmController {
 	 * A visited list equivalent is not needed due to that list being empty on start. 
 	 */
 	private void initialiseExpandedList() {
-		
+
 		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
 			return;
 		}
-				
+
 		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
 			algorithmDisplay.getExpandedList().get(i).setBackground(Color.yellow);
@@ -78,14 +78,16 @@ public class AlgorithmController {
 		public void actionPerformed(ActionEvent e) {
 
 			buttonLogic();
-			
+
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
+				algorithmDisplay.toggleSkip(false);
 			}
 			else {
 				algorithmDisplay.toggleAuto(true);
 				algorithmDisplay.toggleStep(true);
+				algorithmDisplay.toggleSkip(true);
 			}
 			if(searchAlgorithm.canUndo()) {
 				algorithmDisplay.toggleUndo(true);
@@ -143,17 +145,21 @@ public class AlgorithmController {
 		public void actionPerformed(ActionEvent e) {
 			buttonLogic();
 		}
-		
+
 		@Override
 		protected void buttonLogic() {
+
 			new Thread(){
 
 				public void run() {
-					while(!searchAlgorithm.atGoal()) {
+
+					while(!searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) {
 
 						algorithmDisplay.toggleAuto(false);
 						algorithmDisplay.toggleStep(false);
 						algorithmDisplay.toggleReset(false);
+						algorithmDisplay.toggleSkip(false);
+						algorithmDisplay.togglePause(true);
 
 						try {
 							sleep(1000);
@@ -181,13 +187,18 @@ public class AlgorithmController {
 							}
 						});
 					}
+
+					algorithmDisplay.togglePause(false);
+
 					if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 						algorithmDisplay.toggleAuto(false);
 						algorithmDisplay.toggleStep(false);
+						algorithmDisplay.toggleSkip(false);
 					}
 					else {
 						algorithmDisplay.toggleAuto(true);
 						algorithmDisplay.toggleStep(true);
+						algorithmDisplay.toggleSkip(true);
 					}
 					if(searchAlgorithm.canUndo()) {
 						algorithmDisplay.toggleUndo(true);
@@ -197,8 +208,18 @@ public class AlgorithmController {
 					}
 					algorithmDisplay.toggleReset(true);
 				}
+
 			}.start();	
 		}
+	}
+
+	private class PauseListener extends DisplayListener {
+
+		@Override
+		protected void buttonLogic() {
+		
+		}
+
 	}
 
 	/**
@@ -236,7 +257,7 @@ public class AlgorithmController {
 		}
 
 	}
-	
+
 	private class SkipListener extends DisplayListener {
 
 		@Override
@@ -252,9 +273,9 @@ public class AlgorithmController {
 			}
 			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
-			
+
 		}
-		
+
 	}
 
 }
