@@ -40,11 +40,13 @@ public class AlgorithmController {
 		this.algorithmDisplay.toggleStep(true);
 		this.algorithmDisplay.toggleSkip(true);
 		this.algorithmDisplay.registerStepListener(new StepListener());
-		this.algorithmDisplay.registerAutoListener(new AutoListener());
 		this.algorithmDisplay.registerUndoListener(new UndoListener());
 		this.algorithmDisplay.registerResetListener(new ResetListener());
-		this.algorithmDisplay.registerPauseListener(new PauseListener());
 		this.algorithmDisplay.registerSkipListener(new SkipListener());
+		
+		AutoListener auto = new AutoListener();
+		this.algorithmDisplay.registerAutoListener(auto);
+		this.algorithmDisplay.registerPauseListener(new PauseListener(auto));
 	} 
 
 	/**
@@ -73,7 +75,7 @@ public class AlgorithmController {
 	 *
 	 */
 	private abstract class DisplayListener implements ActionListener {
-
+				
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -141,83 +143,50 @@ public class AlgorithmController {
 	 */
 	private class AutoListener extends DisplayListener {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			buttonLogic();
-		}
-
+		AutoThread thread = null;
+		
 		@Override
 		protected void buttonLogic() {
-
-			new Thread(){
-
-				public void run() {
-
-					while(!searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) {
-
-						algorithmDisplay.toggleAuto(false);
-						algorithmDisplay.toggleStep(false);
-						algorithmDisplay.toggleReset(false);
-						algorithmDisplay.toggleSkip(false);
-						algorithmDisplay.togglePause(true);
-
-						try {
-							sleep(1000);
-						} catch (InterruptedException e) {
-							return;
-						}
-
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								algorithmDisplay.addMemento();
-								searchAlgorithm.step();
-								LinkedList<Integer> expandedValues = new LinkedList<Integer>();
-								for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-									expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
-								}
-								LinkedList<Integer> visitedValues = new LinkedList<Integer>();
-								for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
-									visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
-								}
-
-								algorithmDisplay.setLabelValues(expandedValues, visitedValues);
-								algorithmDisplay.setLabelBackgrounds();
-								algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
-
-							}
-						});
-					}
-
-					algorithmDisplay.togglePause(false);
-
-					if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
-						algorithmDisplay.toggleAuto(false);
-						algorithmDisplay.toggleStep(false);
-						algorithmDisplay.toggleSkip(false);
-					}
-					else {
-						algorithmDisplay.toggleAuto(true);
-						algorithmDisplay.toggleStep(true);
-						algorithmDisplay.toggleSkip(true);
-					}
-					if(searchAlgorithm.canUndo()) {
-						algorithmDisplay.toggleUndo(true);
-					}
-					else {
-						algorithmDisplay.toggleUndo(false);
-					}
-					algorithmDisplay.toggleReset(true);
-				}
-
-			}.start();	
+			thread = new AutoThread();
+			thread.start();
 		}
+
+		
 	}
 
+	/**
+	 * Pause button listener.
+	 * Takes an AutoListener which it uses to get the current thread running.
+	 * Provides way to pause this thread.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class PauseListener extends DisplayListener {
 
+		/**
+		 * The AutoListener starting the thread
+		 */
+		AutoListener auto = null;
+		
+		PauseListener(AutoListener auto) {
+			this.auto = auto;
+		}
+		
+		/**
+		 * Returns the current active thread
+		 * 
+		 * @return an instance of AutoThread, a subclass of Thread
+		 */
+		private AutoThread getThread() {
+			return auto.thread;
+		}
+		
 		@Override
 		protected void buttonLogic() {
-		
+			
+			AutoThread thread = getThread();
+			if(thread!=null)thread.stopAuto();
 		}
 
 	}
@@ -258,6 +227,14 @@ public class AlgorithmController {
 
 	}
 
+	/**
+	 * Skip button listener.
+	 * Calls the auto method in the search algorithm, which takes the algorithm
+	 * as far as it can (be it finding the goal or run out of nodes).
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class SkipListener extends DisplayListener {
 
 		@Override
@@ -273,6 +250,86 @@ public class AlgorithmController {
 			}
 			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
+
+		}
+
+	}
+
+	/**
+	 * Thread for the auto complete button.
+	 * Extends thread interface, and so uses run method to run the thread.
+	 * Defines a method to stop the thread from executing.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
+	private class AutoThread extends Thread {
+
+		volatile boolean running = true;
+
+		public void stopAuto() {
+			running = false;
+		}
+
+		public void run() {
+
+			while(running) {
+				
+				algorithmDisplay.toggleAuto(false);
+				algorithmDisplay.toggleStep(false);
+				algorithmDisplay.toggleReset(false);
+				algorithmDisplay.toggleSkip(false);
+				algorithmDisplay.toggleUndo(false);
+				
+				algorithmDisplay.togglePause(true);
+				
+				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
+
+				algorithmDisplay.addMemento();
+				searchAlgorithm.step();
+				LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
+				}
+				LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+				for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
+					visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
+				}
+				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+				algorithmDisplay.setLabelBackgrounds();
+				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
+
+				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
+				
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					return;
+				}
+				
+				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
+				
+			}
+
+			algorithmDisplay.togglePause(false);
+
+			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
+				algorithmDisplay.toggleAuto(false);
+				algorithmDisplay.toggleStep(false);
+				algorithmDisplay.toggleSkip(false);
+			}
+			else {
+				algorithmDisplay.toggleAuto(true);
+				algorithmDisplay.toggleStep(true);
+				algorithmDisplay.toggleSkip(true);
+			}
+			if(searchAlgorithm.canUndo()) {
+				algorithmDisplay.toggleUndo(true);
+			}
+			else {
+				algorithmDisplay.toggleUndo(false);
+			}
+			algorithmDisplay.toggleReset(true);
 
 		}
 
