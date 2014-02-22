@@ -23,7 +23,6 @@ public class Node {
 	/**
 	 * Constructor.
 	 * Assigns the value of VALUE and initialises the children list.
-	 * Sets the node's parent.
 	 * 
 	 * @param VALUE - the integer value of the VALUE variable
 	 */
