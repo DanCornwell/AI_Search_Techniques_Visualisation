@@ -13,18 +13,22 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import dac28.controller.AlgorithmController;
+import dac28.controller.TreeController;
 import dac28.model.BreadthFirstSearchCreator;
 import dac28.model.Tree124Creator;
 
 class TopLevelContainer implements ActionListener {
 
 	private AlgorithmDisplay algorithmDisplay;
+	private TreeDisplay treeDisplay;
 	
 	TopLevelContainer() {
 		algorithmDisplay = new AlgorithmDisplay();
+		treeDisplay = new TreeDisplay();
 		initialiseBase();
 		
 		new AlgorithmController(new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4)),algorithmDisplay);
+		new TreeController(new Tree124Creator().getTree(4),treeDisplay);
 	}
 	
 	/**
@@ -63,8 +67,8 @@ class TopLevelContainer implements ActionListener {
 
 		// Assign stuff onto the base frame
 		base.setJMenuBar(menuBar);
-		base.getContentPane().add(TreeDisplay.initialiseTree(WIDTH,HEIGHT),BorderLayout.WEST);
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithm(WIDTH, HEIGHT),BorderLayout.EAST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(WIDTH,HEIGHT),BorderLayout.WEST);
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(WIDTH, HEIGHT),BorderLayout.EAST);
 
 		// Display the window.
 		base.setMinimumSize(new Dimension(WIDTH,HEIGHT));

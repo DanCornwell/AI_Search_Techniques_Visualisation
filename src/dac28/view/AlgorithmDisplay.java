@@ -40,7 +40,7 @@ public class AlgorithmDisplay {
 	 * @param HEIGHT - height of the whole application
 	 * @return JPanel containing fields to display a search algorithm's data
 	 */
-	JPanel initialiseAlgorithm(int WIDTH, int HEIGHT) {
+	JPanel initialiseAlgorithmPanel(int WIDTH, int HEIGHT) {
 
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));

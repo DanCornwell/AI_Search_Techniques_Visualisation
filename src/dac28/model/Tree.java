@@ -9,7 +9,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-abstract class Tree {
+public abstract class Tree {
 
 	/**
 	 * The goal value.
@@ -54,6 +54,24 @@ abstract class Tree {
 		return ROOT;
 	}
 
+	/**
+	 * Returns the maximum depth from the given node.
+	 * 
+	 * @param node - the node we want the depth of
+	 * @return integer representing the maximum depth from the node
+	 */
+	public int getTreeDepth(Node node) {
+
+		int max = 0;
+	    for (Node childNode: node.getChildren()) {
+	        int height = getTreeDepth(childNode);
+	        if (height > max)
+	            max = height;
+	    }
+	    return max + 1;
+
+	}
+	
 	/**
 	 * Creates nodes and connects them to the root node.
 	 */

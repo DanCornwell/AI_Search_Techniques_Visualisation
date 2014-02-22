@@ -23,6 +23,7 @@ public class Node {
 	/**
 	 * Constructor.
 	 * Assigns the value of VALUE and initialises the children list.
+	 * Sets the node's parent.
 	 * 
 	 * @param VALUE - the integer value of the VALUE variable
 	 */
@@ -59,13 +60,13 @@ public class Node {
 	final void addChild(Node child) {
 		children.add(child);
 	}
-	
+
 	/**
 	 * Returns the node's children.
 	 * 
 	 * @return list of the child nodes for this node
 	 */
-	final LinkedList<Node> getChildren() {
+	public final LinkedList<Node> getChildren() {
 		return children;
 	}
 
