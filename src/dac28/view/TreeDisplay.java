@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import dac28.model.Node;
+import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 
 /**
@@ -27,6 +28,8 @@ public class TreeDisplay {
 
 	// The tree panel instance.
 	private TreePanel treePanel;
+	
+	private SearchAlgorithm searchAlgorithm;
 	// The max width and max height of the display.
 	private int maxWidth, maxHeight;
 	// The tree the display will use.
@@ -54,6 +57,14 @@ public class TreeDisplay {
 		this.tree = tree;
 	}
 
+	public void drawTree() {
+		treePanel.repaint();
+	}
+	
+	public void setAlgorithm(SearchAlgorithm searchAlgorithm) {
+		this.searchAlgorithm = searchAlgorithm;
+	}
+	
 	/**
 	 * The tree panel class.
 	 * Defines the method to draw the tree within the tree display.
@@ -99,6 +110,12 @@ public class TreeDisplay {
 			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
 			// The size of all the nodes on the tree. These are squares.
 			final int BOXSIZE = 40;
+			// Colour of the current node.
+			final Color CURRENT_NODE = Color.yellow;
+			// Colour of the goal node.
+			final Color GOAL_NODE = Color.red;
+			// Default colour.
+			final Color DEFAULT = Color.black;
 			
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(BOXSIZE/2);
@@ -107,8 +124,13 @@ public class TreeDisplay {
 			
 			// Draws the root node, with its values inside it.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, BOXSIZE, BOXSIZE);
+			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue()) {
+				g.setColor(CURRENT_NODE);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+				g.setColor(DEFAULT);
+			}
 			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(BOXSIZE/2), ROOT_Y_POS+(BOXSIZE/2));
-
+			
 			// The line connection point of the root node. This will be the bottom centre of the box.
 			Point rootPoint = new Point(ROOT_X_POS+(BOXSIZE/2),ROOT_Y_POS+BOXSIZE);
 
@@ -151,6 +173,16 @@ public class TreeDisplay {
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, BOXSIZE, BOXSIZE);
+						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
+							g.setColor(CURRENT_NODE);
+							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+							g.setColor(DEFAULT);
+						}
+						if(children.get(i).getValue() == tree.getGoal()) {
+							g.setColor(GOAL_NODE);
+							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+							g.setColor(DEFAULT);
+						}
 						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(BOXSIZE/2), yPos+(BOXSIZE/2));
 						
 						// The child line connection point. This will be the top middle of the box.

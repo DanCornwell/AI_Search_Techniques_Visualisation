@@ -26,8 +26,11 @@ public class AlgorithmController {
 	 */
 	private SearchAlgorithm searchAlgorithm;
 
-	public AlgorithmController(SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
+	private TreeController treeController;
+	
+	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 
+		this.treeController = treeController;
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
 
@@ -95,6 +98,8 @@ public class AlgorithmController {
 			else {
 				algorithmDisplay.toggleUndo(false);
 			}
+			
+			treeController.drawTree();
 		}
 
 		/**
@@ -297,6 +302,8 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
 
+				treeController.drawTree();
+				
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
 				
 				try {

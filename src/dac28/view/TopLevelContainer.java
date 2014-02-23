@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import dac28.controller.AlgorithmController;
 import dac28.controller.TreeController;
 import dac28.model.BreadthFirstSearchCreator;
+import dac28.model.SearchAlgorithm;
+import dac28.model.Tree;
 import dac28.model.Tree124Creator;
 
 class TopLevelContainer implements ActionListener {
@@ -27,8 +29,11 @@ class TopLevelContainer implements ActionListener {
 		treeDisplay = new TreeDisplay();
 		initialiseBase();
 		
-		new AlgorithmController(new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4)),algorithmDisplay);
-		new TreeController(new Tree124Creator().getTree(4),treeDisplay);
+		Tree tree = new Tree124Creator().getTree(4);
+		SearchAlgorithm algorithm = new BreadthFirstSearchCreator().getSearchAlgorithm(tree);
+		
+		new AlgorithmController((new TreeController(algorithm,tree,treeDisplay)),algorithm,algorithmDisplay);
+
 	}
 	
 	/**
