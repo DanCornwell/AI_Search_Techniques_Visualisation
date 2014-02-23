@@ -25,7 +25,9 @@ public class AlgorithmController {
 	 * The search algorithm being used.
 	 */
 	private SearchAlgorithm searchAlgorithm;
-
+	/**
+	 * The tree controller thats controls the tree display.
+	 */
 	private TreeController treeController;
 	
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
@@ -63,7 +65,7 @@ public class AlgorithmController {
 
 		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
-			algorithmDisplay.getExpandedList().get(i).setBackground(Color.yellow);
+			algorithmDisplay.getExpandedList().get(i).setBackground(Color.white);
 		}
 	}
 
@@ -80,8 +82,10 @@ public class AlgorithmController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+			// Perform the subclass button's logic.
 			buttonLogic();
 
+			// Set the buttons to enable or disabled depending on where we are.
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
@@ -99,6 +103,7 @@ public class AlgorithmController {
 				algorithmDisplay.toggleUndo(false);
 			}
 			
+			// Update the tree.
 			treeController.drawTree();
 		}
 
@@ -120,8 +125,11 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {	
+			// Create a memento based on the current state.
 			algorithmDisplay.addMemento();
+			// Perform a step of the algorithm.
 			searchAlgorithm.step();
+			// Get the new values of the expanded and visited lists.
 			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -130,8 +138,11 @@ public class AlgorithmController {
 			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
+			// Update the algorithm display to the new values of expanded and visited lists.
 			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+			// Set the label backgrounds.
 			algorithmDisplay.setLabelBackgrounds();
+			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
 
@@ -145,7 +156,10 @@ public class AlgorithmController {
 	 *
 	 */
 	private class AutoListener extends DisplayListener {
-
+		
+		/**
+		 * The thread used to automatically step through the algorithm.
+		 */
 		AutoThread thread = null;
 		
 		@Override
@@ -177,7 +191,7 @@ public class AlgorithmController {
 		}
 		
 		/**
-		 * Returns the current active thread
+		 * Returns the current active thread.
 		 * 
 		 * @return an instance of AutoThread, a subclass of Thread
 		 */
@@ -188,6 +202,7 @@ public class AlgorithmController {
 		@Override
 		protected void buttonLogic() {
 			
+			// Gets thread from the auto listener, and stops it if it exists
 			AutoThread thread = getThread();
 			if(thread!=null)thread.stopAuto();
 		}
@@ -205,8 +220,11 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
+			// Restores the expanded and visited display lists to the most current mementos.
 			algorithmDisplay.restoreMemento();
+			// Undoes a step in the algorithm.
 			searchAlgorithm.undo();
+			// Sets the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
 
@@ -223,6 +241,7 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
+			// Resets the search algorithm and its display, and initialises the display as if it were new.
 			searchAlgorithm.reset();
 			algorithmDisplay.reset();
 			initialiseExpandedList();
@@ -242,6 +261,7 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
+			// Skips the algorithm to its final state and then updates the display just like in the step button.
 			searchAlgorithm.auto();
 			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
@@ -268,26 +288,36 @@ public class AlgorithmController {
 	 */
 	private class AutoThread extends Thread {
 
+		/**
+		 * Boolean to start/stop the algorithm.
+		 */
 		volatile boolean running = true;
 
+		/**
+		 * Stops the thread.
+		 */
 		public void stopAuto() {
 			running = false;
 		}
 
+		/**
+		 * Runs the thread.
+		 */
 		public void run() {
 
 			while(running) {
-				
+				// Disable all buttons.
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
 				algorithmDisplay.toggleReset(false);
 				algorithmDisplay.toggleSkip(false);
 				algorithmDisplay.toggleUndo(false);
-				
+				// Enable pause button.
 				algorithmDisplay.togglePause(true);
 				
+				// If search is at goal or out of nodes, stop.
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
-
+				// Peform a step in the algorithm.
 				algorithmDisplay.addMemento();
 				searchAlgorithm.step();
 				LinkedList<Integer> expandedValues = new LinkedList<Integer>();
@@ -301,7 +331,7 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
-
+				// Update display tree.
 				treeController.drawTree();
 				
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
@@ -315,9 +345,10 @@ public class AlgorithmController {
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
 				
 			}
-
+			// Disable pause.
 			algorithmDisplay.togglePause(false);
-
+			
+			// Set the buttons to enable or disabled depending on where we are.
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);

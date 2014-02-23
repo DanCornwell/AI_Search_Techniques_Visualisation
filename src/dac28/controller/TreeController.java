@@ -6,6 +6,9 @@ import dac28.view.TreeDisplay;
 
 public class TreeController {
 
+	/**
+	 * The tree display being used.
+	 */
 	TreeDisplay treeDisplay;
 	
 	public TreeController(SearchAlgorithm searchAlgorithm, Tree tree, TreeDisplay treeDisplay) {
@@ -16,6 +19,9 @@ public class TreeController {
 		
 	}
 	
+	/**
+	 * Draws the tree onto the tree display.
+	 */
 	void drawTree() {
 		treeDisplay.drawTree();
 	}

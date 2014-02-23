@@ -57,10 +57,18 @@ public class TreeDisplay {
 		this.tree = tree;
 	}
 
+	/**
+	 * Repaints the tree panel.
+	 */
 	public void drawTree() {
 		treePanel.repaint();
 	}
 	
+	/**
+	 * Sets the search algorithm being used on the tree.
+	 * 
+	 * @param searchAlgorithm - the search algorithm to use.
+	 */
 	public void setAlgorithm(SearchAlgorithm searchAlgorithm) {
 		this.searchAlgorithm = searchAlgorithm;
 	}
@@ -100,7 +108,7 @@ public class TreeDisplay {
 			if(tree==null) {
 				return;
 			}
-
+			
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
@@ -117,13 +125,55 @@ public class TreeDisplay {
 			// Default colour.
 			final Color DEFAULT = Color.black;
 			
+			// Tree legend box drawing
+			final int TREE_LEGEND_X = 10;
+			final int TREE_LEGEND_Y = 15;
+			g.drawString("Node Legend", TREE_LEGEND_X+15, TREE_LEGEND_Y);
+			g.drawRect(TREE_LEGEND_X-3, TREE_LEGEND_Y+5, 100, 35);
+			g.drawRect(TREE_LEGEND_X, TREE_LEGEND_Y + 10, 10, 10);
+			g.setColor(CURRENT_NODE);
+			g.fillRect(TREE_LEGEND_X+1,TREE_LEGEND_Y+11,9,9);
+			g.setColor(DEFAULT);
+			g.drawString("- Current Node", TREE_LEGEND_X+15, TREE_LEGEND_Y+20);
+			g.drawRect(TREE_LEGEND_X,TREE_LEGEND_Y + 25, 10, 10);
+			g.setColor(GOAL_NODE);
+			g.fillRect(TREE_LEGEND_X+1,TREE_LEGEND_Y + 26,9,9);
+			g.setColor(DEFAULT);
+			g.drawString("- Goal Node", TREE_LEGEND_X+15, TREE_LEGEND_Y+35);
+			
+			// Algorithm legend box drawing
+			final int ALGORITHM_LEGEND_X = maxWidth - 110;
+			final int ALGORITH_LEGEND_Y = 15;
+			g.drawString("Algorithm Legend", ALGORITHM_LEGEND_X+5, ALGORITH_LEGEND_Y);
+			g.drawRect(ALGORITHM_LEGEND_X-5, ALGORITH_LEGEND_Y+5, 105, 65);
+			g.setColor(new Color(139, 0, 255));
+			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 10, 10);
+			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 2, 10);
+			g.fillRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 2, 10);
+			g.setColor(DEFAULT);
+			g.drawString("- Head of Queue", ALGORITHM_LEGEND_X+15, ALGORITH_LEGEND_Y+20);
+			g.drawString("/ Top of Stack", ALGORITHM_LEGEND_X+25, ALGORITH_LEGEND_Y+35);
+			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+50, 10, 10);
+			g.setColor(Color.green);
+			g.fillRect(ALGORITHM_LEGEND_X+1, ALGORITH_LEGEND_Y+51, 9, 9);
+			g.setColor(DEFAULT);
+			g.drawString("- New Element", ALGORITHM_LEGEND_X+20, ALGORITH_LEGEND_Y+60);
+			
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(BOXSIZE/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = 30;
 			
-			// Draws the root node, with its values inside it.
+			// Draws the root node, with its values inside it. 
+			// Will also colour the box the appropriate colour.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, BOXSIZE, BOXSIZE);
+			// If root is the goal colour box red.
+			if(tree.getRoot().getValue() == tree.getGoal()) {
+				g.setColor(GOAL_NODE);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+				g.setColor(DEFAULT);
+			}
+			// If the root is the current node colour box yellow.
 			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue()) {
 				g.setColor(CURRENT_NODE);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
@@ -173,13 +223,15 @@ public class TreeDisplay {
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, BOXSIZE, BOXSIZE);
-						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
-							g.setColor(CURRENT_NODE);
+						// If the node is the goal colour it red.
+						if(children.get(i).getValue() == tree.getGoal()) {
+							g.setColor(GOAL_NODE);
 							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
 							g.setColor(DEFAULT);
 						}
-						if(children.get(i).getValue() == tree.getGoal()) {
-							g.setColor(GOAL_NODE);
+						// If the node is the current node colour is yellow.
+						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
+							g.setColor(CURRENT_NODE);
 							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
 							g.setColor(DEFAULT);
 						}

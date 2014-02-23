@@ -34,6 +34,27 @@ public class AlgorithmDisplay {
 	private Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
 
 	/**
+	 * Default colour for the list boxes.
+	 */
+	private final Color DEFAULT = Color.white;
+	/**
+	 * Border colour for the list boxes.
+	 */
+	private final Color BOX_BORDER_COLOUR = Color.black;
+	/**
+	 * Colour for the goal node box.
+	 */
+	private final Color GOAL_NODE = Color.yellow;
+	/**
+	 * Colour for the new element in list box.
+	 */
+	private final Color NEW_ELEMENT = Color.green;
+	/**
+	 * Dimension for the list boxes.
+	 */
+	private final Dimension BOX_SIZE = new Dimension(30,30);
+	
+	/**
 	 * Initialises the JPanel displaying algorithm data and returns it.
 	 * 
 	 * @param WIDTH - width of the whole application
@@ -49,20 +70,20 @@ public class AlgorithmDisplay {
 		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
 
 		// Initialise the display components
-		final JLabel expandedLabel = new JLabel("Expanded");
-		final JLabel visitedLabel = new JLabel("Visited");
+		final JLabel expandedLabel = new JLabel("Expanded List");
+		final JLabel visitedLabel = new JLabel("Visited List");
 		final JLabel currentNode = new JLabel("Current Node: ");
 		final JLabel goalLabel = new JLabel("At Goal? : ");
 		node = new JLabel("",JLabel.CENTER);
 		node.setOpaque(true);
-		node.setBackground(Color.white);
-		node.setBorder(BorderFactory.createLineBorder(Color.black));
-		node.setPreferredSize(new Dimension(30,30));
+		node.setBackground(DEFAULT);
+		node.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+		node.setPreferredSize(BOX_SIZE);
 		atGoal = new JLabel("",JLabel.CENTER);
 		atGoal.setOpaque(true);
-		atGoal.setBackground(Color.white);
-		atGoal.setBorder(BorderFactory.createLineBorder(Color.black));
-		atGoal.setPreferredSize(new Dimension(30,30));
+		atGoal.setBackground(DEFAULT);
+		atGoal.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+		atGoal.setPreferredSize(BOX_SIZE);
 		expandedList = new LinkedList<JLabel>();
 		visitedList = new LinkedList<JLabel>();
 
@@ -88,15 +109,17 @@ public class AlgorithmDisplay {
 		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-20);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p1.add(expandedLabel);
+		
 		// Panel 2 - holds the expanded list
 		JPanel p2 = getHoldingPanel(panelWidth,panelHeight);
 		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
-			label.setPreferredSize(new Dimension(30,30));
-			label.setBorder(BorderFactory.createLineBorder(Color.black));
-			label.setBackground(Color.white);
+			label.setPreferredSize(BOX_SIZE);
+			if(i==0) label.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
+			else label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+			label.setBackground(DEFAULT);
 			expandedList.add(label);
 			p2.add(label);
 		}
@@ -110,9 +133,9 @@ public class AlgorithmDisplay {
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
-			label.setPreferredSize(new Dimension(30,30));
-			label.setBorder(BorderFactory.createLineBorder(Color.black));
-			label.setBackground(Color.white);		
+			label.setPreferredSize(BOX_SIZE);
+			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+			label.setBackground(DEFAULT);		
 			visitedList.add(label);
 			p4.add(label);
 		}
@@ -230,13 +253,13 @@ public class AlgorithmDisplay {
 		node.setText(value);
 		if(bool) {
 			atGoal.setText("Yes");
-			atGoal.setBackground(Color.yellow);
-			node.setBackground(Color.yellow);
+			atGoal.setBackground(GOAL_NODE);
+			node.setBackground(GOAL_NODE);
 		}
 		else {
 			atGoal.setText("No");
-			atGoal.setBackground(Color.white);
-			node.setBackground(Color.white);
+			atGoal.setBackground(DEFAULT);
+			node.setBackground(DEFAULT);
 		}
 	}
 
@@ -259,9 +282,9 @@ public class AlgorithmDisplay {
 	public void reset() {
 		resetLabels();
 		node.setText("");
-		node.setBackground(Color.white);
+		node.setBackground(DEFAULT);
 		atGoal.setText("");
-		atGoal.setBackground(Color.white);
+		atGoal.setBackground(DEFAULT);
 	}
 
 	/**
@@ -403,12 +426,12 @@ public class AlgorithmDisplay {
 		// Set background to yellow
 		for(JLabel label: expandedList) {
 			if(!previousExpandedValues.contains(label.getText())) {
-				label.setBackground(Color.yellow);
+				label.setBackground(NEW_ELEMENT);
 			}
 		}
 		for(JLabel label: visitedList) {
 			if(!previousVisitedValues.contains(label.getText())) {
-				label.setBackground(Color.yellow);
+				label.setBackground(NEW_ELEMENT);
 			}
 		}
 
@@ -421,11 +444,11 @@ public class AlgorithmDisplay {
 		
 		for(int i=0;i<expandedList.size();i++) {
 			expandedList.get(i).setText("");
-			expandedList.get(i).setBackground(Color.white);
+			expandedList.get(i).setBackground(DEFAULT);
 		}
 		for(int i=0;i<visitedList.size();i++) {
 			visitedList.get(i).setText("");
-			visitedList.get(i).setBackground(Color.white);
+			visitedList.get(i).setBackground(DEFAULT);
 		}
 	}
 
