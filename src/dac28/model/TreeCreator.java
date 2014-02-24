@@ -8,7 +8,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-interface TreeCreator {
+public interface TreeCreator {
 
 	/**
 	 * Factory method for the tree creators. 

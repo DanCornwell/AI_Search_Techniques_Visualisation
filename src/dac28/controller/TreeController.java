@@ -16,6 +16,7 @@ public class TreeController {
 		this.treeDisplay = treeDisplay;
 		this.treeDisplay.setTree(tree);
 		this.treeDisplay.setAlgorithm(searchAlgorithm);
+		this.treeDisplay.drawTree();
 		
 	}
 	

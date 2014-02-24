@@ -7,7 +7,7 @@ package dac28.model;
  * @author Dan Cornwell
  *
  */
-interface SearchAlgorithmCreator {
+public interface SearchAlgorithmCreator {
 	
 	/**
 	 * Factory method for the search algorithm creators.

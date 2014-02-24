@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
+import javax.swing.BorderFactory;
+
 import dac28.model.SearchAlgorithm;
 import dac28.view.AlgorithmDisplay;
 
@@ -66,6 +68,7 @@ public class AlgorithmController {
 		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
 			algorithmDisplay.getExpandedList().get(i).setBackground(Color.white);
+			algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
 		}
 	}
 

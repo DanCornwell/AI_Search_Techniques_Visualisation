@@ -50,6 +50,10 @@ public class AlgorithmDisplay {
 	 */
 	private final Color NEW_ELEMENT = Color.green;
 	/**
+	 * Colour for the head of queue / top of stack.
+	 */
+	private final Color PURPLE = new Color(139, 0, 255);
+	/**
 	 * Dimension for the list boxes.
 	 */
 	private final Dimension BOX_SIZE = new Dimension(30,30);
@@ -117,8 +121,7 @@ public class AlgorithmDisplay {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
-			if(i==0) label.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
-			else label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
 			label.setBackground(DEFAULT);
 			expandedList.add(label);
 			p2.add(label);
@@ -398,6 +401,9 @@ public class AlgorithmDisplay {
 		for(int i=0;i<visitedValues.size();i++) {
 			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
+	
+		// Change head/top to unique border
+		expandedList.get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, PURPLE));
 	}
 	
 	/**
@@ -434,7 +440,6 @@ public class AlgorithmDisplay {
 				label.setBackground(NEW_ELEMENT);
 			}
 		}
-
 	}
 	
 	/**
@@ -450,6 +455,10 @@ public class AlgorithmDisplay {
 			visitedList.get(i).setText("");
 			visitedList.get(i).setBackground(DEFAULT);
 		}
+		
+		// Reset head/top to normal border
+		expandedList.get(0).setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+
 	}
 
 	/**
