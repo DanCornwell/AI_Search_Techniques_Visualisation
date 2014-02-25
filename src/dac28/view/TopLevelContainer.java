@@ -24,11 +24,29 @@ import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 
+/**
+ * The top level container that holds the rest of the displays.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 class TopLevelContainer implements ActionListener {
 
+	/**
+	 * The algorithm display being used.
+	 */
 	private AlgorithmDisplay algorithmDisplay;
+	/**
+	 * The tree display being used.
+	 */
 	private TreeDisplay treeDisplay;
+	/**
+	 * Menu items that the user can interact with.
+	 */
 	private JMenuItem newSearch,quit,about,legend;
+	/**
+	 * Base frame for the application.
+	 */
 	private JFrame base;
 
 	TopLevelContainer() {
@@ -90,6 +108,9 @@ class TopLevelContainer implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		// New search, creates a controller and takes a user input for the goal node and their choices
+		// for the tree and algorithm. Loops if input is invalid.
 		if(e.getSource() == newSearch) {
 			Object[] options = {"Confirm", "Cancel"};
 
@@ -121,6 +142,9 @@ class TopLevelContainer implements ActionListener {
 				}
 
 			}
+			
+			// Create a tree and algorithm controller with the user supplied information.
+			
 			Tree tree = controller.getTreeCreator().getTree(goal);
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
 
@@ -146,11 +170,29 @@ class TopLevelContainer implements ActionListener {
 
 	}
 
+	/**
+	 * Returns the legend panel.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class LegendPanel {
 
+		/**
+		 * Border for the legend boxes.
+		 */
 		private final Border BOX_BORDER = BorderFactory.createLineBorder(Color.black);
+		/**
+		 * Size for the legend boxes.
+		 */
 		private final Dimension BOX_SIZE = new Dimension(20,20);
+		/**
+		 * Size for the panel that all legend data is inside.
+		 */
 		private final Dimension PANEL_SIZE = new Dimension(270,30);
+		/**
+		 * The default colour.
+		 */
 		private final Color DEFAULT = Color.white;
 
 		private JDialog showLegend() {
@@ -158,6 +200,7 @@ class TopLevelContainer implements ActionListener {
 			JDialog legend = new JDialog(base,"Legend",false);
 			legend.setLayout(new FlowLayout());
 
+			// Creates all the boxes in the legend.
 			JLabel currentNode = new JLabel();
 			currentNode.setBorder(BOX_BORDER);
 			currentNode.setPreferredSize(BOX_SIZE);
@@ -182,6 +225,7 @@ class TopLevelContainer implements ActionListener {
 			newItem.setOpaque(true);
 			JLabel newItemInfo = new JLabel(" - New element to the list");
 
+			// Creates panels and adds the boxes to them.
 			JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			p1.setPreferredSize(PANEL_SIZE);
 			p1.setBackground(DEFAULT);
@@ -203,6 +247,7 @@ class TopLevelContainer implements ActionListener {
 			p4.add(newItem);
 			p4.add(newItemInfo);
 
+			// Add the panels to the legend.
 			legend.getContentPane().setBackground(DEFAULT);
 			legend.setSize(300,200);
 			legend.add(p1);
@@ -211,6 +256,7 @@ class TopLevelContainer implements ActionListener {
 			legend.add(p4);
 			legend.setVisible(true);
 			legend.setLocationRelativeTo(base);
+			
 			return legend;
 
 		}

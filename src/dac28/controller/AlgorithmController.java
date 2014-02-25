@@ -65,6 +65,7 @@ public class AlgorithmController {
 			return;
 		}
 		
+		// Reset the algorithm and display
 		searchAlgorithm.reset();
 		algorithmDisplay.reset();
 

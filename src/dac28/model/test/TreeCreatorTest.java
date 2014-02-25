@@ -1,8 +1,12 @@
-package dac28.model.tree;
+package dac28.model.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import dac28.model.Tree;
+import dac28.model.Tree124Creator;
+import dac28.model.TreeCreator;
 
 
 
@@ -13,7 +17,7 @@ import org.junit.Test;
  *
  */
 public class TreeCreatorTest {
-/**
+
 	@Test
 	public void testTreeCreator() {
 		// Tree124 creator test
@@ -24,5 +28,5 @@ public class TreeCreatorTest {
 		assertEquals("Tree was not created with goal node of 5",5,another.getGoal());
 		
 	}
-**/
+
 }
