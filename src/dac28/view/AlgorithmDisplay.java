@@ -74,6 +74,7 @@ public class AlgorithmDisplay {
 		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
 
 		// Initialise the display components
+		final JLabel title = new JLabel("Search Algorithm Data");
 		final JLabel expandedLabel = new JLabel("Expanded List");
 		final JLabel visitedLabel = new JLabel("Visited List");
 		final JLabel currentNode = new JLabel("Current Node: ");
@@ -109,6 +110,9 @@ public class AlgorithmDisplay {
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH/2)-20;
 		final int panelHeight = (HEIGHT-40)/7;
+		// Title Panel
+		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
+		titlePanel.add(title);
 		// Panel 1 - holds the expanded label
 		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-20);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -150,17 +154,18 @@ public class AlgorithmDisplay {
 		p5.add(goalLabel);
 		p5.add(atGoal);
 		// Panel 6 - holds step, auto and undo buttons
-		JPanel p6 = getHoldingPanel(panelWidth,panelHeight);
+		JPanel p6 = getHoldingPanel(panelWidth,panelHeight-20);
 		p6.add(step);
 		p6.add(auto);
 		p6.add(undo);
 		p6.add(pause);
 		// Panel 7 - holds the reset button
-		JPanel p7 = getHoldingPanel(panelWidth,panelHeight);
+		JPanel p7 = getHoldingPanel(panelWidth,panelHeight-20);
 		p7.add(skip);
 		p7.add(reset);
 
 		// Add the holding panels to the algorithm panel
+		algorithmPanel.add(titlePanel);
 		algorithmPanel.add(p1);
 		algorithmPanel.add(p2);
 		algorithmPanel.add(p3);

@@ -28,7 +28,7 @@ public class TreeDisplay {
 
 	// The tree panel instance.
 	private TreePanel treePanel;
-	
+
 	private SearchAlgorithm searchAlgorithm;
 	// The max width and max height of the display.
 	private int maxWidth, maxHeight;
@@ -63,7 +63,7 @@ public class TreeDisplay {
 	public void drawTree() {
 		treePanel.repaint();
 	}
-	
+
 	/**
 	 * Sets the search algorithm being used on the tree.
 	 * 
@@ -72,7 +72,7 @@ public class TreeDisplay {
 	public void setAlgorithm(SearchAlgorithm searchAlgorithm) {
 		this.searchAlgorithm = searchAlgorithm;
 	}
-	
+
 	/**
 	 * The tree panel class.
 	 * Defines the method to draw the tree within the tree display.
@@ -104,16 +104,18 @@ public class TreeDisplay {
 		 */
 		public void drawTree(Graphics g) {
 
+			super.paintComponent(g);
+
 			// If we have no tree return.
 			if(tree==null) {
 				return;
 			}
-			
+
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
-			
+
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
 			// The size of all the nodes on the tree. These are squares.
@@ -124,46 +126,16 @@ public class TreeDisplay {
 			final Color GOAL_NODE = Color.red;
 			// Default colour.
 			final Color DEFAULT = Color.black;
-			
-			// Tree legend box drawing
-			final int TREE_LEGEND_X = 10;
-			final int TREE_LEGEND_Y = 15;
-			g.drawString("Node Legend", TREE_LEGEND_X+15, TREE_LEGEND_Y);
-			g.drawRect(TREE_LEGEND_X-3, TREE_LEGEND_Y+5, 100, 35);
-			g.drawRect(TREE_LEGEND_X, TREE_LEGEND_Y + 10, 10, 10);
-			g.setColor(CURRENT_NODE);
-			g.fillRect(TREE_LEGEND_X+1,TREE_LEGEND_Y+11,9,9);
-			g.setColor(DEFAULT);
-			g.drawString("- Current Node", TREE_LEGEND_X+15, TREE_LEGEND_Y+20);
-			g.drawRect(TREE_LEGEND_X,TREE_LEGEND_Y + 25, 10, 10);
-			g.setColor(GOAL_NODE);
-			g.fillRect(TREE_LEGEND_X+1,TREE_LEGEND_Y + 26,9,9);
-			g.setColor(DEFAULT);
-			g.drawString("- Goal Node", TREE_LEGEND_X+15, TREE_LEGEND_Y+35);
-			
-			// Algorithm legend box drawing
-			final int ALGORITHM_LEGEND_X = maxWidth - 110;
-			final int ALGORITH_LEGEND_Y = 15;
-			g.drawString("Algorithm Legend", ALGORITHM_LEGEND_X+5, ALGORITH_LEGEND_Y);
-			g.drawRect(ALGORITHM_LEGEND_X-5, ALGORITH_LEGEND_Y+5, 105, 65);
-			g.setColor(new Color(139, 0, 255));
-			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 10, 10);
-			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 2, 10);
-			g.fillRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+10, 2, 10);
-			g.setColor(DEFAULT);
-			g.drawString("- Head of Queue", ALGORITHM_LEGEND_X+15, ALGORITH_LEGEND_Y+20);
-			g.drawString("/ Top of Stack", ALGORITHM_LEGEND_X+25, ALGORITH_LEGEND_Y+35);
-			g.drawRect(ALGORITHM_LEGEND_X, ALGORITH_LEGEND_Y+50, 10, 10);
-			g.setColor(Color.green);
-			g.fillRect(ALGORITHM_LEGEND_X+1, ALGORITH_LEGEND_Y+51, 9, 9);
-			g.setColor(DEFAULT);
-			g.drawString("- New Element", ALGORITHM_LEGEND_X+20, ALGORITH_LEGEND_Y+60);
-			
+
+			// Draw title
+			g.drawString("Tree Data", (maxWidth/2)-20, 20);
+			g.drawLine((maxWidth/2)-20, 22, (maxWidth/2)+28, 22);
+
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(BOXSIZE/2);
 			// The y position of the root node.
-			final int ROOT_Y_POS = 30;
-			
+			final int ROOT_Y_POS = maxHeight/10;
+
 			// Draws the root node, with its values inside it. 
 			// Will also colour the box the appropriate colour.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, BOXSIZE, BOXSIZE);
@@ -180,7 +152,7 @@ public class TreeDisplay {
 				g.setColor(DEFAULT);
 			}
 			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(BOXSIZE/2), ROOT_Y_POS+(BOXSIZE/2));
-			
+
 			// The line connection point of the root node. This will be the bottom centre of the box.
 			Point rootPoint = new Point(ROOT_X_POS+(BOXSIZE/2),ROOT_Y_POS+BOXSIZE);
 
@@ -201,7 +173,7 @@ public class TreeDisplay {
 
 			// While elements exist within parents list.
 			while(!parents.isEmpty()) {
-				
+
 				// Remove all elements from parent list and add their children to the children list.
 				while(!parents.isEmpty()) {
 					children.addAll(parents.remove().getChildren());
@@ -236,10 +208,10 @@ public class TreeDisplay {
 							g.setColor(DEFAULT);
 						}
 						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(BOXSIZE/2), yPos+(BOXSIZE/2));
-						
+
 						// The child line connection point. This will be the top middle of the box.
 						Point childCoord = new Point(xPos+(BOXSIZE/2),yPos);
-						
+
 						// If there are parent coordinates in the list
 						if(!parentCoords.isEmpty()) {
 							// Get the first parent coordinate.
@@ -259,7 +231,7 @@ public class TreeDisplay {
 						}	
 					}
 				}
-				
+
 				// Add all the children to the parents list.
 				for(Node newParents: children) {
 					parents.add(newParents);
@@ -274,7 +246,7 @@ public class TreeDisplay {
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
-			
+
 		}
 	}
 }

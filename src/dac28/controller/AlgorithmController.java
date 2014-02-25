@@ -64,6 +64,9 @@ public class AlgorithmController {
 		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
 			return;
 		}
+		
+		searchAlgorithm.reset();
+		algorithmDisplay.reset();
 
 		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
