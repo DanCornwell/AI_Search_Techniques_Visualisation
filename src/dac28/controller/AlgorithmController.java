@@ -37,7 +37,7 @@ public class AlgorithmController {
 		this.treeController = treeController;
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
-
+		
 		initialiseExpandedList();
 
 		this.algorithmDisplay.toggleAuto(true);
@@ -69,11 +69,9 @@ public class AlgorithmController {
 		searchAlgorithm.reset();
 		algorithmDisplay.reset();
 
-		for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-			algorithmDisplay.getExpandedList().get(i).setText(String.valueOf(searchAlgorithm.getExpanded().get(i).getValue()));
-			algorithmDisplay.getExpandedList().get(i).setBackground(Color.white);
-			algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
-		}
+		algorithmDisplay.getExpandedList().get(0).setText(String.valueOf(searchAlgorithm.getExpanded().get(0).getValue()));
+		algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
+
 	}
 
 	/**
@@ -248,9 +246,8 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
-			// Resets the search algorithm and its display, and initialises the display as if it were new.
-			searchAlgorithm.reset();
-			algorithmDisplay.reset();
+			
+			// Initialises the display as if it were new.
 			initialiseExpandedList();
 		}
 

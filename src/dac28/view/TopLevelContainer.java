@@ -48,10 +48,16 @@ class TopLevelContainer implements ActionListener {
 	 * Base frame for the application.
 	 */
 	private JFrame base;
+	/**
+	 * Height of the displays.
+	 */
+	private int HEIGHT = 500;
+	/**
+	 * Width of the displays.
+	 */
+	private int WIDTH = 700;
 
 	TopLevelContainer() {
-		algorithmDisplay = new AlgorithmDisplay();
-		treeDisplay = new TreeDisplay();
 		initialiseBase();
 	}
 
@@ -59,10 +65,6 @@ class TopLevelContainer implements ActionListener {
 	 * Initialises the graphical user interface.
 	 */
 	private void initialiseBase() {
-
-		// Width and Height of the application
-		final int WIDTH = 700;
-		final int HEIGHT = 500;
 
 		// Create the base frame
 		base = new JFrame("Search Algorithm Visualiser");
@@ -95,9 +97,8 @@ class TopLevelContainer implements ActionListener {
 
 		// Assign stuff onto the base frame
 		base.setJMenuBar(menuBar);
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(WIDTH,HEIGHT),BorderLayout.WEST);
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(WIDTH, HEIGHT),BorderLayout.EAST);
-
+		addDisplays();
+		 
 		// Display the window.
 		base.setMinimumSize(new Dimension(WIDTH,HEIGHT));
 		base.pack();
@@ -143,6 +144,9 @@ class TopLevelContainer implements ActionListener {
 
 			}
 			
+			// Add new displays
+			addDisplays();
+
 			// Create a tree and algorithm controller with the user supplied information.
 			
 			Tree tree = controller.getTreeCreator().getTree(goal);
@@ -170,6 +174,19 @@ class TopLevelContainer implements ActionListener {
 
 	}
 
+	/**
+	 * Adds displays onto the base frame.
+	 */
+	private void addDisplays() {
+		
+		base.getContentPane().removeAll();
+		treeDisplay = new TreeDisplay();
+		algorithmDisplay = new AlgorithmDisplay();
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(WIDTH,HEIGHT),BorderLayout.WEST);
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(WIDTH,HEIGHT),BorderLayout.EAST);
+
+	}
+	
 	/**
 	 * Returns the legend panel.
 	 * 

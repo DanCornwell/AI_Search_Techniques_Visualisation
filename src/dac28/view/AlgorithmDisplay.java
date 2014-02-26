@@ -32,7 +32,6 @@ public class AlgorithmDisplay {
 	 * Stack to hold the list mementos
 	 */
 	private Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
-
 	/**
 	 * Default colour for the list boxes.
 	 */
@@ -114,12 +113,12 @@ public class AlgorithmDisplay {
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
 		// Panel 1 - holds the expanded label
-		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-20);
+		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-40);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p1.add(expandedLabel);
 		
 		// Panel 2 - holds the expanded list
-		JPanel p2 = getHoldingPanel(panelWidth,panelHeight);
+		JPanel p2 = getHoldingPanel(panelWidth,panelHeight+BOX_SIZE.height);
 		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -131,11 +130,11 @@ public class AlgorithmDisplay {
 			p2.add(label);
 		}
 		// Panel 3 - holds the visited label
-		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-20);
+		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-40);
 		p3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p3.add(visitedLabel);
 		// Panel 4 - holds the visited list
-		JPanel p4 = getHoldingPanel(panelWidth,panelHeight);
+		JPanel p4 = getHoldingPanel(panelWidth,panelHeight+BOX_SIZE.height);
 		p4.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -147,10 +146,10 @@ public class AlgorithmDisplay {
 			p4.add(label);
 		}
 		// Panel 5 - holds the current node labels and at goal labels
-		JPanel p5 = getHoldingPanel(panelWidth,panelHeight);
+		JPanel p5 = getHoldingPanel(panelWidth,panelHeight-20);
 		p5.add(currentNode);
 		p5.add(node);
-		p5.add(Box.createRigidArea(new Dimension(20,0)));
+		p5.add(Box.createRigidArea(new Dimension(40,0)));
 		p5.add(goalLabel);
 		p5.add(atGoal);
 		// Panel 6 - holds step, auto and undo buttons
@@ -407,7 +406,6 @@ public class AlgorithmDisplay {
 			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
 	
-		// Change head/top to unique border
 		expandedList.get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, PURPLE));
 	}
 	
@@ -450,22 +448,21 @@ public class AlgorithmDisplay {
 	/**
 	 * Resets the list labels
 	*/
-	public void resetLabels() {
-		
-		for(int i=0;i<expandedList.size();i++) {
-			expandedList.get(i).setText("");
-			expandedList.get(i).setBackground(DEFAULT);
+	void resetLabels() {
+	
+		for(JLabel label:expandedList) {
+			label.setText("");
+			label.setBackground(DEFAULT);
 		}
-		for(int i=0;i<visitedList.size();i++) {
-			visitedList.get(i).setText("");
-			visitedList.get(i).setBackground(DEFAULT);
+		for(JLabel label:visitedList) {
+			label.setText("");
+			label.setBackground(DEFAULT);
 		}
 		
-		// Reset head/top to normal border
 		expandedList.get(0).setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
 
 	}
-
+	
 	/**
 	 * Memento class for the list elements.
 	 * Holds a colour instance and a string.
