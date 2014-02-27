@@ -172,7 +172,7 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(p5);
 		algorithmPanel.add(p6);
 		algorithmPanel.add(p7);
-
+		
 		return algorithmPanel;
 	}
 
@@ -406,7 +406,6 @@ public class AlgorithmDisplay {
 			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
 	
-		expandedList.get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, PURPLE));
 	}
 	
 	/**
@@ -445,6 +444,13 @@ public class AlgorithmDisplay {
 		}
 	}
 	
+	public void setHeadTopBorder(int index) {
+		for(JLabel label: expandedList) {
+			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+		}
+		expandedList.get(index).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, PURPLE));
+	}
+	
 	/**
 	 * Resets the list labels
 	*/
@@ -453,14 +459,12 @@ public class AlgorithmDisplay {
 		for(JLabel label:expandedList) {
 			label.setText("");
 			label.setBackground(DEFAULT);
+			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
 		}
 		for(JLabel label:visitedList) {
 			label.setText("");
 			label.setBackground(DEFAULT);
 		}
-		
-		expandedList.get(0).setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
-
 	}
 	
 	/**

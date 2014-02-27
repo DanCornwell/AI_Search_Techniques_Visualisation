@@ -70,7 +70,7 @@ public class AlgorithmController {
 		algorithmDisplay.reset();
 
 		algorithmDisplay.getExpandedList().get(0).setText(String.valueOf(searchAlgorithm.getExpanded().get(0).getValue()));
-		algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
+		algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, new Color(139, 0, 255)));
 
 	}
 
@@ -149,6 +149,10 @@ public class AlgorithmController {
 			algorithmDisplay.setLabelBackgrounds();
 			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
+		
+			//	algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
+			
+			algorithmDisplay.setHeadTopBorder(0);
 		}
 
 	}

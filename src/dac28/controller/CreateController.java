@@ -13,13 +13,14 @@ import javax.swing.JTextField;
 import dac28.model.BreadthFirstSearchCreator;
 import dac28.model.DepthFirstSearchCreator;
 import dac28.model.SearchAlgorithmCreator;
+import dac28.model.Tree112111Creator;
 import dac28.model.Tree124Creator;
 import dac28.model.Tree1354Creator;
 import dac28.model.TreeCreator;
 
 public class CreateController {
 	
-	private JRadioButton tree124,tree1354;
+	private JRadioButton tree124,tree1354,tree112111;
 	private JRadioButton bfs,dfs;
 	private JTextField goal;
 	
@@ -29,6 +30,8 @@ public class CreateController {
 		tree124.setSelected(true);	
 		tree1354 = new JRadioButton("1-3-5-4 Tree");
 		tree1354.setSelected(false);
+		tree112111 = new JRadioButton("1-1-2-1-1-1 Tree");
+		tree112111.setSelected(false);
 	    
 	    bfs = new JRadioButton("Breadth First Search");
 		bfs.setSelected(true);
@@ -57,10 +60,12 @@ public class CreateController {
 		treeChoices.add(goal);
 	    treeChoices.add(tree124);
 	    treeChoices.add(tree1354);
+	    treeChoices.add(tree112111);
 	    
 	    ButtonGroup treeGroup = new ButtonGroup();
 	    treeGroup.add(tree124);
 	    treeGroup.add(tree1354);
+	    treeGroup.add(tree112111);
 	    
 		JPanel searchChoices = new JPanel();
 		searchChoices.setPreferredSize(new Dimension((WIDTH/2)-10,HEIGHT/2));
@@ -92,6 +97,9 @@ public class CreateController {
 		}
 		else if(tree1354.isSelected()) {
 			return new Tree1354Creator();
+		}
+		else if(tree112111.isSelected()) {
+			return new Tree112111Creator();
 		}
 		
 		return new Tree124Creator();

@@ -128,13 +128,13 @@ public class TreeDisplay {
 			final Color DEFAULT = Color.black;
 
 			// Draw title
-			g.drawString("Tree Data", (maxWidth/2)-20, 20);
-			g.drawLine((maxWidth/2)-20, 22, (maxWidth/2)+28, 22);
+			g.drawString("Tree Data", (maxWidth/4)-20, 20);
+			g.drawLine((maxWidth/4)-20, 22, (maxWidth/4)+28, 22);
 
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(BOXSIZE/2);
 			// The y position of the root node.
-			final int ROOT_Y_POS = maxHeight/10;
+			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
 
 			// Draws the root node, with its values inside it. 
 			// Will also colour the box the appropriate colour.
