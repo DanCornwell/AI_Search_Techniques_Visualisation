@@ -1,5 +1,6 @@
 package dac28.model;
 
+
 /**
  * The Tree112111 class. Implements the tree interface.
  * This tree has the structure as followed:

@@ -31,13 +31,15 @@ public class AlgorithmController {
 	 * The tree controller thats controls the tree display.
 	 */
 	private TreeController treeController;
-	
+
+	private final String SEARCH_TYPE;
+
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 
 		this.treeController = treeController;
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
-		
+
 		initialiseExpandedList();
 
 		this.algorithmDisplay.toggleAuto(true);
@@ -48,10 +50,12 @@ public class AlgorithmController {
 		this.algorithmDisplay.registerUndoListener(new UndoListener());
 		this.algorithmDisplay.registerResetListener(new ResetListener());
 		this.algorithmDisplay.registerSkipListener(new SkipListener());
-		
+
 		AutoListener auto = new AutoListener();
 		this.algorithmDisplay.registerAutoListener(auto);
 		this.algorithmDisplay.registerPauseListener(new PauseListener(auto));
+
+		this.SEARCH_TYPE = this.searchAlgorithm.getClass().getName();
 	} 
 
 	/**
@@ -64,7 +68,7 @@ public class AlgorithmController {
 		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
 			return;
 		}
-		
+
 		// Reset the algorithm and display
 		searchAlgorithm.reset();
 		algorithmDisplay.reset();
@@ -83,7 +87,7 @@ public class AlgorithmController {
 	 *
 	 */
 	private abstract class DisplayListener implements ActionListener {
-				
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -107,7 +111,7 @@ public class AlgorithmController {
 			else {
 				algorithmDisplay.toggleUndo(false);
 			}
-			
+
 			// Update the tree.
 			treeController.drawTree();
 		}
@@ -149,10 +153,13 @@ public class AlgorithmController {
 			algorithmDisplay.setLabelBackgrounds();
 			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
-		
-			//	algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
 			
-			algorithmDisplay.setHeadTopBorder(0);
+			// If we are using DFS, and hence a stack 
+			if(!searchAlgorithm.getExpanded().isEmpty() && SEARCH_TYPE == "dac28.model.DepthFirstSearch") {
+				algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
+			}
+			else algorithmDisplay.setHeadTopBorder(0);
+			
 		}
 
 	}
@@ -165,19 +172,19 @@ public class AlgorithmController {
 	 *
 	 */
 	private class AutoListener extends DisplayListener {
-		
+
 		/**
 		 * The thread used to automatically step through the algorithm.
 		 */
 		AutoThread thread = null;
-		
+
 		@Override
 		protected void buttonLogic() {
 			thread = new AutoThread();
 			thread.start();
 		}
 
-		
+
 	}
 
 	/**
@@ -194,11 +201,11 @@ public class AlgorithmController {
 		 * The AutoListener starting the thread
 		 */
 		AutoListener auto = null;
-		
+
 		PauseListener(AutoListener auto) {
 			this.auto = auto;
 		}
-		
+
 		/**
 		 * Returns the current active thread.
 		 * 
@@ -207,10 +214,10 @@ public class AlgorithmController {
 		private AutoThread getThread() {
 			return auto.thread;
 		}
-		
+
 		@Override
 		protected void buttonLogic() {
-			
+
 			// Gets thread from the auto listener, and stops it if it exists
 			AutoThread thread = getThread();
 			if(thread!=null)thread.stopAuto();
@@ -250,7 +257,7 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
-			
+
 			// Initialises the display as if it were new.
 			initialiseExpandedList();
 		}
@@ -322,7 +329,7 @@ public class AlgorithmController {
 				algorithmDisplay.toggleUndo(false);
 				// Enable pause button.
 				algorithmDisplay.togglePause(true);
-				
+
 				// If search is at goal or out of nodes, stop.
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
 				// Peform a step in the algorithm.
@@ -339,23 +346,30 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
+				
+				// If we are using DFS, and hence a stack 
+				if(!searchAlgorithm.getExpanded().isEmpty() && SEARCH_TYPE == "dac28.model.DepthFirstSearch") {
+					algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
+				}
+				else algorithmDisplay.setHeadTopBorder(0);
+				
 				// Update display tree.
 				treeController.drawTree();
-				
+
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
-				
+
 				try {
 					sleep(1000);
 				} catch (InterruptedException e) {
 					return;
 				}
-				
+
 				if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) stopAuto();
-				
+
 			}
 			// Disable pause.
 			algorithmDisplay.togglePause(false);
-			
+
 			// Set the buttons to enable or disabled depending on where we are.
 			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
 				algorithmDisplay.toggleAuto(false);

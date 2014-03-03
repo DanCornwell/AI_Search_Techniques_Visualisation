@@ -1,5 +1,6 @@
 package dac28.model;
 
+
 /**
  * Creates an instance of the Tree112111 class with the given goal value.
  * 

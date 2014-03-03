@@ -233,7 +233,7 @@ class TopLevelContainer implements ActionListener {
 			JLabel head = new JLabel();
 			head.setBorder(BOX_BORDER);
 			head.setPreferredSize(BOX_SIZE);
-			head.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(139, 0, 255)));
+			head.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, new Color(139, 0, 255)));
 			JLabel headInfo = new JLabel(" - Head of queue / Top of stack");
 			JLabel newItem = new JLabel();
 			newItem.setBorder(BOX_BORDER);

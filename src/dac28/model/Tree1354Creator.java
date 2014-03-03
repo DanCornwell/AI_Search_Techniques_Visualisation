@@ -1,5 +1,6 @@
 package dac28.model;
 
+
 /**
  * Creator for the 1354 tree.
  * 

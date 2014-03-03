@@ -2,6 +2,7 @@ package dac28.controller;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -18,12 +19,30 @@ import dac28.model.Tree124Creator;
 import dac28.model.Tree1354Creator;
 import dac28.model.TreeCreator;
 
+/**
+ * Controller to create new searches and trees.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class CreateController {
 	
+	/**
+	 * Radio buttons relating to the trees the user can choose.
+	 */
 	private JRadioButton tree124,tree1354,tree112111;
+	/**
+	 * Radio buttons relating to the searches the user can choose.
+	 */
 	private JRadioButton bfs,dfs;
+	/**
+	 * The goal field the user can enter their goal value in.
+	 */
 	private JTextField goal;
 	
+	/**
+	 * Initialises the radio buttons and goal field.
+	 */
 	public CreateController() {
 		
 		tree124 = new JRadioButton("1-2-4 Tree");
@@ -42,16 +61,23 @@ public class CreateController {
 		
 	}
 	
+	/**
+	 * Returns a dialog window allowing the user to choose the search.
+	 * 
+	 * @return dialog window
+	 */
 	public JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
 		
+		// width of the window
 		final int WIDTH = 400;
+		// height of the window
 		final int HEIGHT = 500;
 		
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		
-		JPanel treeChoices = new JPanel();
+		JPanel treeChoices = new JPanel(new GridLayout(0,1));
 		treeChoices.setPreferredSize(new Dimension((WIDTH/2)-10,HEIGHT/2));
 		treeChoices.setBorder(BorderFactory.createLineBorder(Color.black));
 		
@@ -67,7 +93,7 @@ public class CreateController {
 	    treeGroup.add(tree1354);
 	    treeGroup.add(tree112111);
 	    
-		JPanel searchChoices = new JPanel();
+		JPanel searchChoices = new JPanel(new GridLayout(0,1));
 		searchChoices.setPreferredSize(new Dimension((WIDTH/2)-10,HEIGHT/2));
 		searchChoices.setBorder(BorderFactory.createLineBorder(Color.black));
 
@@ -90,6 +116,11 @@ public class CreateController {
 		
 	}
 	
+	/**
+	 * Returns a tree creator, depending on which button is selected.
+	 * 
+	 * @return a tree creator
+	 */
 	public TreeCreator getTreeCreator() {
 		
 		if(tree124.isSelected()) {
@@ -105,6 +136,11 @@ public class CreateController {
 		return new Tree124Creator();
 	}
 	
+	/**
+	 * Returns a search algorithm creator, depending on which button is selected.
+	 * 
+	 * @return a search algorithm creator
+	 */
 	public SearchAlgorithmCreator getAlgorithmCreator() {
 		
 		if(dfs.isSelected()) {
@@ -117,6 +153,11 @@ public class CreateController {
 		return new DepthFirstSearchCreator();
 	}
 	
+	/**
+	 * Returns the value that is in the goal text field.
+	 * 
+	 * @return string representing the value entered
+	 */
 	public String getGoal() {
 		return goal.getText();
 	}
