@@ -4,9 +4,15 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import dac28.model.Tree;
-import dac28.model.Tree124Creator;
 
 
 /**
@@ -15,31 +21,35 @@ import dac28.model.Tree124Creator;
  * @author Dan Cornwell
  *
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Tree.class)
+@PowerMockIgnore("org.apache.log4j.*")
 public class TreeTest {
 
-	private Tree tree124;
-	private final int GOAL = 4;
+	private Tree tree;
 	
 	@Before
 	public void setup() {
 		
-		tree124 = new Tree124Creator().getTree(GOAL);
-		
+		tree = PowerMockito.mock(Tree.class);
 	}
 	
 	@Test
-	public void testConstructorAssignsGoalValueAndGetRoot() {
-
-		assertEquals("Goal value and expected value did not match",4,tree124.getGoal());
-		assertEquals("Root node value and expected node value did not match",0,tree124.getRoot().getValue());
-		
+	public void testCallsConstruct() throws Exception {
+		Whitebox.invokeMethod(tree, "construct");
+		PowerMockito.verifyPrivate(tree).invoke("construct");
 	}
 	
-	@Test 
-	public void testTreeDepth() {
-		
-		assertEquals("Tree depth did not match expected value",3,tree124.getTreeDepth(tree124.getRoot()));
-		
+	@Test
+	public void testCallsGetGoal() {
+		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "GOAL"),tree.getGoal());
+		Mockito.verify(tree).getGoal();
+	}
+	
+	@Test
+	public void testCallsGetRoot() {
+		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree, "ROOT"),tree.getRoot());
+		Mockito.verify(tree).getRoot();
 	}
  
 }

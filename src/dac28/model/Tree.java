@@ -55,7 +55,7 @@ public abstract class Tree {
 	}
 
 	/**
-	 * Returns the maximum depth from the given node.
+	 * Returns the maximum depth from the given node via recursion.
 	 * 
 	 * @param node - the node we want the depth of
 	 * @return integer representing the maximum depth from the node
