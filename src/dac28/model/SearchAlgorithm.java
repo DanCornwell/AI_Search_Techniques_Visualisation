@@ -51,7 +51,7 @@ public abstract class SearchAlgorithm {
 	 * 
 	 * @param TREE - the tree which the algorithm will traverse on
 	 */
-	protected SearchAlgorithm(Tree TREE) {
+	protected SearchAlgorithm(final Tree TREE) {
 
 		visited = new LinkedList<Node>();
 		mementos = new Stack<Memento>();

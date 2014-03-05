@@ -20,6 +20,7 @@ public abstract class Tree {
 	 */
 	protected final Node ROOT;
 
+	
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.
@@ -28,7 +29,7 @@ public abstract class Tree {
 	 * 
 	 * @param GOAL - integer to set the goal node
 	 */
-	Tree(int GOAL) {
+	Tree(final int GOAL) {
 
 		this.GOAL = GOAL;
 		ROOT = new Node(0);
@@ -60,7 +61,7 @@ public abstract class Tree {
 	 * @param node - the node we want the depth of
 	 * @return integer representing the maximum depth from the node
 	 */
-	public int getTreeDepth(Node node) {
+	public final int getTreeDepth(Node node) {
 
 		int max = 0;
 	    for (Node childNode: node.getChildren()) {

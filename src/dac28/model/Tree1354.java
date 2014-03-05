@@ -20,7 +20,7 @@ class Tree1354 extends Tree {
 	 * 
 	 * @param GOAL - the goal value
 	 */
-	Tree1354(int GOAL) {
+	Tree1354(final int GOAL) {
 		 
 		super(GOAL);
 		

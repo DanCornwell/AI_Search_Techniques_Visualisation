@@ -1,202 +1,147 @@
 package dac28.model.test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
-import dac28.model.BreadthFirstSearchCreator;
-import dac28.model.DepthFirstSearchCreator;
+import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
-import dac28.model.Tree124Creator;
 
-/**
- * Tests the implemented search algorithm methods.
- * 
- * @author Dan Cornwell
- *
- */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({SearchAlgorithm.class,Node.class})
+@PowerMockIgnore("org.apache.log4j.*")
 public class SearchAlgorithmTest {
 
-	private SearchAlgorithm bfs,dfs;
+	private SearchAlgorithm algorithm;
 
 	@Before
 	public void setup() {
-		bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4));
-		dfs = new DepthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4));
+		algorithm = PowerMockito.mock(SearchAlgorithm.class);
+	}
+
+	@Test
+	public void testGetCurrentNodeReturnsCurrentNode() {
+		// Initialise the current node
+		Node node = Mockito.mock(Node.class);
+		Whitebox.setInternalState(node, "VALUE", 5);
+		Whitebox.setInternalState(algorithm, "currentNode", node);
 		
+		Mockito.when(algorithm.getCurrentNode()).thenCallRealMethod();
+		// Checks that getCurrentNode returns a node object
+		assertEquals("getCurrentNode did not return a node",node.getValue(),algorithm.getCurrentNode().getValue());
+
+		// Checks algorithm calls getCurrentNode
+		Mockito.verify(algorithm).getCurrentNode();
 	}
 
 	@Test
-	public void testAlgorithmsStopWhenNoNodesLeftAndAtGoalReturnsFalse() {
-		//BFS test
-		SearchAlgorithm other_bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(10));
-		other_bfs.auto();
-		assertFalse("Current node was goal node",other_bfs.atGoal());
-		//DFS test
-		SearchAlgorithm other_dfs =  new DepthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(10));
-		other_dfs.auto();
-		assertFalse("Current node was goal node",other_dfs.atGoal());
+	public void testAtGoalReturnsTrueAtGoalFalseOtherwise() {
+		// Initialise new current node
+		Node node = Mockito.mock(Node.class);
+		// Initialise goal value
+		Whitebox.setInternalState(algorithm, "GOAL", 4);
+		// Set current node to a non goal value
+		Whitebox.setInternalState(node, "VALUE", 2);
+		Whitebox.setInternalState(algorithm, "currentNode", node);
+		
+		Mockito.when(algorithm.atGoal()).thenCallRealMethod();
+		// Checks incorrect node is not the goal
+		assertFalse("At goal node when shouldn't be",algorithm.atGoal());
+		
+		// Sets current node to goal value
+		Whitebox.setInternalState(node, "VALUE", 4);
+		// Checks incorrect node is not the goal
+		assertTrue("Was not at goal node when we should be",algorithm.atGoal());
+
+		// Checks algorithm calls atGoal
+		Mockito.verify(algorithm,times(2)).atGoal();
 	}
 
 	@Test
-	public void testStep() {
-		//BFS test
-		bfs.step();
-		assertEquals("Node value did not match expected node value",0,bfs.getCurrentNode().getValue());
-		bfs.step();
-		assertEquals("Node value did not match expected node value",1,bfs.getCurrentNode().getValue());
-		//DFS test
-		dfs.step();
-		assertEquals("Node value did not match expected node value",0,dfs.getCurrentNode().getValue());
-		dfs.step();
-		assertEquals("Node value did not match expected node value",1,dfs.getCurrentNode().getValue());
+	public void testGetVisitedReturnsVisitedList() {
+		// Initialise visited
+		Whitebox.setInternalState(algorithm, "visited", new LinkedList<Node>());
+		
+		Mockito.when(algorithm.getVisited()).thenCallRealMethod();
+		// Checks getVisited returns a linked list with the visited list elements
+		assertTrue("Did not return the visited linked list",algorithm.getVisited().equals(Whitebox.getInternalState(algorithm, "visited")));
+
+		// Checks algorithm calls getVisited
+		Mockito.verify(algorithm).getVisited();
 	}
 
 	@Test
-	public void testAutoAndStepReachesGoalAndAtGoalReturnsTrue() {
-		// As auto repeatedly calls step(), passing this test verifies both methods reach the goal
-
-		//BFS test
-		bfs.auto();
-		assertEquals("Node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",bfs.atGoal());
-		//DFS test
-		dfs.auto();
-		assertEquals("Node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",dfs.atGoal());
-	}
-
-	@Test
-	public void testStepDoesNotGoPassGoal() {
-		//BFS test
-		bfs.auto();
-		assertEquals("Node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",bfs.atGoal());
-		bfs.step();
-		assertEquals("Step moved from the goal node",4,bfs.getCurrentNode().getValue());
-		assertTrue("No longer at the goal node",bfs.atGoal());
-		//DFS test
-		dfs.auto();
-		assertEquals("Node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",dfs.atGoal());
-		dfs.step();
-		assertEquals("Step moved from the goal node",4,dfs.getCurrentNode().getValue());
-		assertTrue("No longer at the goal node",dfs.atGoal());
-	}
-
-	@Test
-	public void testFinalExpandedAndVisitedLists() {
-		//BFS test
-		bfs.auto();
-		assertEquals("Goal node not reached",4,bfs.getCurrentNode().getValue());
-		int[] bfsExpVisited = {0,1,2,3};
-		int[] bfsExpExpanded = {5,6};
-		assertEquals("Visited list was not the expected size",bfsExpVisited.length,bfs.getVisited().size());
-		assertEquals("Expected list was not the expected size",bfsExpExpanded.length,bfs.getExpanded().size());
-		//safety check
-		if(bfsExpVisited.length == bfs.getVisited().size()) {
-			for(int i=0;i<bfsExpVisited.length;i++) {
-				assertEquals("List element did not match",bfsExpVisited[i],bfs.getVisited().get(i).getValue());
-			}
-		}
-		if(bfsExpExpanded.length == bfs.getExpanded().size()) {
-			for(int i=0;i<bfsExpExpanded.length;i++) {
-				assertEquals("List element did not match",bfsExpExpanded[i],bfs.getExpanded().get(i).getValue());
-			}
-		}
-		//DFS test
-		dfs.auto();
-		assertEquals("Goal node not reached",4,dfs.getCurrentNode().getValue());
-		int[] dfsExpVisited = {0,1,3};
-		int[] dfsExpExpanded = {2};
-		assertEquals("Visited list was not the expected size",dfsExpVisited.length,dfs.getVisited().size());
-		assertEquals("Expected list was not the expected size",dfsExpExpanded.length,dfs.getExpanded().size());
-		//safety check
-		if(dfsExpVisited.length == dfs.getVisited().size()) {
-			for(int i=0;i<dfsExpVisited.length;i++) {
-				assertEquals("List element did not match",dfsExpVisited[i],dfs.getVisited().get(i).getValue());
-			}
-		}
-		if(dfsExpExpanded.length == dfs.getExpanded().size()) {
-			for(int i=0;i<dfsExpExpanded.length;i++) {
-				assertEquals("List element did not match",dfsExpExpanded[i],dfs.getExpanded().get(i).getValue());
-			}
-		}
-	}
-
-	@Test
-	public void testReset() {
-		//BFS test
-		bfs.auto();
-		assertTrue("Goal node not reached",bfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",bfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",bfs.getVisited().isEmpty());
-		bfs.reset();
-		assertFalse("Current node did not reset",bfs.atGoal());
-		assertEquals("Root node value did not match expected node value",0,bfs.getCurrentNode().getValue());
-		assertTrue("Expanded list did not contain root",bfs.getExpanded().size() == 1);
-		assertTrue("Visited list was not empty",bfs.getVisited().isEmpty());
-		bfs.auto();
-		assertTrue("Goal node not reached",bfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",bfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",bfs.getVisited().isEmpty());
-		//DFS test
-		dfs.auto();
-		assertTrue("Goal node not reached",dfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",dfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",dfs.getVisited().isEmpty());
-		dfs.reset();
-		assertFalse("Current node did not reset",dfs.atGoal());
-		assertEquals("Root node value did not match expected node value",0,dfs.getCurrentNode().getValue());
-		assertTrue("Expanded list did not contain root",dfs.getExpanded().size() == 1);
-		assertTrue("Visited list was not empty",dfs.getVisited().isEmpty());
-		dfs.auto();
-		assertTrue("Goal node not reached",dfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",dfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",dfs.getVisited().isEmpty());
+	public void testAutoCallsStep() {
+				
+		// Causes atGoal to return false, false, true - i.e 2 loops 
+		PowerMockito.when(algorithm.atGoal()).thenReturn(false,false,true);
+		// Initialise expanded - curiously expanded.isEmpty() returns false, despite its size being 0
+		Whitebox.setInternalState(algorithm, "expanded", Mockito.mock(List.class));
+		
+		Mockito.doCallRealMethod().when(algorithm).auto();
+		algorithm.auto();
+		// Checks algorithm calls auto
+		Mockito.verify(algorithm).auto(); 
+		// Checks algorithm calls step twice
+		Mockito.verify(algorithm,times(2)).step();
 	}
 	
 	@Test
-	public void testUndoAndMemento() {
-		//BFS test
-		bfs.step();
-		bfs.step();
-		bfs.undo();
-		assertTrue("Not back at goal node",bfs.getCurrentNode().getValue() == 0);
-		bfs.undo();
-		assertTrue("Undo at root node doesn't do anything",bfs.getCurrentNode().getValue() == 0);
-		bfs.auto();
-		assertTrue("Goal node was not reached",bfs.atGoal());
-		bfs.undo();
-		assertFalse("Did not undo",bfs.atGoal());
-		bfs.step();
-		assertTrue("Step did not go to goal node",bfs.atGoal());
-		for(int i=0;i<10;i++) {
-			bfs.undo();
-		}
-		assertTrue("undo did not go back to root node",bfs.getCurrentNode().getValue()==0);
-		//DFS test
-		dfs.step();
-		dfs.step();
-		dfs.undo();
-		assertTrue("Not back at goal node",dfs.getCurrentNode().getValue() == 0);
-		dfs.undo();
-		assertTrue("Undo at root node doesn't do anything",dfs.getCurrentNode().getValue() == 0);
-		dfs.auto();
-		assertTrue("Goal node was not reached",dfs.atGoal());
-		dfs.undo();
-		assertFalse("Did not undo",dfs.atGoal());
-		dfs.step();
-		assertTrue("Step did not go to goal node",dfs.atGoal());
-		for(int i=0;i<10;i++) {
-			dfs.undo();
-		}
-		assertTrue("undo did not go back to root node",dfs.getCurrentNode().getValue()==0);
+	public void testGetExpandedReturnsExpandedList() {
+		// Initialise expanded
+		Whitebox.setInternalState(algorithm, "expanded", Mockito.mock(List.class));
+		
+		Mockito.when(algorithm.getExpanded()).thenCallRealMethod();
+		// Checks getVisited returns a linked list with the visited list elements
+		assertTrue("Did not return the expanded list",algorithm.getExpanded().equals(Whitebox.getInternalState(algorithm, "expanded")));
+
+		// Checks algorithm calls getVisited
+		Mockito.verify(algorithm).getExpanded();
 	}
-	
+
+	@Test
+	public void testResetClearsListAndSetsRoot() {
+		// Initialise variables
+		Node node = Mockito.mock(Node.class);
+		Whitebox.setInternalState(node, "VALUE", 5);
+		Whitebox.setInternalState(algorithm, "ROOT", node);
+		@SuppressWarnings("unchecked")
+		LinkedList<Node> visited = Mockito.mock(LinkedList.class);
+		@SuppressWarnings("unchecked")
+		List<Node> expanded = Mockito.mock(List.class);
+		@SuppressWarnings("unchecked")
+		Stack<Node> memento = Mockito.mock(Stack.class);
+		Whitebox.setInternalState(algorithm, "visited", visited);
+		Whitebox.setInternalState(algorithm, "mementos", memento);
+		Whitebox.setInternalState(algorithm, "expanded", expanded);
+		
+		// Set mock to call real method, then call reset
+		Mockito.when(algorithm.getCurrentNode()).thenCallRealMethod();
+		Mockito.doCallRealMethod().when(algorithm).reset();
+		algorithm.reset();
+		
+		// Verify reset method calls list methods and sets the current node to the root
+		Mockito.verify(visited).clear();
+		Mockito.verify(expanded).clear();
+		Mockito.verify(expanded).add(node);
+		Mockito.verify(memento).clear();
+		assertTrue("Current node was not the root",algorithm.getCurrentNode().getValue() == node.getValue());
+		
+		// Verify reset is called
+		verify(algorithm).reset();
+	}
+
 }

@@ -26,7 +26,7 @@ public class Node {
 	 * 
 	 * @param VALUE - the integer value of the VALUE variable
 	 */
-	Node(int VALUE) {
+	Node(final int VALUE) {
 
 		this.VALUE = VALUE;
 		children = new LinkedList<Node>();
