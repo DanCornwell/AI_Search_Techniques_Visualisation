@@ -20,7 +20,6 @@ public abstract class Tree {
 	 */
 	protected final Node ROOT;
 
-	
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.

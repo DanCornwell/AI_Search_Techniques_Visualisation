@@ -66,7 +66,7 @@ public class Node {
 	 * @return list of the child nodes for this node
 	 */
 	public final LinkedList<Node> getChildren() {
-		return children;
+		return new LinkedList<Node>(children);
 	}
 
 }

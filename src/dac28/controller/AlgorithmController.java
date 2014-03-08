@@ -95,7 +95,7 @@ public class AlgorithmController {
 			buttonLogic();
 
 			// Set the buttons to enable or disabled depending on where we are.
-			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
+			if(searchAlgorithm.atGoal() || !searchAlgorithm.nodesToExplore()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
 				algorithmDisplay.toggleSkip(false);
@@ -371,7 +371,7 @@ public class AlgorithmController {
 			algorithmDisplay.togglePause(false);
 
 			// Set the buttons to enable or disabled depending on where we are.
-			if(searchAlgorithm.atGoal() || searchAlgorithm.nodesUnexplored()) {
+			if(searchAlgorithm.atGoal() || !searchAlgorithm.nodesToExplore()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
 				algorithmDisplay.toggleSkip(false);

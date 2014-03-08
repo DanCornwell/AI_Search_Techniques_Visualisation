@@ -149,14 +149,14 @@ public abstract class SearchAlgorithm {
 			visited = memento.STATE_VISITED;
 		}
 	}
-
+	
 	/**
-	 * Returns whether we have nodes left to expanded
+	 * Returns whether we have nodes left to explore.
 	 * 
-	 * @return true if expanded list is empty, false otherwise
+	 * @return true is the expanded list is not empty, false otherwise
 	 */
-	public final boolean nodesUnexplored() {
-		return expanded.isEmpty();
+	public final boolean nodesToExplore() {
+		return !expanded.isEmpty();
 	}
 	
 	/**
@@ -164,7 +164,8 @@ public abstract class SearchAlgorithm {
 	 * Adds a memento to the memento stack if we can.
 	 */ 
 	public final void step() {
-		if(!atGoal() && !nodesUnexplored()) {
+
+		if(!atGoal() && !expanded.isEmpty()) {
 			mementos.push(new Memento());
 			algorithmLogic();
 		}
