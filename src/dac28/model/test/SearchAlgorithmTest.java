@@ -216,18 +216,13 @@ public class SearchAlgorithmTest {
 		Whitebox.setInternalState(algorithm, "mementos", memento);
 		List<Node> expanded = mock(List.class);
 		Whitebox.setInternalState(algorithm, "expanded", expanded);
-		Whitebox.setInternalState(algorithm, "visited", new LinkedList<Node>());
 		Node node = PowerMockito.mock(Node.class);
 		// Initialise goal value
 		Whitebox.setInternalState(algorithm, "GOAL", 4);
 		// Set current node to a non goal value
 		when(node.getValue()).thenReturn(2);
 		Whitebox.setInternalState(algorithm, "currentNode", node);
-		
-		Node currentNode = PowerMockito.mock(Node.class);
-		when(currentNode.getValue()).thenReturn(7);
-		Whitebox.setInternalState(algorithm, "currentNode", currentNode);
-		Whitebox.setInternalState(algorithm, "GOAL", 5);
+		doReturn(new LinkedList<Node>()).when(algorithm).getVisited();
 		
 		// make expanded list say it is not empty, allow call to the abstract method 
 		when(expanded.isEmpty()).thenReturn(false);
@@ -250,6 +245,93 @@ public class SearchAlgorithmTest {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testStepDoesntWorkWhenConditionsNotMet() {
+
+		@SuppressWarnings( "rawtypes" )
+		Stack memento = Mockito.mock(Stack.class);
+		Whitebox.setInternalState(algorithm, "mementos", memento);
+		when(memento.push(any(Object.class))).thenReturn(null);
+		List<Node> expanded = mock(List.class);
+		Whitebox.setInternalState(algorithm, "expanded", expanded);
+		try {
+			PowerMockito.doNothing().when(algorithm,"algorithmLogic");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		doReturn(true).when(algorithm).atGoal();
+		when(expanded.isEmpty()).thenReturn(false);	
+		doReturn(new LinkedList<Node>()).when(algorithm).getVisited();
+		// verify a call to step calls mementos push and algorithmLogic
+		algorithm.step();
+		verify(memento,never()).push(any(Object.class));
+		try {
+			// verify algorithmLogic is called
+			PowerMockito.verifyPrivate(algorithm,never()).invoke("algorithmLogic");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testStepWorksWhenConditionsMet() {
+
+		@SuppressWarnings( "rawtypes" )
+		Stack memento = Mockito.mock(Stack.class);
+		Whitebox.setInternalState(algorithm, "mementos", memento);
+		when(memento.push(any(Object.class))).thenReturn(null);
+		List<Node> expanded = mock(List.class);
+		Whitebox.setInternalState(algorithm, "expanded", expanded);
+		try {
+			PowerMockito.doNothing().when(algorithm,"algorithmLogic");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		doReturn(false).when(algorithm).atGoal();
+		when(expanded.isEmpty()).thenReturn(false);	
+		doReturn(new LinkedList<Node>()).when(algorithm).getVisited();
+		// verify a call to step calls mementos push and algorithmLogic
+		algorithm.step();
+		algorithm.step();
+		verify(memento,times(2)).push(any(Object.class));
+		try {
+			// verify algorithmLogic is called
+			PowerMockito.verifyPrivate(algorithm,times(2)).invoke("algorithmLogic");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Test
+	public void testAutoDoesntWorkWhenConditionsNotMet() {
+
+		doReturn(true).when(algorithm).atGoal();
+		algorithm.auto();
+		verify(algorithm).auto();
+		verify(algorithm,never()).step();		
+		
+	}
+	
+	@Test
+	public void testAutoWorksWhenConditionsMet() {
+		
+		@SuppressWarnings("unchecked")
+		List<Node> expanded = mock(List.class);
+		Whitebox.setInternalState(algorithm, "expanded", expanded);
+		doReturn(false).when(algorithm).atGoal();
+		// Return false then true to break auto loop
+		when(expanded.isEmpty()).thenReturn(false,true);
+		doNothing().when(algorithm).step();
+
+		algorithm.auto();
+		verify(algorithm).auto();
+		verify(algorithm).step();
 	}
 
 }

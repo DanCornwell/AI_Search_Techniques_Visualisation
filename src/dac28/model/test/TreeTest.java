@@ -70,5 +70,5 @@ public class TreeTest {
 		// Checks calls getGetTreeDepth with some node
 		verify(tree).getTreeDepth(any(Node.class));
 	}
-
+	
 }

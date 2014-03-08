@@ -1,14 +1,25 @@
 package dac28.model.test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import dac28.model.BreadthFirstSearchCreator;
 import dac28.model.DepthFirstSearchCreator;
+import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
-import dac28.model.Tree124Creator;
+import dac28.model.Tree;
 
 /**
  * Tests the implemented search algorithm methods.
@@ -16,187 +27,127 @@ import dac28.model.Tree124Creator;
  * @author Dan Cornwell
  *
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Tree.class,Node.class})
+@PowerMockIgnore("org.apache.log4j.*")
 public class ConcreteSearchAlgorithmTest {
 
 	private SearchAlgorithm bfs,dfs;
 
 	@Before
 	public void setup() {
-		bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4));
-		dfs = new DepthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(4));
+		Tree tree = PowerMockito.mock(Tree.class);
+		Node root = PowerMockito.mock(Node.class);
+		Node left = PowerMockito.mock(Node.class);
+		Node right = PowerMockito.mock(Node.class);
+		Node left_left = PowerMockito.mock(Node.class);
+
+		doReturn(0).when(root).getValue();
+		doReturn(new LinkedList<Node>(Arrays.asList(left,right))).when(root).getChildren();
+		doReturn(1).when(left).getValue();
+		doReturn(new LinkedList<Node>(Arrays.asList(left_left))).when(left).getChildren();
+		doReturn(2).when(right).getValue();
+		doReturn(new LinkedList<Node>()).when(right).getChildren();
+		doReturn(3).when(left_left).getValue();
+		doReturn(new LinkedList<Node>()).when(left_left).getChildren();
+
+		try {
+			PowerMockito.doReturn(true).when(root, "hasChild");
+			PowerMockito.doReturn(true).when(left, "hasChild");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		doReturn(3).when(tree).getGoal();
+		doReturn(root).when(tree).getRoot();
+
+		bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(tree);
+		dfs = new DepthFirstSearchCreator().getSearchAlgorithm(tree);
+
+	}
+
+	@Test
+	public void testBFSAlgorithmLogic() {
+
+		LinkedList<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
+		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
+		Whitebox.setInternalState(bfs, "expanded", expandedSpy);
+		LinkedList<Node> visited = Whitebox.getInternalState(bfs, "visited");
+		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
+		Whitebox.setInternalState(bfs, "visited", visitedSpy);
+		Node currentNode = Whitebox.getInternalState(bfs, "currentNode");
+
+		Node nextToExpanded = expanded.peek();
+		try {
+			Whitebox.invokeMethod(bfs, "algorithmLogic");
+		}
+		catch (Exception e) {
+		}
+		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
+		verify(visitedSpy).add(any(Node.class));
+		try {
+			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		verify(expandedSpy,atLeast(1)).add(any(Node.class));
+	}
+	
+	public void testDFSAlgorithmLogic() {
+		
+		LinkedList<Node> expanded = Whitebox.getInternalState(dfs, "expanded");
+		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
+		Whitebox.setInternalState(dfs, "expanded", expandedSpy);
+		LinkedList<Node> visited = Whitebox.getInternalState(dfs, "visited");
+		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
+		Whitebox.setInternalState(dfs, "visited", visitedSpy);
+		Node currentNode = Whitebox.getInternalState(dfs, "currentNode");
+
+		Node nextToExpanded = expanded.peek();
+		try {
+			Whitebox.invokeMethod(dfs, "algorithmLogic");
+		}
+		catch (Exception e) {
+		}
+		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
+		verify(visitedSpy).add(any(Node.class));
+		try {
+			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		verify(expandedSpy,atLeast(1)).add(any(Node.class));
 		
 	}
 
 	@Test
-	public void testAlgorithmsStopWhenNoNodesLeftAndAtGoalReturnsFalse() {
-		//BFS test
-		SearchAlgorithm other_bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(10));
-		other_bfs.auto();
-		assertFalse("Current node was goal node",other_bfs.atGoal());
-		//DFS test
-		SearchAlgorithm other_dfs =  new DepthFirstSearchCreator().getSearchAlgorithm(new Tree124Creator().getTree(10));
-		other_dfs.auto();
-		assertFalse("Current node was goal node",other_dfs.atGoal());
-	}
+	public void testBFSFinalExpandedAndVisitedLists() {
 
-	@Test
-	public void testStep() {
-		//BFS test
-		bfs.step();
-		assertEquals("Node value did not match expected node value",0,bfs.getCurrentNode().getValue());
-		bfs.step();
-		assertEquals("Node value did not match expected node value",1,bfs.getCurrentNode().getValue());
-		//DFS test
-		dfs.step();
-		assertEquals("Node value did not match expected node value",0,dfs.getCurrentNode().getValue());
-		dfs.step();
-		assertEquals("Node value did not match expected node value",1,dfs.getCurrentNode().getValue());
-	}
-
-	@Test
-	public void testAutoAndStepReachesGoalAndAtGoalReturnsTrue() {
-		// As auto repeatedly calls step(), passing this test verifies both methods reach the goal
-
-		//BFS test
 		bfs.auto();
-		assertEquals("Node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",bfs.atGoal());
-		//DFS test
-		dfs.auto();
-		assertEquals("Node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",dfs.atGoal());
-	}
-
-	@Test
-	public void testStepDoesNotGoPassGoal() {
-		//BFS test
-		bfs.auto();
-		assertEquals("Node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",bfs.atGoal());
-		bfs.step();
-		assertEquals("Step moved from the goal node",4,bfs.getCurrentNode().getValue());
-		assertTrue("No longer at the goal node",bfs.atGoal());
-		//DFS test
-		dfs.auto();
-		assertEquals("Node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertTrue("Correct node was not the goal node",dfs.atGoal());
-		dfs.step();
-		assertEquals("Step moved from the goal node",4,dfs.getCurrentNode().getValue());
-		assertTrue("No longer at the goal node",dfs.atGoal());
-	}
-
-	@Test
-	public void testFinalExpandedAndVisitedLists() {
-		//BFS test
-		bfs.auto();
-		assertEquals("Goal node not reached",4,bfs.getCurrentNode().getValue());
-		int[] bfsExpVisited = {0,1,2,3};
-		int[] bfsExpExpanded = {5,6};
-		assertEquals("Visited list was not the expected size",bfsExpVisited.length,bfs.getVisited().size());
-		assertEquals("Expected list was not the expected size",bfsExpExpanded.length,bfs.getExpanded().size());
-		//safety check
-		if(bfsExpVisited.length == bfs.getVisited().size()) {
-			for(int i=0;i<bfsExpVisited.length;i++) {
-				assertEquals("List element did not match",bfsExpVisited[i],bfs.getVisited().get(i).getValue());
-			}
+		int[] expandedFinal = {};
+		int[] visitedFinal = {0,1,2,3};
+		for(int i=0;i<bfs.getExpanded().size();i++) {
+			assertTrue("An expanded value did not match",bfs.getExpanded().get(i).getValue() == expandedFinal[i]);
 		}
-		if(bfsExpExpanded.length == bfs.getExpanded().size()) {
-			for(int i=0;i<bfsExpExpanded.length;i++) {
-				assertEquals("List element did not match",bfsExpExpanded[i],bfs.getExpanded().get(i).getValue());
-			}
+		for(int j=0;j<bfs.getVisited().size();j++) {
+			assertTrue("An visited value did not match",bfs.getVisited().get(j).getValue() == visitedFinal[j]);
 		}
-		//DFS test
-		dfs.auto();
-		assertEquals("Goal node not reached",4,dfs.getCurrentNode().getValue());
-		int[] dfsExpVisited = {0,1,3};
-		int[] dfsExpExpanded = {2};
-		assertEquals("Visited list was not the expected size",dfsExpVisited.length,dfs.getVisited().size());
-		assertEquals("Expected list was not the expected size",dfsExpExpanded.length,dfs.getExpanded().size());
-		//safety check
-		if(dfsExpVisited.length == dfs.getVisited().size()) {
-			for(int i=0;i<dfsExpVisited.length;i++) {
-				assertEquals("List element did not match",dfsExpVisited[i],dfs.getVisited().get(i).getValue());
-			}
-		}
-		if(dfsExpExpanded.length == dfs.getExpanded().size()) {
-			for(int i=0;i<dfsExpExpanded.length;i++) {
-				assertEquals("List element did not match",dfsExpExpanded[i],dfs.getExpanded().get(i).getValue());
-			}
-		}
-	}
-
-	@Test
-	public void testReset() {
-		//BFS test
-		bfs.auto();
-		assertTrue("Goal node not reached",bfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",bfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",bfs.getVisited().isEmpty());
-		bfs.reset();
-		assertFalse("Current node did not reset",bfs.atGoal());
-		assertEquals("Root node value did not match expected node value",0,bfs.getCurrentNode().getValue());
-		assertTrue("Expanded list did not contain root",bfs.getExpanded().size() == 1);
-		assertTrue("Visited list was not empty",bfs.getVisited().isEmpty());
-		bfs.auto();
-		assertTrue("Goal node not reached",bfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,bfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",bfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",bfs.getVisited().isEmpty());
-		//DFS test
-		dfs.auto();
-		assertTrue("Goal node not reached",dfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",dfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",dfs.getVisited().isEmpty());
-		dfs.reset();
-		assertFalse("Current node did not reset",dfs.atGoal());
-		assertEquals("Root node value did not match expected node value",0,dfs.getCurrentNode().getValue());
-		assertTrue("Expanded list did not contain root",dfs.getExpanded().size() == 1);
-		assertTrue("Visited list was not empty",dfs.getVisited().isEmpty());
-		dfs.auto();
-		assertTrue("Goal node not reached",dfs.atGoal());
-		assertEquals("Goal node value did not match expected node value",4,dfs.getCurrentNode().getValue());
-		assertFalse("Expanded list was empty",dfs.getExpanded().isEmpty());
-		assertFalse("Visited list was empty",dfs.getVisited().isEmpty());
+		
 	}
 	
 	@Test
-	public void testUndoAndMemento() {
-		//BFS test
-		bfs.step();
-		bfs.step();
-		bfs.undo();
-		assertTrue("Not back at goal node",bfs.getCurrentNode().getValue() == 0);
-		bfs.undo();
-		assertTrue("Undo at root node doesn't do anything",bfs.getCurrentNode().getValue() == 0);
-		bfs.auto();
-		assertTrue("Goal node was not reached",bfs.atGoal());
-		bfs.undo();
-		assertFalse("Did not undo",bfs.atGoal());
-		bfs.step();
-		assertTrue("Step did not go to goal node",bfs.atGoal());
-		for(int i=0;i<10;i++) {
-			bfs.undo();
-		}
-		assertTrue("undo did not go back to root node",bfs.getCurrentNode().getValue()==0);
-		//DFS test
-		dfs.step();
-		dfs.step();
-		dfs.undo();
-		assertTrue("Not back at goal node",dfs.getCurrentNode().getValue() == 0);
-		dfs.undo();
-		assertTrue("Undo at root node doesn't do anything",dfs.getCurrentNode().getValue() == 0);
+	public void testDFSFinalExpandedAndVisitedLists() {
+		
 		dfs.auto();
-		assertTrue("Goal node was not reached",dfs.atGoal());
-		dfs.undo();
-		assertFalse("Did not undo",dfs.atGoal());
-		dfs.step();
-		assertTrue("Step did not go to goal node",dfs.atGoal());
-		for(int i=0;i<10;i++) {
-			dfs.undo();
+		int[] expandedFinal = {2};
+		int[] visitedFinal = {0,1,3};
+		for(int i=0;i<dfs.getExpanded().size();i++) {
+			assertTrue("An expanded value did not match",dfs.getExpanded().get(i).getValue() == expandedFinal[i]);
 		}
-		assertTrue("undo did not go back to root node",dfs.getCurrentNode().getValue()==0);
+		for(int j=0;j<dfs.getVisited().size();j++) {
+			assertTrue("An visited value did not match",dfs.getVisited().get(j).getValue() == visitedFinal[j]);
+		}
+		
 	}
-	
+
 }
