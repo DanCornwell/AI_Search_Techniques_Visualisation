@@ -64,10 +64,10 @@ public class AlgorithmDisplay {
 	 * @param HEIGHT - height of the whole application
 	 * @return JPanel containing fields to display a search algorithm's data
 	 */
-	JPanel initialiseAlgorithmPanel(int WIDTH, int HEIGHT) {
+	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
 
 		JPanel algorithmPanel = new JPanel();
-		algorithmPanel.setPreferredSize(new Dimension(WIDTH/2,HEIGHT-30));
+		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
 		expandedMementos = new Stack<LinkedList<ListElementMemento>>();
 		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
@@ -107,7 +107,7 @@ public class AlgorithmDisplay {
 
 		// Create holding panels and add items to them
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
-		final int panelWidth = (WIDTH/2)-20;
+		final int panelWidth = (WIDTH)-20;
 		final int panelHeight = (HEIGHT-40)/7;
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);

@@ -20,6 +20,7 @@ import javax.swing.border.Border;
 
 import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
+import dac28.controller.DualCreateController;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
@@ -37,13 +38,17 @@ class TopLevelContainer implements ActionListener {
 	 */
 	private AlgorithmDisplay algorithmDisplay;
 	/**
+	 * The second algorithm display used in the dual search.
+	 */
+	private AlgorithmDisplay dualAlgorithmDisplay;
+	/**
 	 * The tree display being used.
 	 */
 	private TreeDisplay treeDisplay;
 	/**
 	 * Menu items that the user can interact with.
 	 */
-	private JMenuItem newSearch,quit,about,legend;
+	private JMenuItem newSearch,newDualSearch,quit,about,legend;
 	/**
 	 * Base frame for the application.
 	 */
@@ -55,7 +60,7 @@ class TopLevelContainer implements ActionListener {
 	/**
 	 * Width of the displays.
 	 */
-	private int WIDTH = 700;
+	private int width = 700;
 
 	TopLevelContainer() {
 		initialiseBase();
@@ -74,11 +79,14 @@ class TopLevelContainer implements ActionListener {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
 		menuBar.setBackground(new Color(154, 165, 127));
-		menuBar.setPreferredSize(new Dimension(WIDTH, 30));
+		menuBar.setPreferredSize(new Dimension(width, 30));
 		JMenu file = new JMenu("File");
 		newSearch = new JMenuItem("New Search...");
 		newSearch.addActionListener(this);
+		newDualSearch = new JMenuItem("New Dual Search...");
+		newDualSearch.addActionListener(this);
 		file.add(newSearch);
+		file.add(newDualSearch);
 		file.addSeparator();
 		quit = new JMenuItem("Quit");
 		quit.addActionListener(this);
@@ -97,10 +105,34 @@ class TopLevelContainer implements ActionListener {
 
 		// Assign stuff onto the base frame
 		base.setJMenuBar(menuBar);
+
+		initialiseSingleDisplay();
+	}
+
+
+	/**
+	 * Initialises the graphical user interface for a single search.
+	 */
+	private void initialiseSingleDisplay() {
+
+		width = 700;
 		addDisplays();
-		 
+		showBase();
+	}
+
+	/**
+	 * Initialises the graphical user interface for a dual search.
+	 */
+	private void initialiseDualDisplay() {
+
+		width = 1000;
+		addDualDisplays(); 
+		showBase();
+	}
+
+	private void showBase() {
 		// Display the window.
-		base.setMinimumSize(new Dimension(WIDTH,HEIGHT));
+		base.setMinimumSize(new Dimension(width,HEIGHT));
 		base.pack();
 		base.setVisible(true);
 		base.setResizable(false);
@@ -109,7 +141,7 @@ class TopLevelContainer implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		// New search, creates a controller and takes a user input for the goal node and their choices
 		// for the tree and algorithm. Loops if input is invalid.
 		if(e.getSource() == newSearch) {
@@ -143,19 +175,69 @@ class TopLevelContainer implements ActionListener {
 				}
 
 			}
-			
+
 			// Add new displays
 			addDisplays();
 
 			// Create a tree and algorithm controller with the user supplied information.
-			
+
 			Tree tree = controller.getTreeCreator().getTree(goal);
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
-
+			initialiseSingleDisplay();
+			
 			TreeController treeController = new TreeController(algorithm,tree,treeDisplay);
 
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
+		}
+
+		else if(e.getSource() == newDualSearch) {
+			Object[] options = {"Confirm", "Cancel"};
+
+			DualCreateController controller = new DualCreateController();
+
+			int goal = 0;
+
+			while(true) {
+
+				int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
+						"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+				if(result == JOptionPane.OK_OPTION) {
+
+					try {
+						goal = Integer.parseInt(controller.getGoal());
+						break;
+					}
+					catch(NumberFormatException error) {
+						Object[] ok = {"Ok"};
+						JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
+								"Please enter a valid integer.", 
+								"Goal Value Error",JOptionPane.YES_OPTION,
+								JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					}
+				}
+				else {
+					return;
+				}
+
+			}
+
+			// Add new displays
+			addDualDisplays();
+
+			// Create a tree and algorithm controller with the user supplied information.
+
+			Tree tree = controller.getTreeCreator().getTree(goal);
+			SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
+			SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
+			initialiseDualDisplay();
+			// Controllers for the first algorithm
+			TreeController treeController1 = new TreeController(algorithm1,tree,treeDisplay);
+			new AlgorithmController(treeController1,algorithm1,dualAlgorithmDisplay);
+			// Controller for the second algorithm
+			TreeController treeController2 = new TreeController(algorithm2,tree,treeDisplay);
+			new AlgorithmController(treeController2,algorithm2,algorithmDisplay);
 		}
 
 		else if(e.getSource() == quit) {
@@ -175,18 +257,33 @@ class TopLevelContainer implements ActionListener {
 	}
 
 	/**
-	 * Adds displays onto the base frame.
+	 * Adds single displays onto the base frame.
 	 */
 	private void addDisplays() {
-		
+
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplay();
 		algorithmDisplay = new AlgorithmDisplay();
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(WIDTH,HEIGHT),BorderLayout.WEST);
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(WIDTH,HEIGHT),BorderLayout.EAST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,HEIGHT-30),BorderLayout.WEST);
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,HEIGHT-30),BorderLayout.EAST);
 
 	}
 	
+	/**
+	 * Adds dual displays onto the base frame.
+	 */
+	private void addDualDisplays() {
+
+		base.getContentPane().removeAll();
+		treeDisplay = new TreeDisplay();
+		algorithmDisplay = new AlgorithmDisplay();
+		dualAlgorithmDisplay = new AlgorithmDisplay();
+		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3, HEIGHT-30),BorderLayout.WEST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,HEIGHT-30));
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3,HEIGHT-30),BorderLayout.EAST);
+
+	}
+
 	/**
 	 * Returns the legend panel.
 	 * 
@@ -273,7 +370,7 @@ class TopLevelContainer implements ActionListener {
 			legend.add(p4);
 			legend.setVisible(true);
 			legend.setLocationRelativeTo(base);
-			
+
 			return legend;
 
 		}

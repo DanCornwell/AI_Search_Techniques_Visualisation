@@ -37,8 +37,8 @@ public class TreeDisplay {
 
 	JPanel initialiseTreePanel(int WIDTH, int HEIGHT) {
 
-		maxWidth = WIDTH/2;
-		maxHeight = HEIGHT-30;
+		maxWidth = WIDTH;
+		maxHeight = HEIGHT;
 
 		treePanel = new TreePanel();
 		treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
