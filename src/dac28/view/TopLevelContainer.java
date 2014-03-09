@@ -21,6 +21,8 @@ import javax.swing.border.Border;
 import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
+import dac28.controller.DualTreeController;
+import dac28.controller.SingleTreeController;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
@@ -185,7 +187,7 @@ class TopLevelContainer implements ActionListener {
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
 			initialiseSingleDisplay();
 			
-			TreeController treeController = new TreeController(algorithm,tree,treeDisplay);
+			TreeController treeController = new SingleTreeController(algorithm,tree,treeDisplay);
 
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
@@ -233,11 +235,10 @@ class TopLevelContainer implements ActionListener {
 			SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
 			initialiseDualDisplay();
 			// Controllers for the first algorithm
-			TreeController treeController1 = new TreeController(algorithm1,tree,treeDisplay);
-			new AlgorithmController(treeController1,algorithm1,dualAlgorithmDisplay);
-			// Controller for the second algorithm
-			TreeController treeController2 = new TreeController(algorithm2,tree,treeDisplay);
-			new AlgorithmController(treeController2,algorithm2,algorithmDisplay);
+			SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
+			TreeController treeController = new DualTreeController(searchAlgorithms,tree,treeDisplay);
+			new AlgorithmController(treeController,algorithm1,dualAlgorithmDisplay);
+			new AlgorithmController(treeController,algorithm2,algorithmDisplay);
 		}
 
 		else if(e.getSource() == quit) {
@@ -275,7 +276,7 @@ class TopLevelContainer implements ActionListener {
 	private void addDualDisplays() {
 
 		base.getContentPane().removeAll();
-		treeDisplay = new TreeDisplay();
+		treeDisplay = new DualTreeDisplay();
 		algorithmDisplay = new AlgorithmDisplay();
 		dualAlgorithmDisplay = new AlgorithmDisplay();
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3, HEIGHT-30),BorderLayout.WEST);
