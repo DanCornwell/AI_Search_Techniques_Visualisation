@@ -6,16 +6,16 @@ import dac28.view.DualTreeDisplay;
 import dac28.view.TreeDisplay;
 
 public class DualTreeController extends TreeController {
+
+	public DualTreeController(SearchAlgorithm[] searchAlgorithms, Tree tree,TreeDisplay treeDisplay) {
+		super(searchAlgorithms, tree, treeDisplay);
+	}
+
+	@Override
+	void setAlgorithms(SearchAlgorithm[] searchAlgorithms) {
+		((DualTreeDisplay) treeDisplay).setAlgorithms(searchAlgorithms);
+	}
 	
-	public DualTreeController(SearchAlgorithm[] searchAlgorithms, Tree tree, TreeDisplay treeDisplay) {
-		
-		this.treeDisplay = new DualTreeDisplay();
-		
-		this.treeDisplay = treeDisplay;
-		this.treeDisplay.setTree(tree);
-		((DualTreeDisplay) this.treeDisplay).setAlgorithms(searchAlgorithms);
-		this.treeDisplay.drawTree();
-		
-	}	
+
 	
 }

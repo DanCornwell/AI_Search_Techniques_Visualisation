@@ -42,7 +42,7 @@ public class DualTreeDisplay extends TreeDisplay {
 		maxWidth = WIDTH;
 		maxHeight = HEIGHT;
 
-		treePanel = new TreePanel();
+		treePanel = new DualTreePanel();
 		treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
 		treePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		treePanel.setBackground(Color.white);
@@ -84,20 +84,12 @@ public class DualTreeDisplay extends TreeDisplay {
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class TreePanel extends JPanel {
+	private class DualTreePanel extends TreePanel {
 
 		/**
 		 * Random serial number.
 		 */
 		private static final long serialVersionUID = 8970803915887926117L;
-
-		/**
-		 * Paints the JPanel. Calls the draw tree method.
-		 */
-		public void paintComponent(final Graphics g) {
-			super.paintComponent(g);
-			drawTree(g);
-		}
 
 		/**
 		 * Draws the tree that the JPanel has an instance variable of.
@@ -106,9 +98,8 @@ public class DualTreeDisplay extends TreeDisplay {
 		 * 
 		 * @param g - Graphics instance
 		 */
+		@Override
 		public void drawTree(Graphics g) {
-
-			super.paintComponent(g);
 
 			// If we have no tree or algorithms return.
 			if(tree==null || searchAlgorithm1==null || searchAlgorithm2==null) {

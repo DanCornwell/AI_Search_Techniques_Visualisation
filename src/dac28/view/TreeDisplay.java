@@ -27,13 +27,13 @@ import dac28.model.Tree;
 public class TreeDisplay {
 
 	// The tree panel instance.
-	private TreePanel treePanel;
+	protected TreePanel treePanel;
 
 	private SearchAlgorithm searchAlgorithm;
 	// The max width and max height of the display.
-	private int maxWidth, maxHeight;
+	protected int maxWidth, maxHeight;
 	// The tree the display will use.
-	private Tree tree = null;
+	protected Tree tree = null;
 
 	JPanel initialiseTreePanel(int WIDTH, int HEIGHT) {
 
@@ -47,7 +47,7 @@ public class TreeDisplay {
 
 		return treePanel;
 	}
-
+	
 	/**
 	 * Sets the tree.
 	 * 
@@ -67,10 +67,11 @@ public class TreeDisplay {
 	/**
 	 * Sets the search algorithm being used on the tree.
 	 * 
-	 * @param searchAlgorithm - the search algorithm to use.
+	 * @param searchAlgorithms - the search algorithm to use.
 	 */
-	public void setAlgorithm(SearchAlgorithm searchAlgorithm) {
-		this.searchAlgorithm = searchAlgorithm;
+	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
+		if(searchAlgorithms.length != 1);
+		this.searchAlgorithm = searchAlgorithms[0];
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class TreeDisplay {
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class TreePanel extends JPanel {
+	protected class TreePanel extends JPanel {
 
 		/**
 		 * Random serial number.
@@ -103,8 +104,6 @@ public class TreeDisplay {
 		 * @param g - Graphics instance
 		 */
 		public void drawTree(Graphics g) {
-
-			super.paintComponent(g);
 
 			// If we have no tree or algorithm return.
 			if(tree==null || searchAlgorithm==null) {

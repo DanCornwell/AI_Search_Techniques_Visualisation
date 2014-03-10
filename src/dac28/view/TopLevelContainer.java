@@ -134,7 +134,7 @@ class TopLevelContainer implements ActionListener {
 
 	private void showBase() {
 		// Display the window.
-		base.setMinimumSize(new Dimension(width,HEIGHT));
+		base.setPreferredSize(new Dimension(width,HEIGHT));
 		base.pack();
 		base.setVisible(true);
 		base.setResizable(false);
@@ -187,7 +187,8 @@ class TopLevelContainer implements ActionListener {
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
 			initialiseSingleDisplay();
 			
-			TreeController treeController = new SingleTreeController(algorithm,tree,treeDisplay);
+			SearchAlgorithm[] algorithms = {algorithm};
+			TreeController treeController = new SingleTreeController(algorithms,tree,treeDisplay);
 
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
@@ -234,7 +235,7 @@ class TopLevelContainer implements ActionListener {
 			SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
 			SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
 			initialiseDualDisplay();
-			// Controllers for the first algorithm
+
 			SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
 			TreeController treeController = new DualTreeController(searchAlgorithms,tree,treeDisplay);
 			new AlgorithmController(treeController,algorithm1,dualAlgorithmDisplay);
