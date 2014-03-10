@@ -13,7 +13,7 @@ public class DualTreeController extends TreeController {
 
 	@Override
 	void setAlgorithms(SearchAlgorithm[] searchAlgorithms) {
-		((DualTreeDisplay) treeDisplay).setAlgorithms(searchAlgorithms);
+		((DualTreeDisplay) treeDisplay).setAlgorithm(searchAlgorithms);
 	}
 	
 

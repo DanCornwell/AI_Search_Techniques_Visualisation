@@ -264,7 +264,7 @@ class TopLevelContainer implements ActionListener {
 	private void addDisplays() {
 
 		base.getContentPane().removeAll();
-		treeDisplay = new TreeDisplay();
+		treeDisplay = new SingleTreeDisplay();
 		algorithmDisplay = new AlgorithmDisplay();
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,HEIGHT-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,HEIGHT-30),BorderLayout.EAST);

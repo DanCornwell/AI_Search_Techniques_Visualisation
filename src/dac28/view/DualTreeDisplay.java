@@ -1,7 +1,6 @@
 package dac28.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashMap;
@@ -9,12 +8,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
-import dac28.model.Tree;
 
 /**
  * The tree display class.
@@ -26,52 +21,17 @@ import dac28.model.Tree;
  */
 public class DualTreeDisplay extends TreeDisplay {
 
-	// The tree panel instance.
-	private TreePanel treePanel;
-
 	private SearchAlgorithm searchAlgorithm1;
 
 	private SearchAlgorithm searchAlgorithm2;
-	// The max width and max height of the display.
-	private int maxWidth, maxHeight;
-	// The tree the display will use.
-	private Tree tree = null;
-
-	JPanel initialiseTreePanel(int WIDTH, int HEIGHT) {
-
-		maxWidth = WIDTH;
-		maxHeight = HEIGHT;
-
-		treePanel = new DualTreePanel();
-		treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
-		treePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		treePanel.setBackground(Color.white);
-
-		return treePanel;
+	
+	@Override
+	TreePanel getTreePanel() {
+		return new DualTreePanel();
 	}
 
-	/**
-	 * Sets the tree.
-	 * 
-	 * @param tree - new tree for this display.
-	 */
-	public void setTree(Tree tree) {
-		this.tree = tree;
-	}
-
-	/**
-	 * Repaints the tree panel.
-	 */
-	public void drawTree() {
-		treePanel.repaint();
-	}
-
-	/**
-	 * Sets the search algorithm being used on the tree.
-	 * 
-	 * @param searchAlgorithm - list of search algorithms to use.
-	 */
-	public void setAlgorithms(SearchAlgorithm[] searchAlgorithms) {
+	@Override
+	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
 		if(searchAlgorithms.length != 2) return;
 		this.searchAlgorithm1 = searchAlgorithms[0];
 		this.searchAlgorithm2 = searchAlgorithms[1];
