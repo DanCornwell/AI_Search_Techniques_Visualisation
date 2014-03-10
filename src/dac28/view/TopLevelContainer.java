@@ -21,8 +21,6 @@ import javax.swing.border.Border;
 import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
-import dac28.controller.DualTreeController;
-import dac28.controller.SingleTreeController;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
@@ -58,7 +56,7 @@ class TopLevelContainer implements ActionListener {
 	/**
 	 * Height of the displays.
 	 */
-	private int HEIGHT = 500;
+	private int height = 500;
 	/**
 	 * Width of the displays.
 	 */
@@ -134,7 +132,7 @@ class TopLevelContainer implements ActionListener {
 
 	private void showBase() {
 		// Display the window.
-		base.setPreferredSize(new Dimension(width,HEIGHT));
+		base.setPreferredSize(new Dimension(width,height));
 		base.pack();
 		base.setVisible(true);
 		base.setResizable(false);
@@ -188,7 +186,7 @@ class TopLevelContainer implements ActionListener {
 			initialiseSingleDisplay();
 			
 			SearchAlgorithm[] algorithms = {algorithm};
-			TreeController treeController = new SingleTreeController(algorithms,tree,treeDisplay);
+			TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
 
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
@@ -237,7 +235,7 @@ class TopLevelContainer implements ActionListener {
 			initialiseDualDisplay();
 
 			SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
-			TreeController treeController = new DualTreeController(searchAlgorithms,tree,treeDisplay);
+			TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 			new AlgorithmController(treeController,algorithm1,dualAlgorithmDisplay);
 			new AlgorithmController(treeController,algorithm2,algorithmDisplay);
 		}
@@ -264,10 +262,10 @@ class TopLevelContainer implements ActionListener {
 	private void addDisplays() {
 
 		base.getContentPane().removeAll();
-		treeDisplay = new SingleTreeDisplay();
+		treeDisplay = new TreeDisplaySingleAlgorithm();
 		algorithmDisplay = new AlgorithmDisplay();
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,HEIGHT-30),BorderLayout.WEST);
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,HEIGHT-30),BorderLayout.EAST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,height-30),BorderLayout.WEST);
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 
 	}
 	
@@ -277,12 +275,12 @@ class TopLevelContainer implements ActionListener {
 	private void addDualDisplays() {
 
 		base.getContentPane().removeAll();
-		treeDisplay = new DualTreeDisplay();
+		treeDisplay = new TreeDisplayDualAlgorithms();
 		algorithmDisplay = new AlgorithmDisplay();
 		dualAlgorithmDisplay = new AlgorithmDisplay();
-		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3, HEIGHT-30),BorderLayout.WEST);
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,HEIGHT-30));
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3,HEIGHT-30),BorderLayout.EAST);
+		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3, height-30),BorderLayout.WEST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30));
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3,height-30),BorderLayout.EAST);
 
 	}
 

@@ -4,7 +4,7 @@ import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 import dac28.view.TreeDisplay;
 
-public abstract class TreeController {
+public class TreeController {
 
 	/**
 	 * The tree display being used.
@@ -15,12 +15,12 @@ public abstract class TreeController {
 		
 		this.treeDisplay = treeDisplay;
 		this.treeDisplay.setTree(tree);
+		this.treeDisplay.setAlgorithm(searchAlgorithms);
+		
 		this.treeDisplay.drawTree();
-		setAlgorithms(searchAlgorithms);
+
 	}	
-	
-	abstract void setAlgorithms(SearchAlgorithm[] searchAlgorithms);
-	
+		
 	/**
 	 * Draws the tree onto the tree display.
 	 */

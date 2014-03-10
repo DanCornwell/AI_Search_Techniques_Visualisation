@@ -11,33 +11,55 @@ import java.util.Map.Entry;
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 
-public class SingleTreeDisplay extends TreeDisplay {
+/**
+ * Dual tree display class, a subclass of tree display.
+ * Defines how to draw a tree with a two algorithms searching on it.
+ * 
+ * @author Dan Cornwell
+ *
+ */
+public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
-	private SearchAlgorithm searchAlgorithm;
+	/**
+	 * The first algorithm searching on the tree.
+	 */
+	private SearchAlgorithm searchAlgorithm1;
+	/**
+	 * The second algorithm searching on the tree.
+	 */
+	private SearchAlgorithm searchAlgorithm2;
 	
 	@Override
 	TreePanel getTreePanel() {
-		return new SingleTreePanel();
+		return new DualTreePanel();
 	}
 
 	@Override
 	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
-		if(searchAlgorithms.length != 1) return;
-		searchAlgorithm = searchAlgorithms[0];
+		if(searchAlgorithms.length != 2) return;
+		this.searchAlgorithm1 = searchAlgorithms[0];
+		this.searchAlgorithm2 = searchAlgorithms[1];
 	}
 
-	private class SingleTreePanel extends TreePanel {
+	/**
+	 * Dual tree panel class, a subclass of tree panel.
+	 * Defines the drawTree method for a tree with a two algorithms.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
+	private class DualTreePanel extends TreePanel {
 
 		/**
 		 * Random serial number.
 		 */
-		private static final long serialVersionUID = -9056497863601289548L;
+		private static final long serialVersionUID = 8970803915887926117L;
 
 		@Override
 		public void drawTree(Graphics g) {
 
-			// If we have no tree or algorithm return.
-			if(tree==null || searchAlgorithm==null) {
+			// If we have no tree or algorithms return.
+			if(tree==null || searchAlgorithm1==null || searchAlgorithm2==null) {
 				return;
 			}
 
@@ -50,10 +72,12 @@ public class SingleTreeDisplay extends TreeDisplay {
 			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
 			// The size of all the nodes on the tree. These are squares.
 			final int BOXSIZE = 40;
-			// Colour of the current node.
-			final Color CURRENT_NODE = Color.yellow;
-			// Colour of the goal node.
-			final Color GOAL_NODE = Color.red;
+			// Colour of the current node for algorithm 1.
+			final Color CURRENT_NODE_1 = Color.blue;
+			// Colour of the current node for algorithm 2.
+			final Color CURRENT_NODE_2 = Color.orange;
+			// Colour of the goal node for the algorithms.
+			final Color GOAL_NODE = Color.yellow;
 			// Default colour.
 			final Color DEFAULT = Color.black;
 
@@ -75,11 +99,25 @@ public class SingleTreeDisplay extends TreeDisplay {
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
 				g.setColor(DEFAULT);
 			}
-			// If the root is the current node colour box yellow.
-			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue()) {
-				g.setColor(CURRENT_NODE);
-				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+			// Both algorithms at same node
+			if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue() && tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+				g.setColor(CURRENT_NODE_1);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, (BOXSIZE/2)-1, BOXSIZE-1);
+				g.setColor(CURRENT_NODE_2);
+				g.fillRect(ROOT_X_POS+1+(BOXSIZE/2), ROOT_Y_POS+1, (BOXSIZE/2)-1, BOXSIZE-1);
 				g.setColor(DEFAULT);
+			}
+			else {
+				if(tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+					g.setColor(CURRENT_NODE_2);
+					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+					g.setColor(DEFAULT);
+				}
+				if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
+					g.setColor(CURRENT_NODE_1);
+					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+					g.setColor(DEFAULT);
+				}
 			}
 			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(BOXSIZE/2), ROOT_Y_POS+(BOXSIZE/2));
 
@@ -131,11 +169,25 @@ public class SingleTreeDisplay extends TreeDisplay {
 							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
 							g.setColor(DEFAULT);
 						}
-						// If the node is the current node colour is yellow.
-						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
-							g.setColor(CURRENT_NODE);
-							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+						// Both algorithms at same node
+						if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue() && children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+							g.setColor(CURRENT_NODE_1);
+							g.fillRect(xPos+1, yPos+1, (BOXSIZE/2)-1, BOXSIZE-1);
+							g.setColor(CURRENT_NODE_2);
+							g.fillRect(xPos+1+(BOXSIZE/2), yPos+1, (BOXSIZE/2)-1, BOXSIZE-1);
 							g.setColor(DEFAULT);
+						}
+						else {
+							if(children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+								g.setColor(CURRENT_NODE_2);
+								g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+								g.setColor(DEFAULT);
+							}
+							if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
+								g.setColor(CURRENT_NODE_1);
+								g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+								g.setColor(DEFAULT);
+							}
 						}
 						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(BOXSIZE/2), yPos+(BOXSIZE/2));
 
@@ -178,6 +230,6 @@ public class SingleTreeDisplay extends TreeDisplay {
 			}
 
 		}
-		
 	}
 }
+

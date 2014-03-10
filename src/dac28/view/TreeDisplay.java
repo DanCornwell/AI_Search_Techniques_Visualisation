@@ -11,23 +11,36 @@ import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 
 /**
- * The tree display class.
- * Holds an instance of tree panel inner class which it returns with
- * its initialisers. 
+ * The tree display superclass.
+ * Defines a method to return a TreePanel instance, set the tree being used and algorithms being used on the tree,
+ * and method to draw the tree onto the panel.
  * 
  * @author Dan Cornwell
  *
  */
 public abstract class TreeDisplay {
 
-	// The tree panel instance.
+	/**
+	 * The tree panel instance.
+	 */
 	protected TreePanel treePanel;
-	// The max width and max height of the display.
+	/**
+	 * The max width and height of the tree panel instance.
+	 */
 	protected int maxWidth, maxHeight;
-	// The tree the display will use.
+	/**
+	 * The tree being displayed onto the tree panel instance. 
+	 */
 	protected Tree tree = null;
 
-	JPanel initialiseTreePanel(int WIDTH, int HEIGHT) {
+	/**
+	 * Initialises a tree panel instance.
+	 * 
+	 * @param WIDTH - the maximum width of the tree panel.
+	 * @param HEIGHT - the maximum height of the tree panel.
+	 * @return a tree panel instance
+	 */
+	JPanel initialiseTreePanel(final int WIDTH,final int HEIGHT) {
 
 		maxWidth = WIDTH;
 		maxHeight = HEIGHT;
@@ -40,6 +53,11 @@ public abstract class TreeDisplay {
 		return treePanel;
 	}
 	
+	/**
+	 * Returns a tree panel subclass, defined by subclasses of tree display.
+	 * 
+	 * @return a tree panel subclass
+	 */
 	abstract TreePanel getTreePanel();
 	
 	/**
@@ -59,15 +77,18 @@ public abstract class TreeDisplay {
 	}
 
 	/**
-	 * Sets the search algorithm being used on the tree.
+	 * Assigns the algorithms being used on the tree display.
+	 * Subclasses of tree display decide on how many they should use.
+	 * E.g single should only accept an array of length one, dual two etc...
 	 * 
-	 * @param searchAlgorithms - the search algorithm to use.
+	 * @param searchAlgorithms - array of search algorithms
 	 */
 	public abstract void setAlgorithm(SearchAlgorithm[] searchAlgorithms);
 
 	/**
-	 * The tree panel class.
-	 * Defines the method to draw the tree within the tree display.
+	 * The tree panel superclass.
+	 * Defines the method to draw the tree within the tree display,
+	 * deferring actual drawing to its subclasses.
 	 * 
 	 * @author Dan Cornwell
 	 *
@@ -82,11 +103,16 @@ public abstract class TreeDisplay {
 		/**
 		 * Paints the JPanel. Calls the draw tree method.
 		 */
-		public void paintComponent(final Graphics g) {
+		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			drawTree(g);
 		}
 
+		/**
+		 * Draws the tree onto the tree panel, as defined by the subclass.
+		 * 
+		 * @param g - graphics instance
+		 */
 		abstract void drawTree(Graphics g);
 		
 	}
