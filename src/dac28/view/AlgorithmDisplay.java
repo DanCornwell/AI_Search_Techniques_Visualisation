@@ -19,27 +19,27 @@ public class AlgorithmDisplay {
 	/**
 	 * JButtons that will be used to control the search algorithm
 	 */
-	private JButton step,auto,reset,undo,pause,skip;
+	protected JButton step,auto,reset,undo,pause,skip;
 	/**
 	 * Labels representing the current node and whether it is the goal node
 	 */
-	private JLabel node,atGoal;
+	protected JLabel node,atGoal,title,expandedLabel,visitedLabel,currentNode,goalLabel;
 	/**
 	 * Lists containing elements that visualise a search algorithms expanded and visited lists
 	 */
-	private LinkedList<JLabel> expandedList, visitedList;
+	protected LinkedList<JLabel> expandedList, visitedList;
 	/**
 	 * Stack to hold the list mementos
 	 */
-	private Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
+	protected Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
 	/**
 	 * Default colour for the list boxes.
 	 */
-	private final Color DEFAULT = Color.white;
+	protected final Color DEFAULT = Color.white;
 	/**
 	 * Border colour for the list boxes.
 	 */
-	private final Color BOX_BORDER_COLOUR = Color.black;
+	protected final Color BOX_BORDER_COLOUR = Color.black;
 	/**
 	 * Colour for the goal node box.
 	 */
@@ -55,29 +55,16 @@ public class AlgorithmDisplay {
 	/**
 	 * Dimension for the list boxes.
 	 */
-	private final Dimension BOX_SIZE = new Dimension(30,30);
-	
-	/**
-	 * Initialises the JPanel displaying algorithm data and returns it.
-	 * 
-	 * @param WIDTH - width of the whole application
-	 * @param HEIGHT - height of the whole application
-	 * @return JPanel containing fields to display a search algorithm's data
-	 */
-	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
+	protected final Dimension BOX_SIZE = new Dimension(30,30);
 
-		JPanel algorithmPanel = new JPanel();
-		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
-
-		expandedMementos = new Stack<LinkedList<ListElementMemento>>();
-		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
+	public AlgorithmDisplay() {
 
 		// Initialise the display components
-		final JLabel title = new JLabel("Search Algorithm Data");
-		final JLabel expandedLabel = new JLabel("Expanded List");
-		final JLabel visitedLabel = new JLabel("Visited List");
-		final JLabel currentNode = new JLabel("Current Node: ");
-		final JLabel goalLabel = new JLabel("At Goal? : ");
+		title = new JLabel("Search Algorithm Data");
+		expandedLabel = new JLabel("Expanded List");
+		visitedLabel = new JLabel("Visited List");
+		currentNode = new JLabel("Current Node: ");
+		goalLabel = new JLabel("At Goal? : ");
 		node = new JLabel("",JLabel.CENTER);
 		node.setOpaque(true);
 		node.setBackground(DEFAULT);
@@ -90,6 +77,8 @@ public class AlgorithmDisplay {
 		atGoal.setPreferredSize(BOX_SIZE);
 		expandedList = new LinkedList<JLabel>();
 		visitedList = new LinkedList<JLabel>();
+		expandedMementos = new Stack<LinkedList<ListElementMemento>>();
+		visitedMementos = new Stack<LinkedList<ListElementMemento>>();
 
 		// Buttons
 		step = new JButton("Step");
@@ -104,6 +93,19 @@ public class AlgorithmDisplay {
 		pause.setEnabled(false);
 		skip = new JButton("Skip to End");
 		skip.setEnabled(false);
+	}
+
+	/**
+	 * Initialises the JPanel displaying algorithm data and returns it.
+	 * 
+	 * @param WIDTH - width of the whole application
+	 * @param HEIGHT - height of the whole application
+	 * @return JPanel containing fields to display a search algorithm's data
+	 */
+	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
+
+		JPanel algorithmPanel = new JPanel();
+		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
 		// Create holding panels and add items to them
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
@@ -116,7 +118,7 @@ public class AlgorithmDisplay {
 		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-40);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p1.add(expandedLabel);
-		
+
 		// Panel 2 - holds the expanded list
 		JPanel p2 = getHoldingPanel(panelWidth,panelHeight+BOX_SIZE.height);
 		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
@@ -172,7 +174,7 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(p5);
 		algorithmPanel.add(p6);
 		algorithmPanel.add(p7);
-		
+
 		return algorithmPanel;
 	}
 
@@ -277,7 +279,7 @@ public class AlgorithmDisplay {
 	 * @param height - height of the holding panel
 	 * @return a specified sized JPanel
 	 */
-	private JPanel getHoldingPanel(int width,int height) {
+	protected JPanel getHoldingPanel(int width,int height) {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(width,height));
 		return panel;
@@ -397,7 +399,7 @@ public class AlgorithmDisplay {
 
 		// Reset the list labels
 		resetLabels();
-		
+
 		// Sets the lists elements to the new values
 		for(int i=0;i<expandedValues.size();i++) {
 			expandedList.get(i).setText(String.valueOf(expandedValues.get(i)));
@@ -405,9 +407,9 @@ public class AlgorithmDisplay {
 		for(int i=0;i<visitedValues.size();i++) {
 			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
-	
+
 	}
-	
+
 	/**
 	 * Sets the label backgrounds of the lists. If an element is new to the list,
 	 * (by comparing with a memento) then set background to yellow.
@@ -428,7 +430,7 @@ public class AlgorithmDisplay {
 		for(ListElementMemento element: visitedMementos.peek()) {
 			previousVisitedValues.add(element.VALUE);
 		}
-		
+
 		// Check the the label values against the memento values
 		// If the label values is contained within the memento values
 		// Set background to yellow
@@ -443,19 +445,19 @@ public class AlgorithmDisplay {
 			}
 		}
 	}
-	
+
 	public void setHeadTopBorder(int index) {
 		for(JLabel label: expandedList) {
 			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
 		}
 		expandedList.get(index).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, PURPLE));
 	}
-	
+
 	/**
 	 * Resets the list labels
-	*/
+	 */
 	void resetLabels() {
-	
+
 		for(JLabel label:expandedList) {
 			label.setText("");
 			label.setBackground(DEFAULT);
@@ -466,7 +468,7 @@ public class AlgorithmDisplay {
 			label.setBackground(DEFAULT);
 		}
 	}
-	
+
 	/**
 	 * Memento class for the list elements.
 	 * Holds a colour instance and a string.
@@ -476,7 +478,7 @@ public class AlgorithmDisplay {
 	 * @author Dan Cornwell
 	 *
 	 */
-	private class ListElementMemento {
+	protected class ListElementMemento {
 
 		/**
 		 * A colour relating to a JLabel background

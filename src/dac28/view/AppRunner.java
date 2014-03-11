@@ -21,7 +21,6 @@ public class AppRunner {
                 new TopLevelContainer();
             }
         });
-        
 	}
 
 }

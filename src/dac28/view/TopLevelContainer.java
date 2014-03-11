@@ -22,6 +22,7 @@ import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
 import dac28.controller.TreeController;
+import dac28.model.DepthFirstSearchCreator;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 
@@ -106,6 +107,7 @@ class TopLevelContainer implements ActionListener {
 		// Assign stuff onto the base frame
 		base.setJMenuBar(menuBar);
 
+		algorithmDisplay = new AlgorithmDisplay();
 		initialiseSingleDisplay();
 	}
 
@@ -176,18 +178,23 @@ class TopLevelContainer implements ActionListener {
 
 			}
 
-			// Add new displays
-			addDisplays();
-
 			// Create a tree and algorithm controller with the user supplied information.
 
 			Tree tree = controller.getTreeCreator().getTree(goal);
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
+			
+			if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
+				algorithmDisplay = new AlgorithmDisplayStack();
+			}
+			else {
+				algorithmDisplay = new AlgorithmDisplay();
+			}
+			
 			initialiseSingleDisplay();
 			
 			SearchAlgorithm[] algorithms = {algorithm};
 			TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
-
+			
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
 		}
@@ -263,7 +270,7 @@ class TopLevelContainer implements ActionListener {
 
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplaySingleAlgorithm();
-		algorithmDisplay = new AlgorithmDisplay();
+	//	algorithmDisplay = new AlgorithmDisplay();
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,height-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 

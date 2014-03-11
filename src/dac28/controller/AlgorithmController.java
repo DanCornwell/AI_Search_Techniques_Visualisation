@@ -63,7 +63,7 @@ public class AlgorithmController {
 	 * Called within the constructor and reset method.
 	 * A visited list equivalent is not needed due to that list being empty on start. 
 	 */
-	private void initialiseExpandedList() {
+	protected void initialiseExpandedList() {
 
 		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
 			return;
