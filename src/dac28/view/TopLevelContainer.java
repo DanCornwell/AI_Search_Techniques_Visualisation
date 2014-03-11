@@ -68,7 +68,7 @@ class TopLevelContainer implements ActionListener {
 	}
 
 	/**
-	 * Initialises the graphical user interface.
+	 * Initialises the graphical user interface items.
 	 */
 	private void initialiseBase() {
 
@@ -153,6 +153,7 @@ class TopLevelContainer implements ActionListener {
 		// New search, creates a controller and takes a user input for the goal node and their choices
 		// for the tree and algorithm. Loops if input is invalid.
 		if(e.getSource() == newSearch) {
+			
 			Object[] options = {"Confirm", "Cancel"};
 
 			CreateController controller = new CreateController();
@@ -184,28 +185,35 @@ class TopLevelContainer implements ActionListener {
 
 			}
 
-			// Create a tree and algorithm controller with the user supplied information.
-
+			// Create a tree and algorithm with the user supplied information. Return if null.
 			Tree tree = controller.getTreeCreator().getTree(goal);
+			if(tree==null) return;
 			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
+			if(algorithm==null) return;
 			
+			// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
 			if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
 				algorithmDisplay = new AlgorithmDisplayStack();
 			}
 			else {
 				algorithmDisplay = new AlgorithmDisplay();
 			}
-			
+			// initialise the single display
 			initialiseSingleDisplay();
 			
+			// Put algorithm into an array to allow display to set this algorithm
 			SearchAlgorithm[] algorithms = {algorithm};
+			// Create a new tree controller
 			TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
-			
+			// Create a new algorithm controller
 			new AlgorithmController(treeController,algorithm,algorithmDisplay);
 
 		}
-
+		
+		// Dual search. Works similar to the single search except creates an algorithm display either side of
+		// the tree and provides a tree display that allows 2 algorithm to work on it.
 		else if(e.getSource() == newDualSearch) {
+			
 			Object[] options = {"Confirm", "Cancel"};
 
 			DualCreateController controller = new DualCreateController();
@@ -237,30 +245,37 @@ class TopLevelContainer implements ActionListener {
 
 			}
 
-			// Create a tree and algorithm controller with the user supplied information.
+			// Create a tree and 2 algorithms with the user supplied information. Return if null.
 			Tree tree = controller.getTreeCreator().getTree(goal);
+			if(tree==null) return;
 			SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
+			if(algorithm1==null) return;
 			SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
-			
+			if(algorithm2==null) return;
+
+			// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
 			if(controller.getAlgorithm1Creator().getClass() == DepthFirstSearchCreator.class) {
 				algorithmDisplay = new AlgorithmDisplayStack();
 			}
 			else {
 				algorithmDisplay = new AlgorithmDisplay();
 			}
-			
 			if(controller.getAlgorithm2Creator().getClass() == DepthFirstSearchCreator.class) {
 				dualAlgorithmDisplay = new AlgorithmDisplayStack();
 			}
 			else {
 				dualAlgorithmDisplay = new AlgorithmDisplay();
 			}
-			
+			// initialise the dual display
 			initialiseDualDisplay();
 			
+			// put algorithms into an array to allow display to set them
 			SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
+			// Create new tree controller
 			TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
+			// Create new algorithm controller for algorithm 1
 			new AlgorithmController(treeController,algorithm1,algorithmDisplay);
+			// Create new algorithm controller for algorithm 2
 			new AlgorithmController(treeController,algorithm2,dualAlgorithmDisplay);
 		}
 
@@ -287,7 +302,6 @@ class TopLevelContainer implements ActionListener {
 
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplaySingleAlgorithm();
-	//	algorithmDisplay = new AlgorithmDisplay();
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,height-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 
@@ -346,7 +360,7 @@ class TopLevelContainer implements ActionListener {
 			JLabel goalNode = new JLabel();
 			goalNode.setBorder(BOX_BORDER);
 			goalNode.setPreferredSize(BOX_SIZE);
-			goalNode.setBackground(Color.red);
+			goalNode.setBackground(Color.green);
 			goalNode.setOpaque(true);
 			JLabel goalNodeInfo = new JLabel(" - Goal node the algorithm searches for");
 			JLabel head = new JLabel();
@@ -357,7 +371,7 @@ class TopLevelContainer implements ActionListener {
 			JLabel newItem = new JLabel();
 			newItem.setBorder(BOX_BORDER);
 			newItem.setPreferredSize(BOX_SIZE);
-			newItem.setBackground(Color.green);
+			newItem.setBackground(new Color(51,255,255));
 			newItem.setOpaque(true);
 			JLabel newItemInfo = new JLabel(" - New element to the list");
 
