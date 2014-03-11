@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,7 +33,7 @@ import dac28.model.Tree;
  * @author Dan Cornwell
  *
  */
-class TopLevelContainer implements ActionListener {
+class TopLevelContainer {
 
 	/**
 	 * The algorithm display being used.
@@ -63,6 +64,8 @@ class TopLevelContainer implements ActionListener {
 	 */
 	private int width = 700;
 
+	private JButton step,auto,reset,pause,skip,undo;
+
 	TopLevelContainer() {
 		initialiseBase();
 	}
@@ -83,20 +86,169 @@ class TopLevelContainer implements ActionListener {
 		menuBar.setPreferredSize(new Dimension(width, 30));
 		JMenu file = new JMenu("File");
 		newSearch = new JMenuItem("New Search...");
-		newSearch.addActionListener(this);
+		newSearch.addActionListener(new ActionListener(){
+			// New search, creates a controller and takes a user input for the goal node and their choices
+			// for the tree and algorithm. Loops if input is invalid.
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object[] options = {"Confirm", "Cancel"};
+
+				CreateController controller = new CreateController();
+
+				int goal = 0;
+
+				while(true) {
+
+					int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
+							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+					if(result == JOptionPane.OK_OPTION) {
+
+						try {
+							goal = Integer.parseInt(controller.getGoal());
+							break;
+						}
+						catch(NumberFormatException error) {
+							Object[] ok = {"Ok"};
+							JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
+									"Please enter a valid integer.", 
+									"Goal Value Error",JOptionPane.YES_OPTION,
+									JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+						}
+					}
+					else {
+						return;
+					}
+
+				}
+
+				// Create a tree and algorithm with the user supplied information. Return if null.
+				Tree tree = controller.getTreeCreator().getTree(goal);
+				if(tree==null) return;
+				SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
+				if(algorithm==null) return;
+
+				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
+				if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
+					algorithmDisplay = new AlgorithmDisplayStack();
+				}
+				else {
+					algorithmDisplay = new AlgorithmDisplay();
+				}
+				// initialise the single display
+				initialiseSingleDisplay();
+
+				// Put algorithm into an array to allow display to set this algorithm
+				SearchAlgorithm[] algorithms = {algorithm};
+				// Create a new tree controller
+				TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
+				// Create a new algorithm controller
+				new AlgorithmController(treeController,algorithm,algorithmDisplay);
+
+			}
+		});
 		newDualSearch = new JMenuItem("New Dual Search...");
-		newDualSearch.addActionListener(this);
+		newDualSearch.addActionListener(new ActionListener(){
+			// Dual search. Works similar to the single search except creates an algorithm display either side of
+			// the tree and provides a tree display that allows 2 algorithm to work on it.
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object[] options = {"Confirm", "Cancel"};
+
+				DualCreateController controller = new DualCreateController();
+
+				int goal = 0;
+
+				while(true) {
+
+					int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
+							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+					if(result == JOptionPane.OK_OPTION) {
+
+						try {
+							goal = Integer.parseInt(controller.getGoal());
+							break;
+						}
+						catch(NumberFormatException error) {
+							Object[] ok = {"Ok"};
+							JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
+									"Please enter a valid integer.", 
+									"Goal Value Error",JOptionPane.YES_OPTION,
+									JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+						}
+					}
+					else {
+						return;
+					}
+
+				}
+
+				// Create a tree and 2 algorithms with the user supplied information. Return if null.
+				Tree tree = controller.getTreeCreator().getTree(goal);
+				if(tree==null) return;
+				SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
+				if(algorithm1==null) return;
+				SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
+				if(algorithm2==null) return;
+
+				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
+				if(controller.getAlgorithm1Creator().getClass() == DepthFirstSearchCreator.class) {
+					algorithmDisplay = new AlgorithmDisplayStack();
+				}
+				else {
+					algorithmDisplay = new AlgorithmDisplay();
+				}
+				if(controller.getAlgorithm2Creator().getClass() == DepthFirstSearchCreator.class) {
+					dualAlgorithmDisplay = new AlgorithmDisplayStack();
+				}
+				else {
+					dualAlgorithmDisplay = new AlgorithmDisplay();
+				}
+				// initialise the dual display
+				initialiseDualDisplay();
+
+				// put algorithms into an array to allow display to set them
+				SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
+				// Create new tree controller
+				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
+				// Create new algorithm controller for algorithm 1
+				new AlgorithmController(treeController,algorithm1,algorithmDisplay);
+				// Create new algorithm controller for algorithm 2
+				new AlgorithmController(treeController,algorithm2,dualAlgorithmDisplay);
+				
+				toggleDualButtons();
+			}
+		});
 		file.add(newSearch);
 		file.add(newDualSearch);
 		file.addSeparator();
 		quit = new JMenuItem("Quit");
-		quit.addActionListener(this);
+		quit.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?","Quitting Application",JOptionPane.YES_NO_OPTION);
+				if(option == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				}
+			}	
+		});
 		file.add(quit);
 		JMenu help = new JMenu("Help");
 		about = new JMenuItem("About");
-		about.addActionListener(this);
+		about.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
 		legend = new JMenuItem("Legend");
-		legend.addActionListener(this);
+		legend.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new LegendPanel().showLegend();
+			}
+		});
 		help.add(about);
 		help.add(legend);
 
@@ -109,7 +261,7 @@ class TopLevelContainer implements ActionListener {
 
 		// Set algorithmDisplay here so we can draw a blank algorithmDisplay
 		algorithmDisplay = new AlgorithmDisplay();
-		
+
 		// Initialise a single display - this will be blank
 		initialiseSingleDisplay();
 	}
@@ -121,6 +273,7 @@ class TopLevelContainer implements ActionListener {
 	private void initialiseSingleDisplay() {
 
 		width = 700;
+		height = 500;
 		addDisplays();
 		showBase();
 	}
@@ -131,6 +284,7 @@ class TopLevelContainer implements ActionListener {
 	private void initialiseDualDisplay() {
 
 		width = 1000;
+		height = 600;
 		addDualDisplays(); 
 		showBase();
 	}
@@ -139,160 +293,12 @@ class TopLevelContainer implements ActionListener {
 	 * Displays the frame. Calls this method after the frame has been resized (possibly for dual search).
 	 */
 	private void showBase() {
-		
+
 		base.setPreferredSize(new Dimension(width,height));
 		base.pack();
 		base.setVisible(true);
 		base.setResizable(false);
 		base.setLocationRelativeTo(null);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		// New search, creates a controller and takes a user input for the goal node and their choices
-		// for the tree and algorithm. Loops if input is invalid.
-		if(e.getSource() == newSearch) {
-			
-			Object[] options = {"Confirm", "Cancel"};
-
-			CreateController controller = new CreateController();
-
-			int goal = 0;
-
-			while(true) {
-
-				int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
-						"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-				if(result == JOptionPane.OK_OPTION) {
-
-					try {
-						goal = Integer.parseInt(controller.getGoal());
-						break;
-					}
-					catch(NumberFormatException error) {
-						Object[] ok = {"Ok"};
-						JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
-								"Please enter a valid integer.", 
-								"Goal Value Error",JOptionPane.YES_OPTION,
-								JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-					}
-				}
-				else {
-					return;
-				}
-
-			}
-
-			// Create a tree and algorithm with the user supplied information. Return if null.
-			Tree tree = controller.getTreeCreator().getTree(goal);
-			if(tree==null) return;
-			SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
-			if(algorithm==null) return;
-			
-			// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-			if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
-				algorithmDisplay = new AlgorithmDisplayStack();
-			}
-			else {
-				algorithmDisplay = new AlgorithmDisplay();
-			}
-			// initialise the single display
-			initialiseSingleDisplay();
-			
-			// Put algorithm into an array to allow display to set this algorithm
-			SearchAlgorithm[] algorithms = {algorithm};
-			// Create a new tree controller
-			TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
-			// Create a new algorithm controller
-			new AlgorithmController(treeController,algorithm,algorithmDisplay);
-
-		}
-		
-		// Dual search. Works similar to the single search except creates an algorithm display either side of
-		// the tree and provides a tree display that allows 2 algorithm to work on it.
-		else if(e.getSource() == newDualSearch) {
-			
-			Object[] options = {"Confirm", "Cancel"};
-
-			DualCreateController controller = new DualCreateController();
-
-			int goal = 0;
-
-			while(true) {
-
-				int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
-						"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-				if(result == JOptionPane.OK_OPTION) {
-
-					try {
-						goal = Integer.parseInt(controller.getGoal());
-						break;
-					}
-					catch(NumberFormatException error) {
-						Object[] ok = {"Ok"};
-						JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
-								"Please enter a valid integer.", 
-								"Goal Value Error",JOptionPane.YES_OPTION,
-								JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-					}
-				}
-				else {
-					return;
-				}
-
-			}
-
-			// Create a tree and 2 algorithms with the user supplied information. Return if null.
-			Tree tree = controller.getTreeCreator().getTree(goal);
-			if(tree==null) return;
-			SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
-			if(algorithm1==null) return;
-			SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
-			if(algorithm2==null) return;
-
-			// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-			if(controller.getAlgorithm1Creator().getClass() == DepthFirstSearchCreator.class) {
-				algorithmDisplay = new AlgorithmDisplayStack();
-			}
-			else {
-				algorithmDisplay = new AlgorithmDisplay();
-			}
-			if(controller.getAlgorithm2Creator().getClass() == DepthFirstSearchCreator.class) {
-				dualAlgorithmDisplay = new AlgorithmDisplayStack();
-			}
-			else {
-				dualAlgorithmDisplay = new AlgorithmDisplay();
-			}
-			// initialise the dual display
-			initialiseDualDisplay();
-			
-			// put algorithms into an array to allow display to set them
-			SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
-			// Create new tree controller
-			TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
-			// Create new algorithm controller for algorithm 1
-			new AlgorithmController(treeController,algorithm1,algorithmDisplay);
-			// Create new algorithm controller for algorithm 2
-			new AlgorithmController(treeController,algorithm2,dualAlgorithmDisplay);
-		}
-
-		else if(e.getSource() == quit) {
-			int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?","Quitting Application",JOptionPane.YES_NO_OPTION);
-			if(option == JOptionPane.YES_OPTION) {
-				System.exit(0);
-			}
-		}
-
-		else if(e.getSource() == about) {
-		}
-
-		else if(e.getSource() == legend) {
-			new LegendPanel().showLegend();
-		}
-
 	}
 
 	/**
@@ -306,17 +312,107 @@ class TopLevelContainer implements ActionListener {
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 
 	}
-	
+
 	/**
 	 * Adds dual displays onto the base frame.
 	 */
 	private void addDualDisplays() {
 
+		final int MASTER_BUTTON_HEIGHT = 100;
+
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplayDualAlgorithms();
-		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30),BorderLayout.WEST);
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30));
-		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30),BorderLayout.EAST);
+		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
+		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
+		// add the master button panel
+		JPanel p = new JPanel();
+		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));
+		p.setBackground(Color.yellow);
+		step = new JButton("Step");
+		step.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+				algorithmDisplay.step.doClick();
+				dualAlgorithmDisplay.step.doClick();
+			}		
+		});
+		auto = new JButton("Auto");
+		auto.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+
+				algorithmDisplay.auto.doClick();
+				dualAlgorithmDisplay.auto.doClick();
+			}
+		});
+		undo = new JButton("Undo");
+		undo.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+				algorithmDisplay.undo.doClick();
+				dualAlgorithmDisplay.undo.doClick();
+			}
+		});
+		pause = new JButton("Pause");
+		pause.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+				algorithmDisplay.pause.doClick();
+				dualAlgorithmDisplay.pause.doClick();
+			}
+		});
+		skip = new JButton("Skip");
+		skip.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+				algorithmDisplay.skip.doClick();
+				dualAlgorithmDisplay.skip.doClick();
+			}
+		});
+		reset = new JButton("Reset");
+		reset.addActionListener(new DualButtonListener(){
+			@Override
+			public void buttonLogic() {
+				algorithmDisplay.reset.doClick();
+				dualAlgorithmDisplay.reset.doClick();
+			}
+		});
+		p.add(step);
+		p.add(auto);
+		p.add(undo);
+		p.add(pause);
+		p.add(skip);
+		p.add(reset);
+
+		toggleDualButtons();
+
+		base.getContentPane().add(p,BorderLayout.SOUTH);
+
+	}
+
+	private abstract class DualButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			buttonLogic();
+
+			toggleDualButtons();
+
+		}
+
+		protected abstract void buttonLogic();
+
+	}
+
+	private void toggleDualButtons() {
+		// Enable/disable buttons were appropriate
+		step.setEnabled(algorithmDisplay.step.isEnabled() || dualAlgorithmDisplay.step.isEnabled());
+		auto.setEnabled(algorithmDisplay.auto.isEnabled() && dualAlgorithmDisplay.auto.isEnabled());
+		undo.setEnabled(algorithmDisplay.undo.isEnabled() || dualAlgorithmDisplay.undo.isEnabled());
+		pause.setEnabled(algorithmDisplay.pause.isEnabled() && dualAlgorithmDisplay.pause.isEnabled());
+		skip.setEnabled(algorithmDisplay.skip.isEnabled() && dualAlgorithmDisplay.skip.isEnabled());
+		reset.setEnabled(algorithmDisplay.reset.isEnabled() && dualAlgorithmDisplay.reset.isEnabled());
 
 	}
 
