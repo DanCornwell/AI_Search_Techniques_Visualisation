@@ -70,16 +70,10 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
-			// The size of all the nodes on the tree. These are squares.
-			final int BOXSIZE = 40;
 			// Colour of the current node for algorithm 1.
 			final Color CURRENT_NODE_1 = Color.blue;
 			// Colour of the current node for algorithm 2.
 			final Color CURRENT_NODE_2 = Color.orange;
-			// Colour of the goal node for the algorithms.
-			final Color GOAL_NODE = Color.yellow;
-			// Default colour.
-			final Color DEFAULT = Color.black;
 
 			// Draw title
 			g.drawString("Tree Data", (maxWidth/4)-20, 20);

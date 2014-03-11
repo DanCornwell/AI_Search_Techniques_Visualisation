@@ -1,11 +1,8 @@
 package dac28.controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-
-import javax.swing.BorderFactory;
 
 import dac28.model.SearchAlgorithm;
 import dac28.view.AlgorithmDisplay;
@@ -32,8 +29,6 @@ public class AlgorithmController {
 	 */
 	private TreeController treeController;
 
-	private final String SEARCH_TYPE;
-
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 
 		this.treeController = treeController;
@@ -55,7 +50,6 @@ public class AlgorithmController {
 		this.algorithmDisplay.registerAutoListener(auto);
 		this.algorithmDisplay.registerPauseListener(new PauseListener(auto));
 
-		this.SEARCH_TYPE = this.searchAlgorithm.getClass().getName();
 	} 
 
 	/**
@@ -73,8 +67,8 @@ public class AlgorithmController {
 		searchAlgorithm.reset();
 		algorithmDisplay.reset();
 
+		// Get the root element from the expanded list
 		algorithmDisplay.getExpandedList().get(0).setText(String.valueOf(searchAlgorithm.getExpanded().get(0).getValue()));
-		algorithmDisplay.getExpandedList().get(0).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, new Color(139, 0, 255)));
 
 	}
 
@@ -153,12 +147,6 @@ public class AlgorithmController {
 			algorithmDisplay.setLabelBackgrounds();
 			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
-			
-			// If we are using DFS, and hence a stack 
-			if(!searchAlgorithm.getExpanded().isEmpty() && SEARCH_TYPE == "dac28.model.DepthFirstSearch") {
-				algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
-			}
-			else algorithmDisplay.setHeadTopBorder(0);
 			
 		}
 
@@ -346,12 +334,6 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
-				
-				// If we are using DFS, and hence a stack 
-				if(!searchAlgorithm.getExpanded().isEmpty() && SEARCH_TYPE == "dac28.model.DepthFirstSearch") {
-					algorithmDisplay.setHeadTopBorder(searchAlgorithm.getExpanded().size()-1);
-				}
-				else algorithmDisplay.setHeadTopBorder(0);
 				
 				// Update display tree.
 				treeController.drawTree();

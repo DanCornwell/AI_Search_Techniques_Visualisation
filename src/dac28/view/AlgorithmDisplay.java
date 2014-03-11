@@ -14,6 +14,16 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Class used to display the algorithm details.
+ * Creates the panel to display algorithm information and provides methods to
+ * colour and change this information when asked.
+ * This implementation assumes the a QUEUE structure is used, and as such should only be used for 
+ * QUEUE based algorithms. If a stack is needed use AlgorithmDisplayStack, which extends this class.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class AlgorithmDisplay {
 
 	/**
@@ -33,7 +43,7 @@ public class AlgorithmDisplay {
 	 */
 	protected Stack<LinkedList<ListElementMemento>> expandedMementos, visitedMementos;
 	/**
-	 * Default colour for the list boxes.
+	 * Default background colour for the list boxes.
 	 */
 	protected final Color DEFAULT = Color.white;
 	/**
@@ -43,15 +53,11 @@ public class AlgorithmDisplay {
 	/**
 	 * Colour for the goal node box.
 	 */
-	private final Color GOAL_NODE = Color.yellow;
+	private final Color GOAL_NODE = Color.green;
 	/**
 	 * Colour for the new element in list box.
 	 */
-	private final Color NEW_ELEMENT = Color.green;
-	/**
-	 * Colour for the head of queue / top of stack.
-	 */
-	private final Color PURPLE = new Color(139, 0, 255);
+	private final Color NEW_ELEMENT = new Color(51,255,255);
 	/**
 	 * Dimension for the list boxes.
 	 */
@@ -59,7 +65,7 @@ public class AlgorithmDisplay {
 
 	public AlgorithmDisplay() {
 
-		// Initialise the display components
+		// Initialises the display components
 		title = new JLabel("Search Algorithm Data");
 		expandedLabel = new JLabel("Expanded List");
 		visitedLabel = new JLabel("Visited List");
@@ -446,13 +452,6 @@ public class AlgorithmDisplay {
 		}
 	}
 
-	public void setHeadTopBorder(int index) {
-		for(JLabel label: expandedList) {
-			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
-		}
-		expandedList.get(index).setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, PURPLE));
-	}
-
 	/**
 	 * Resets the list labels
 	 */
@@ -461,7 +460,6 @@ public class AlgorithmDisplay {
 		for(JLabel label:expandedList) {
 			label.setText("");
 			label.setBackground(DEFAULT);
-			label.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
 		}
 		for(JLabel label:visitedList) {
 			label.setText("");

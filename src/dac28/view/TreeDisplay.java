@@ -32,7 +32,19 @@ public abstract class TreeDisplay {
 	 * The tree being displayed onto the tree panel instance. 
 	 */
 	protected Tree tree = null;
-
+	/**
+	 * Colour of the goal node.
+	 */
+	protected final Color GOAL_NODE = Color.green;
+	/**
+	 * Colour used for drawing lines and borders. 
+	 */
+	protected final Color DEFAULT = Color.black;
+	/**
+	 * The size of the boxes displayed in the tree.
+	 */
+	protected final int BOXSIZE = 40;
+	
 	/**
 	 * Initialises a tree panel instance.
 	 * 
@@ -52,14 +64,14 @@ public abstract class TreeDisplay {
 
 		return treePanel;
 	}
-	
+
 	/**
 	 * Returns a tree panel subclass, defined by subclasses of tree display.
 	 * 
 	 * @return a tree panel subclass
 	 */
 	abstract TreePanel getTreePanel();
-	
+
 	/**
 	 * Sets the tree.
 	 * 
@@ -114,6 +126,6 @@ public abstract class TreeDisplay {
 		 * @param g - graphics instance
 		 */
 		abstract void drawTree(Graphics g);
-		
+
 	}
 }

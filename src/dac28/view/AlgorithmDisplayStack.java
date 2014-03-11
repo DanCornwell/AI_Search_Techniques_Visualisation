@@ -9,6 +9,13 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * A class used for displaying the algorithm display when a stack is used. Extends algorithmDisplay.
+ * Overrides the initialiseAlgorithmPanel method from algorithm display to do this.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class AlgorithmDisplayStack extends AlgorithmDisplay {
 	
 	@Override
@@ -57,36 +64,38 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 			visitedList.add(label);
 			p3.add(label);
 		}
-		// Panel 5 - holds the current node labels and at goal labels
+		// Panel 4 - holds the current node labels and at goal labels
 		JPanel p4 = getHoldingPanel(panelWidth,panelHeight-20);
 		p4.add(currentNode);
 		p4.add(node);
 		p4.add(Box.createRigidArea(new Dimension(40,0)));
 		p4.add(goalLabel);
 		p4.add(atGoal);
-		// Panel 6 - holds step, auto and undo buttons
+		// Panel 5 - holds step, auto and undo buttons
 		JPanel p5 = getHoldingPanel(panelWidth,panelHeight-20);
 		p5.add(step);
 		p5.add(auto);
 		p5.add(undo);
 		p5.add(pause);
-		// Panel 7 - holds the reset button
+		// Panel 6 - holds the reset button
 		JPanel p6 = getHoldingPanel(panelWidth,panelHeight-20);
 		p6.add(skip);
 		p6.add(reset);
 
+		// Create a left and right panel allow stack to appear horizontally
 		JPanel left = new JPanel();
 		left.setPreferredSize(new Dimension(60,HEIGHT));
 		JPanel right = new JPanel();
 		right.setPreferredSize(new Dimension(WIDTH-60,HEIGHT));
 		
-		// Add the holding panels to the algorithm panel
+		// Add holding panels to the left and right
 		left.add(p2);
 		right.add(p3);		
 		right.add(p4);
 		right.add(p5);
 		right.add(p6);
 		
+		// Add other holding panels plus left and right to the algorithm panel
 		algorithmPanel.add(titlePanel);
 		algorithmPanel.add(p1);
 		algorithmPanel.add(left);
