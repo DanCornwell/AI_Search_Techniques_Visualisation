@@ -505,6 +505,15 @@ public class TopLevelContainer {
 				pause.setEnabled(true);
 
 				algorithmDisplay.step.doClick();
+				
+				// Stepping the 2nd algorithm straight after the first causes unexpected behaviour
+				// Sleep for any amount of time solves this problem
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					return;
+				}
+				
 				dualAlgorithmDisplay.step.doClick();
 
 				try {

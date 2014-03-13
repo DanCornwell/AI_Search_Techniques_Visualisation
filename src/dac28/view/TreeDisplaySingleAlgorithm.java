@@ -50,6 +50,8 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 		 */
 		private static final long serialVersionUID = -9056497863601289548L;
 
+		private int count = 0;
+		
 		@Override
 		public void drawTree(Graphics g) {
 
@@ -87,7 +89,7 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 				g.setColor(DEFAULT);
 			}
 			// If the root is the current node colour box yellow.
-			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue()) {
+			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue() && count!=0) {
 				g.setColor(CURRENT_NODE);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
 				g.setColor(DEFAULT);
@@ -187,7 +189,8 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
-
+			
+			count++;
 		}
 		
 	}
