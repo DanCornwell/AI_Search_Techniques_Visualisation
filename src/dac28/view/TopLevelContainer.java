@@ -33,7 +33,7 @@ import dac28.model.Tree;
  * @author Dan Cornwell
  *
  */
-class TopLevelContainer {
+public class TopLevelContainer {
 
 	/**
 	 * The algorithm display being used.
@@ -64,7 +64,7 @@ class TopLevelContainer {
 	 */
 	private int width = 700;
 
-	private JButton step,auto,reset,pause,skip,undo;
+	private JButton step,auto,pause,reset,skip,undo;
 
 	TopLevelContainer() {
 		initialiseBase();
@@ -205,6 +205,7 @@ class TopLevelContainer {
 				else {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
 				}
+
 				// initialise the dual display
 				initialiseDualDisplay();
 
@@ -216,8 +217,6 @@ class TopLevelContainer {
 				new AlgorithmController(treeController,algorithm1,algorithmDisplay);
 				// Create new algorithm controller for algorithm 2
 				new AlgorithmController(treeController,algorithm2,dualAlgorithmDisplay);
-				
-				toggleDualButtons();
 			}
 		});
 		file.add(newSearch);
@@ -318,101 +317,208 @@ class TopLevelContainer {
 	 */
 	private void addDualDisplays() {
 
-		final int MASTER_BUTTON_HEIGHT = 100;
+		// height of the dual button panel
+		final int MASTER_BUTTON_HEIGHT = 50;
 
+		// add the 2 algorithm displays and tree display to the base
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplayDualAlgorithms();
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
+
 		// add the master button panel
 		JPanel p = new JPanel();
 		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));
 		p.setBackground(Color.yellow);
 		step = new JButton("Step");
-		step.addActionListener(new DualButtonListener(){
+		step.addActionListener(new ActionListener(){
 			@Override
-			public void buttonLogic() {
+			public void actionPerformed(ActionEvent e) {
 				algorithmDisplay.step.doClick();
 				dualAlgorithmDisplay.step.doClick();
-			}		
-		});
-		auto = new JButton("Auto");
-		auto.addActionListener(new DualButtonListener(){
-			@Override
-			public void buttonLogic() {
-
-				algorithmDisplay.auto.doClick();
-				dualAlgorithmDisplay.auto.doClick();
+				toggleButtons();
 			}
 		});
+		auto = new JButton("Auto");
+		AutoListener autoListener = new AutoListener();
+		auto.addActionListener(autoListener);
 		undo = new JButton("Undo");
-		undo.addActionListener(new DualButtonListener(){
+		undo.addActionListener(new ActionListener(){
 			@Override
-			public void buttonLogic() {
-				algorithmDisplay.undo.doClick();
-				dualAlgorithmDisplay.undo.doClick();
+			public void actionPerformed(ActionEvent e) {
+				if(algorithmDisplay.expandedMementos.size() > dualAlgorithmDisplay.expandedMementos.size()) {
+					algorithmDisplay.undo.doClick();
+				}
+				else if(algorithmDisplay.expandedMementos.size() < dualAlgorithmDisplay.expandedMementos.size()) {
+					dualAlgorithmDisplay.undo.doClick();
+				}
+				else {
+					algorithmDisplay.undo.doClick();
+					dualAlgorithmDisplay.undo.doClick();
+					toggleButtons();
+				}
 			}
 		});
 		pause = new JButton("Pause");
-		pause.addActionListener(new DualButtonListener(){
-			@Override
-			public void buttonLogic() {
-				algorithmDisplay.pause.doClick();
-				dualAlgorithmDisplay.pause.doClick();
-			}
-		});
+		pause.addActionListener(new PauseListener(autoListener));
 		skip = new JButton("Skip");
-		skip.addActionListener(new DualButtonListener(){
+		skip.addActionListener(new ActionListener(){
 			@Override
-			public void buttonLogic() {
+			public void actionPerformed(ActionEvent e) {
 				algorithmDisplay.skip.doClick();
 				dualAlgorithmDisplay.skip.doClick();
+				toggleButtons();
 			}
 		});
 		reset = new JButton("Reset");
-		reset.addActionListener(new DualButtonListener(){
+		reset.addActionListener(new ActionListener(){
 			@Override
-			public void buttonLogic() {
+			public void actionPerformed(ActionEvent e) {
 				algorithmDisplay.reset.doClick();
 				dualAlgorithmDisplay.reset.doClick();
+				toggleButtons();
 			}
 		});
+
+		// add buttons and disable pause and undo buttons
 		p.add(step);
 		p.add(auto);
 		p.add(undo);
+		undo.setEnabled(false);
 		p.add(pause);
+		pause.setEnabled(false);
 		p.add(skip);
 		p.add(reset);
 
-		toggleDualButtons();
-
+		// add dual button panel to the base
 		base.getContentPane().add(p,BorderLayout.SOUTH);
 
 	}
 
-	private abstract class DualButtonListener implements ActionListener {
+	private void toggleButtons() {
+		// Set the buttons to enable or disabled depending on where we are.
+		if(!algorithmDisplay.step.isEnabled() && !dualAlgorithmDisplay.step.isEnabled()) {
+			auto.setEnabled(false);
+			step.setEnabled(false);
+			skip.setEnabled(false);
+		}
+		else {
+			auto.setEnabled(true);
+			step.setEnabled(true);
+			skip.setEnabled(true);
+		}
+		if(algorithmDisplay.undo.isEnabled() || dualAlgorithmDisplay.undo.isEnabled()) {
+			undo.setEnabled(true);
+		}
+		else {
+			undo.setEnabled(false);
+		}
+	}
+
+	private abstract class ButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			buttonLogic();
 
-			toggleDualButtons();
-
+			toggleButtons();
 		}
 
+		/**
+		 * Performs the logic associated with the button being pressed
+		 */
 		protected abstract void buttonLogic();
 
 	}
 
-	private void toggleDualButtons() {
-		// Enable/disable buttons were appropriate
-		step.setEnabled(algorithmDisplay.step.isEnabled() || dualAlgorithmDisplay.step.isEnabled());
-		auto.setEnabled(algorithmDisplay.auto.isEnabled() && dualAlgorithmDisplay.auto.isEnabled());
-		undo.setEnabled(algorithmDisplay.undo.isEnabled() || dualAlgorithmDisplay.undo.isEnabled());
-		pause.setEnabled(algorithmDisplay.pause.isEnabled() && dualAlgorithmDisplay.pause.isEnabled());
-		skip.setEnabled(algorithmDisplay.skip.isEnabled() && dualAlgorithmDisplay.skip.isEnabled());
-		reset.setEnabled(algorithmDisplay.reset.isEnabled() && dualAlgorithmDisplay.reset.isEnabled());
+	private class AutoListener extends ButtonListener {
+
+		/**
+		 * The thread used to automatically step through the algorithm.
+		 */
+		AutoThread thread = null;
+
+		@Override
+		protected void buttonLogic() {
+			thread = new AutoThread();
+			thread.start();
+		}
+
+
+	}
+	private class PauseListener extends ButtonListener {
+
+		/**
+		 * The AutoListener starting the thread
+		 */
+		AutoListener auto = null;
+
+		PauseListener(AutoListener auto) {
+			this.auto = auto;
+		}
+
+		/**
+		 * Returns the current active thread.
+		 * 
+		 * @return an instance of AutoThread, a subclass of Thread
+		 */
+		private AutoThread getThread() {
+			return auto.thread;
+		}
+
+		@Override
+		protected void buttonLogic() {
+
+			// Gets thread from the auto listener, and stops it if it exists
+			AutoThread thread = getThread();
+			if(thread!=null)thread.stopAuto();
+		}
+
+
+	}
+
+	private class AutoThread extends Thread {
+
+		/**
+		 * Boolean to start/stop the algorithm.
+		 */
+		volatile boolean running = true;
+
+		/**
+		 * Stops the thread.
+		 */
+		public void stopAuto() {
+			running = false;
+		}
+
+		public void run() {
+
+			while(running) {
+
+				step.setEnabled(false);
+				auto.setEnabled(false);
+				undo.setEnabled(false);
+				reset.setEnabled(false);
+				skip.setEnabled(false);
+
+				pause.setEnabled(true);
+
+				algorithmDisplay.step.doClick();
+				dualAlgorithmDisplay.step.doClick();
+
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					return;
+				}
+				
+				if(!algorithmDisplay.step.isEnabled() && !dualAlgorithmDisplay.step.isEnabled()) stopAuto();
+			}
+			toggleButtons();
+			pause.setEnabled(false);
+			reset.setEnabled(true);
+		}
 
 	}
 
