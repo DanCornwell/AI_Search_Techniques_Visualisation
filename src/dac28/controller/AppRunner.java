@@ -1,7 +1,9 @@
-package dac28.view;
+package dac28.controller;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import dac28.view.TopLevelContainer;
 
 
 public class AppRunner {

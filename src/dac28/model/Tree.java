@@ -1,5 +1,8 @@
 package dac28.model;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 /**
  * Abstract class the defines methods for the search trees.
@@ -63,15 +66,42 @@ public abstract class Tree {
 	public final int getTreeDepth(Node node) {
 
 		int max = 0;
-	    for (Node childNode: node.getChildren()) {
-	        int height = getTreeDepth(childNode);
-	        if (height > max)
-	            max = height;
-	    }
-	    return max + 1;
+		for (Node childNode: node.getChildren()) {
+			int height = getTreeDepth(childNode);
+			if (height > max)
+				max = height;
+		}
+		return max + 1;
 
 	}
-	
+
+	/**
+	 * Returns the maximum width of the tree.
+	 * 
+	 * @return integer representing the maximum width of the tree
+	 */
+	public final int getTreeWidth() {
+
+		Queue<Node> parents = new LinkedList<Node>();
+		Queue<Node> children = new LinkedList<Node>();
+		parents.add(ROOT);
+
+		int width = 0;
+		while(!parents.isEmpty()) {
+			while(!parents.isEmpty()) {
+				Node parent = parents.remove();
+				for(Node child: parent.getChildren()) {
+					children.add(child);
+				}
+			}
+			if(children.size() > width) width = children.size();
+			parents.addAll(children);
+			children.clear();
+		}
+		return width;
+
+	}
+
 	/**
 	 * Creates nodes and connects them to the root node.
 	 */

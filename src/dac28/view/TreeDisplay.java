@@ -40,10 +40,6 @@ public abstract class TreeDisplay {
 	 * Colour used for drawing lines and borders. 
 	 */
 	protected final Color DEFAULT = Color.black;
-	/**
-	 * The size of the boxes displayed in the tree.
-	 */
-	protected final int BOXSIZE = 40;
 	
 	/**
 	 * Initialises a tree panel instance.

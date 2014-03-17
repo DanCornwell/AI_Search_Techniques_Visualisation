@@ -1,6 +1,7 @@
 package dac28.view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashMap;
@@ -74,49 +75,65 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			final Color CURRENT_NODE_1 = Color.blue;
 			// Colour of the current node for algorithm 2.
 			final Color CURRENT_NODE_2 = Color.orange;
+			// The size of the boxes that are being drawn.
+			int boxsize = 40;
+			
+			// The font size
+			int fontSize = 10;
 
-			// Draw title
-			g.drawString("Tree Data", (maxWidth/4)-20, 20);
-			g.drawLine((maxWidth/4)-20, 22, (maxWidth/4)+28, 22);
+			// The shrink ratio for the font size
+			final double shrinkRatio = 7.0/8;	
 
+			// While the boxes are too big either horizontally or vertically, shrink the box size
+			while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
+				boxsize -= 5;
+				fontSize = (int)Math.round(fontSize * (shrinkRatio));
+			}
+			while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
+				boxsize -=5;
+				fontSize = (int)Math.round(fontSize * (shrinkRatio));
+			}
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+
+			
 			// The x position of the root node.
-			final int ROOT_X_POS = (maxWidth/2)-(BOXSIZE/2);
+			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
 
 			// Draws the root node, with its values inside it. 
 			// Will also colour the box the appropriate colour.
-			g.drawRect(ROOT_X_POS, ROOT_Y_POS, BOXSIZE, BOXSIZE);
+			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
 			// If root is the goal colour box red.
 			if(tree.getRoot().getValue() == tree.getGoal()) {
 				g.setColor(GOAL_NODE);
-				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			// Both algorithms at same node
 			if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue() && tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
 				g.setColor(CURRENT_NODE_1);
-				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, (BOXSIZE/2)-1, BOXSIZE-1);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, (boxsize/2)-1, boxsize-1);
 				g.setColor(CURRENT_NODE_2);
-				g.fillRect(ROOT_X_POS+1+(BOXSIZE/2), ROOT_Y_POS+1, (BOXSIZE/2)-1, BOXSIZE-1);
+				g.fillRect(ROOT_X_POS+1+(boxsize/2), ROOT_Y_POS+1, (boxsize/2)-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			else {
 				if(tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
 					g.setColor(CURRENT_NODE_2);
-					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
 				if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
 					g.setColor(CURRENT_NODE_1);
-					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, BOXSIZE-1, BOXSIZE-1);
+					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
 			}
-			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(BOXSIZE/2), ROOT_Y_POS+(BOXSIZE/2));
+			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(boxsize/2), ROOT_Y_POS+(boxsize/2));
 
 			// The line connection point of the root node. This will be the bottom centre of the box.
-			Point rootPoint = new Point(ROOT_X_POS+(BOXSIZE/2),ROOT_Y_POS+BOXSIZE);
+			Point rootPoint = new Point(ROOT_X_POS+(boxsize/2),ROOT_Y_POS+boxsize);
 
 			// A list of nodes representing parents.
 			LinkedList<Node> parents = new LinkedList<Node>();
@@ -151,42 +168,42 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 					for(int i=0;i<NODES_ON_LEVEL;i++) {
 
 						// Gives the nodes x position, using math to give visually pleasing spacing.
-						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (BOXSIZE/2);
+						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
-						g.drawRect(xPos, yPos, BOXSIZE, BOXSIZE);
+						g.drawRect(xPos, yPos, boxsize, boxsize);
 						// If the node is the goal colour it red.
 						if(children.get(i).getValue() == tree.getGoal()) {
 							g.setColor(GOAL_NODE);
-							g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						// Both algorithms at same node
 						if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue() && children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
 							g.setColor(CURRENT_NODE_1);
-							g.fillRect(xPos+1, yPos+1, (BOXSIZE/2)-1, BOXSIZE-1);
+							g.fillRect(xPos+1, yPos+1, (boxsize/2)-1, boxsize-1);
 							g.setColor(CURRENT_NODE_2);
-							g.fillRect(xPos+1+(BOXSIZE/2), yPos+1, (BOXSIZE/2)-1, BOXSIZE-1);
+							g.fillRect(xPos+1+(boxsize/2), yPos+1, (boxsize/2)-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						else {
 							if(children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
 								g.setColor(CURRENT_NODE_2);
-								g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
 							if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
 								g.setColor(CURRENT_NODE_1);
-								g.fillRect(xPos+1, yPos+1, BOXSIZE-1, BOXSIZE-1);
+								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
 						}
-						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(BOXSIZE/2), yPos+(BOXSIZE/2));
+						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(boxsize/2), yPos+(boxsize/2));
 
 						// The child line connection point. This will be the top middle of the box.
-						Point childCoord = new Point(xPos+(BOXSIZE/2),yPos);
+						Point childCoord = new Point(xPos+(boxsize/2),yPos);
 
 						// If there are parent coordinates in the list
 						if(!parentCoords.isEmpty()) {
@@ -201,7 +218,7 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 							for(int j=0;j<children.get(i).getChildren().size();j++) {
 								// Parent coordinate is its child coordinate but with the box size added to the 
 								// y coordinate. AKA the top centre point.
-								Point newParentCoord = new Point(childCoord.x,childCoord.y+BOXSIZE);
+								Point newParentCoord = new Point(childCoord.x,childCoord.y+boxsize);
 								parentCoords.add(newParentCoord);
 							}
 						}	

@@ -67,7 +67,7 @@ public class TopLevelContainer {
 
 	private JButton step,auto,pause,reset,skip,undo;
 
-	TopLevelContainer() {
+	public TopLevelContainer() {
 		initialiseBase();
 	}
 
@@ -519,7 +519,7 @@ public class TopLevelContainer {
 				// Stepping the 2nd algorithm straight after the first causes unexpected behaviour
 				// Sleep for any amount of time solves this problem
 				try {
-					sleep(1);
+					sleep(10);
 				} catch (InterruptedException e) {
 					return;
 				}
