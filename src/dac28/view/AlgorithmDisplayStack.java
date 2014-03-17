@@ -17,27 +17,27 @@ import javax.swing.JPanel;
  *
  */
 public class AlgorithmDisplayStack extends AlgorithmDisplay {
-	
+
 	@Override
 	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
-		
+
 		JPanel algorithmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
 		// Create holding panels and add items to them
-		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
+		// the width and height are chosen so that the holding JPanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-50;
-		final int panelHeight = (HEIGHT-40)/5;
+		final int panelHeight = (HEIGHT-40)/6;
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth+50,panelHeight-20);
 		titlePanel.add(title);
 		// Panel 1 - holds the expanded label and visited label
-		JPanel p1 = getHoldingPanel(panelWidth+50,panelHeight-60);
+		JPanel p1 = getHoldingPanel(panelWidth+50,panelHeight-40);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT,20,0));
 		p1.add(expandedLabel);
 		p1.add(Box.createRigidArea(new Dimension(20,0)));
 		p1.add(visitedLabel);
-		
+
 		// Panel 2 - holds the expanded list
 		JPanel p2 = getHoldingPanel(50,HEIGHT-100);
 		p2.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
@@ -81,26 +81,33 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		JPanel p6 = getHoldingPanel(panelWidth,panelHeight-20);
 		p6.add(skip);
 		p6.add(reset);
+		// Panel 7 - holds expanded list size and iteration size
+		JPanel p7 = getHoldingPanel(panelWidth,panelHeight);
+		p7.add(new JLabel("Maximum size of expanded list: "));
+		p7.add(expandedListSize);
+		p7.add(new JLabel("Number of iterations: "));
+		p7.add(iterationNumber);
 
 		// Create a left and right panel allow stack to appear horizontally
 		JPanel left = new JPanel();
 		left.setPreferredSize(new Dimension(60,HEIGHT));
 		JPanel right = new JPanel();
 		right.setPreferredSize(new Dimension(WIDTH-60,HEIGHT));
-		
+
 		// Add holding panels to the left and right
 		left.add(p2);
 		right.add(p3);		
 		right.add(p4);
 		right.add(p5);
 		right.add(p6);
-		
+		right.add(p7);
+
 		// Add other holding panels plus left and right to the algorithm panel
 		algorithmPanel.add(titlePanel);
 		algorithmPanel.add(p1);
 		algorithmPanel.add(left);
 		algorithmPanel.add(right);
-		
+
 		return algorithmPanel;
 	}
 

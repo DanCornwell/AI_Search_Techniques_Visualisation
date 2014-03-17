@@ -35,6 +35,10 @@ public class AlgorithmDisplay {
 	 */
 	protected JLabel node,atGoal,title,expandedLabel,visitedLabel,currentNode,goalLabel;
 	/**
+	 * Labels representing the iteration number and expanded list size
+	 */
+	protected JLabel iterationNumber,expandedListSize;
+	/**
 	 * Lists containing elements that visualise a search algorithms expanded and visited lists
 	 */
 	protected LinkedList<JLabel> expandedList, visitedList;
@@ -59,6 +63,10 @@ public class AlgorithmDisplay {
 	 */
 	private final Color NEW_ELEMENT = new Color(51,255,255);
 	/**
+	 * Colour for the current node the algorithm is looking at, should match the current node of the tree display.
+	 */
+	private final Color CURRENT_NODE = Color.yellow;
+	/**
 	 * Dimension for the list boxes.
 	 */
 	protected final Dimension BOX_SIZE = new Dimension(30,30);
@@ -71,6 +79,16 @@ public class AlgorithmDisplay {
 		visitedLabel = new JLabel("Visited List");
 		currentNode = new JLabel("Current Node: ");
 		goalLabel = new JLabel("At Goal? : ");
+		iterationNumber = new JLabel("",JLabel.CENTER);
+		iterationNumber.setOpaque(true);
+		iterationNumber.setBackground(DEFAULT);
+		iterationNumber.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+		iterationNumber.setPreferredSize(BOX_SIZE);
+		expandedListSize = new JLabel("",JLabel.CENTER);
+		expandedListSize.setOpaque(true);
+		expandedListSize.setBackground(DEFAULT);
+		expandedListSize.setBorder(BorderFactory.createLineBorder(BOX_BORDER_COLOUR));
+		expandedListSize.setPreferredSize(BOX_SIZE);
 		node = new JLabel("",JLabel.CENTER);
 		node.setOpaque(true);
 		node.setBackground(DEFAULT);
@@ -116,17 +134,17 @@ public class AlgorithmDisplay {
 		// Create holding panels and add items to them
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-20;
-		final int panelHeight = (HEIGHT-40)/7;
+		final int panelHeight = (HEIGHT-20)/8;
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
 		// Panel 1 - holds the expanded label
-		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-40);
+		JPanel p1 = getHoldingPanel(panelWidth,panelHeight-30);
 		p1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p1.add(expandedLabel);
 
 		// Panel 2 - holds the expanded list
-		JPanel p2 = getHoldingPanel(panelWidth,panelHeight+BOX_SIZE.height);
+		JPanel p2 = getHoldingPanel(panelWidth,panelHeight+(BOX_SIZE.height)/2);
 		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -138,11 +156,11 @@ public class AlgorithmDisplay {
 			p2.add(label);
 		}
 		// Panel 3 - holds the visited label
-		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-40);
+		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-30);
 		p3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p3.add(visitedLabel);
 		// Panel 4 - holds the visited list
-		JPanel p4 = getHoldingPanel(panelWidth,panelHeight+BOX_SIZE.height);
+		JPanel p4 = getHoldingPanel(panelWidth,panelHeight+(BOX_SIZE.height)/2);
 		p4.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		for(int i=0;i<10;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -170,6 +188,13 @@ public class AlgorithmDisplay {
 		JPanel p7 = getHoldingPanel(panelWidth,panelHeight-20);
 		p7.add(skip);
 		p7.add(reset);
+		// Panel 8 - holds expanded list size and iteration size
+		JPanel p8 = getHoldingPanel(panelWidth,panelHeight-20);
+		p8.add(new JLabel("Max size of expanded: "));
+		p8.add(expandedListSize);
+		p8.add(Box.createRigidArea(new Dimension(10,0)));
+		p8.add(new JLabel("Number of iterations: "));
+		p8.add(iterationNumber);
 
 		// Add the holding panels to the algorithm panel
 		algorithmPanel.add(titlePanel);
@@ -180,6 +205,7 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(p5);
 		algorithmPanel.add(p6);
 		algorithmPanel.add(p7);
+		algorithmPanel.add(p8);
 
 		return algorithmPanel;
 	}
@@ -274,7 +300,7 @@ public class AlgorithmDisplay {
 		else {
 			atGoal.setText("No");
 			atGoal.setBackground(DEFAULT);
-			node.setBackground(DEFAULT);
+			node.setBackground(CURRENT_NODE);
 		}
 	}
 
@@ -465,6 +491,33 @@ public class AlgorithmDisplay {
 			label.setText("");
 			label.setBackground(DEFAULT);
 		}
+	}
+	
+	/**
+	 * Sets the title label
+	 * 
+	 * @param title - new title for the title panel
+	 */
+	void setTitleLabel(String title) {
+		this.title.setText(title);
+	}
+	
+	/**
+	 * Sets the iteration label
+	 * 
+	 * @param number - new value for the iteration label
+	 */
+	public void setIterationLabel(int number) {
+		this.iterationNumber.setText(String.valueOf(number));
+	}
+	
+	/**
+	 * Sets the expanded list size label
+	 * 
+	 * @param number - new value for the expanded list size label
+	 */
+	public void setMaxExpandedSizeLabel(int number) {
+		this.expandedListSize.setText(String.valueOf(number));
 	}
 
 	/**

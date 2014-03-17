@@ -28,6 +28,8 @@ public class AlgorithmController {
 	 * The tree controller thats controls the tree display.
 	 */
 	private TreeController treeController;
+	
+	private int iterationNumber, maxExpandedSize;
 
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 
@@ -49,6 +51,9 @@ public class AlgorithmController {
 		AutoListener auto = new AutoListener();
 		this.algorithmDisplay.registerAutoListener(auto);
 		this.algorithmDisplay.registerPauseListener(new PauseListener(auto));
+		
+		iterationNumber = 0;
+		maxExpandedSize = 0;
 
 	} 
 
@@ -106,6 +111,9 @@ public class AlgorithmController {
 				algorithmDisplay.toggleUndo(false);
 			}
 
+			algorithmDisplay.setIterationLabel(iterationNumber);
+			algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
+			
 			// Update the tree.
 			treeController.drawTree();
 		}
@@ -132,6 +140,10 @@ public class AlgorithmController {
 			algorithmDisplay.addMemento();
 			// Perform a step of the algorithm.
 			searchAlgorithm.step();
+			iterationNumber++;
+			if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
+				maxExpandedSize = searchAlgorithm.getExpanded().size();
+			}
 			// Get the new values of the expanded and visited lists.
 			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
@@ -228,6 +240,10 @@ public class AlgorithmController {
 			algorithmDisplay.restoreMemento();
 			// Undoes a step in the algorithm.
 			searchAlgorithm.undo();
+			iterationNumber--;
+			if(searchAlgorithm.getExpanded().size() < maxExpandedSize) {
+				maxExpandedSize = searchAlgorithm.getExpanded().size();
+			}
 			// Sets the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
@@ -248,6 +264,9 @@ public class AlgorithmController {
 
 			// Initialises the display as if it were new.
 			initialiseExpandedList();
+			
+			iterationNumber = 0;
+			maxExpandedSize = 0;
 		}
 
 	}
@@ -323,6 +342,10 @@ public class AlgorithmController {
 				// Peform a step in the algorithm.
 				algorithmDisplay.addMemento();
 				searchAlgorithm.step();
+				iterationNumber++;
+				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
+					maxExpandedSize = searchAlgorithm.getExpanded().size();
+				}
 				LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -334,6 +357,9 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
+				
+				algorithmDisplay.setIterationLabel(iterationNumber);
+				algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
 				
 				// Update display tree.
 				treeController.drawTree();

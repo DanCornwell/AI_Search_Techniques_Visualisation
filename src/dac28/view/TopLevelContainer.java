@@ -23,6 +23,7 @@ import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
 import dac28.controller.TreeController;
+import dac28.model.BreadthFirstSearchCreator;
 import dac28.model.DepthFirstSearchCreator;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
@@ -135,6 +136,15 @@ public class TopLevelContainer {
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
+				
+				// Set algorithm display title
+				if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
+					algorithmDisplay.setTitleLabel("Depth First Search");
+				}
+				if(controller.getAlgorithmCreator().getClass() == BreadthFirstSearchCreator.class) {
+					algorithmDisplay.setTitleLabel("Breadth First Search");
+				}
+				
 				// initialise the single display
 				initialiseSingleDisplay();
 
