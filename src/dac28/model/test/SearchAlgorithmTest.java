@@ -40,7 +40,6 @@ public class SearchAlgorithmTest {
 		when(currentNode.getValue()).thenReturn(5);
 		Whitebox.setInternalState(algorithm, "currentNode", currentNode);
 
-		// Checks that getCurrentNode returns a node object, using getValue as getCurrentNode returns copy
 		assertEquals("getCurrentNode did not return the currentNode",5,algorithm.getCurrentNode().getValue());
 
 		// Checks algorithm calls getCurrentNode
@@ -73,7 +72,6 @@ public class SearchAlgorithmTest {
 		// Initialise visited
 		Whitebox.setInternalState(algorithm, "visited", new LinkedList<Node>());
 
-		when(algorithm.getVisited()).thenCallRealMethod();
 		// Checks getVisited returns a linked list with the visited list elements
 		assertTrue("Did not return the visited linked list",algorithm.getVisited().equals(Whitebox.getInternalState(algorithm, "visited")));
 

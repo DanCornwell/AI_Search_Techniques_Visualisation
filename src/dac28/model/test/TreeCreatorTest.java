@@ -19,7 +19,7 @@ import dac28.model.TreeCreator;
 public class TreeCreatorTest {
 
 	@Test
-	public void testTreeCreator() {
+	public void testGetTreeReturnsATree() {
 		// Tree124 creator test
 		TreeCreator tree124Creator = new Tree124Creator();
 		Tree tree124 = tree124Creator.getTree(4);
