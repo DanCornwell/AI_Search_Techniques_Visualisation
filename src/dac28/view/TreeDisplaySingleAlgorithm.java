@@ -67,7 +67,7 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 
 			// The maximum depth of the tree.
-			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
+			final int TREE_DEPTH = tree.getTreeDepth();
 			// Colour of the current node.
 			final Color CURRENT_NODE = Color.yellow;
 			// The size of the boxes that are being drawn.

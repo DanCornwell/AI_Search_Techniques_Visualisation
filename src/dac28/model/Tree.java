@@ -58,12 +58,22 @@ public abstract class Tree {
 	}
 
 	/**
+	 * Returns the maximum depth of the tree. 
+	 * Calls the recursive getTreeDepth method using the root node.
+	 * 
+	 * @return integer representing the maximum depth of the tree
+	 */
+	public final int getTreeDepth() {
+		return getTreeDepth(ROOT);
+	}
+	
+	/**
 	 * Returns the maximum depth from the given node via recursion.
 	 * 
 	 * @param node - the node we want the depth of
 	 * @return integer representing the maximum depth from the node
 	 */
-	public final int getTreeDepth(Node node) {
+	private final int getTreeDepth(Node node) {
 
 		int max = 0;
 		for (Node childNode: node.getChildren()) {
@@ -76,7 +86,7 @@ public abstract class Tree {
 	}
 
 	/**
-	 * Returns the maximum width of the tree.
+	 * Returns the maximum width of the tree. O(n) time complexity.
 	 * 
 	 * @return integer representing the maximum width of the tree
 	 */
@@ -88,13 +98,17 @@ public abstract class Tree {
 
 		int width = 0;
 		while(!parents.isEmpty()) {
+			// Removes all parents and add their children to the children list
 			while(!parents.isEmpty()) {
 				Node parent = parents.remove();
 				for(Node child: parent.getChildren()) {
 					children.add(child);
 				}
 			}
+			
 			if(children.size() > width) width = children.size();
+			
+			// If children list is empty then parent list will be empty and hence loop terminates
 			parents.addAll(children);
 			children.clear();
 		}

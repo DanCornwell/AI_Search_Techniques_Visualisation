@@ -218,7 +218,7 @@ public class CreateController {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 
 			// The maximum depth of the tree.
-			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
+			final int TREE_DEPTH = tree.getTreeDepth();
 			// Size of the boxes to be drawn
 			int boxsize = 30;
 			// The font size

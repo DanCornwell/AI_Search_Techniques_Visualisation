@@ -70,7 +70,7 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 
 			// The maximum depth of the tree.
-			final int TREE_DEPTH = tree.getTreeDepth(tree.getRoot());
+			final int TREE_DEPTH = tree.getTreeDepth();
 			// Colour of the current node for algorithm 1.
 			final Color CURRENT_NODE_1 = Color.blue;
 			// Colour of the current node for algorithm 2.

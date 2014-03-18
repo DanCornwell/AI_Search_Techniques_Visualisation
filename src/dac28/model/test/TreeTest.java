@@ -3,6 +3,7 @@ package dac28.model.test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.junit.Before;
@@ -62,13 +63,37 @@ public class TreeTest {
 
 	@Test
 	public void testGetTreeDepth() {
+		// Mock nodes resembling a tree of depth 3
 		Node root = PowerMockito.mock(Node.class);
 		Whitebox.setInternalState(tree, "ROOT", root);
-		when(root.getChildren()).thenReturn(new LinkedList<Node>());
-		// Check that getTreeDepth returns a positive integer
-		assertTrue("Get tree depth returns a positive integer",tree.getTreeDepth(tree.getRoot()) >= 0);
-		// Checks calls getGetTreeDepth with some node
-		verify(tree).getTreeDepth(any(Node.class));
+		Node one = PowerMockito.mock(Node.class);
+		Node two = PowerMockito.mock(Node.class);
+		LinkedList<Node> childrenRoot = new LinkedList<Node>(Arrays.asList(one));
+		PowerMockito.when(root.getChildren()).thenReturn(childrenRoot);
+		LinkedList<Node> childrenOne = new LinkedList<Node>(Arrays.asList(two));
+		PowerMockito.when(one.getChildren()).thenReturn(childrenOne);
+		PowerMockito.when(two.getChildren()).thenReturn(new LinkedList<Node>());
+		// Test method returns expected depth
+		assertTrue("Incorrect depth was returned",3==tree.getTreeDepth());
+		// Verify method call
+		verify(tree).getTreeDepth();
+	}
+	
+	@Test 
+	public void testGetTreeWidth() {
+		// Mock nodes resembling a tree of width 2
+		Node root = PowerMockito.mock(Node.class);
+		Whitebox.setInternalState(tree, "ROOT", root);
+		Node one = PowerMockito.mock(Node.class);
+		Node two = PowerMockito.mock(Node.class);
+		LinkedList<Node> children = new LinkedList<Node>(Arrays.asList(one,two));
+		PowerMockito.when(root.getChildren()).thenReturn(children);
+		PowerMockito.when(one.getChildren()).thenReturn(new LinkedList<Node>());
+		PowerMockito.when(two.getChildren()).thenReturn(new LinkedList<Node>());
+		// Test method returns expected width
+		assertTrue("Incorrect width was returned",2==tree.getTreeWidth());
+		// Verify method call
+		verify(tree).getTreeWidth();
 	}
 	
 }
