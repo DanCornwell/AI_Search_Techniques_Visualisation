@@ -1,6 +1,10 @@
 package dac28.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
+
+import dac28.io.TextFileReader;
 
 /**
  * The tree creator class. 
@@ -11,7 +15,7 @@ import java.util.HashMap;
  *
  */
 public class TreeCreator {
-	
+
 	/**
 	 * The static instance of the tree creator.
 	 */
@@ -19,18 +23,37 @@ public class TreeCreator {
 	/**
 	 * The HashMap containing all known trees. 
 	 */
-	private HashMap<String,Tree> trees = new HashMap<String,Tree>();
+	private HashMap<Integer,Tree> trees = new HashMap<Integer,Tree>();
 
 	/**
 	 * Constructor for the tree creator. 
 	 * Adds all known trees to the HashMap. 0 is a trivial constructor value for the trees.
 	 */
 	protected TreeCreator() {
-		addTree("tree124",new Tree124(0));
-		addTree("tree1355",new Tree1355(0));
-		addTree("tree112111",new Tree112111(0));
+
+		List<String> treeNames = null;
+
+		treeNames = TextFileReader.getTrees();
+
+		if(treeNames == null) return;
+
+		int id = 0;
+
+		for(String treeName: treeNames) {
+			try {
+
+				Class<?> tree = Class.forName("dac28.model.".concat(treeName));
+				Tree treeInstance = (Tree) tree.getDeclaredConstructor(int.class).newInstance(0);
+				trees.put(id, treeInstance);
+				id++;
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
+					| IllegalArgumentException | InvocationTargetException 
+					| NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
 	/**
 	 * Returns the tree creator, initialising it if it doesn't exist
 	 * 
@@ -40,17 +63,7 @@ public class TreeCreator {
 		if(instance==null) instance = new TreeCreator();
 		return instance;
 	}
-	
-	/**
-	 * Adds a tree to the creator hash.
-	 * 
-	 * @param uID - the key that will be used to receive the tree
-	 * @param tree - the tree to store
-	 */
-	public void addTree(String uID,Tree tree) {
-		trees.put(uID, tree);
-	}
-	
+
 	/**
 	 * Retrieves a tree from the hash.
 	 * 
@@ -58,12 +71,12 @@ public class TreeCreator {
 	 * @param goalValue - the goal value of the tree
 	 * @return a concrete tree with a defined goal value
 	 */
-	public Tree getTree(String uID,int goalValue) {
-		
+	public Tree getTree(int uID,int goalValue) {
+
 		if(!trees.containsKey(uID)) return null;
-		
-		return trees.get(uID.toLowerCase()).getTree(goalValue);
+
+		return trees.get(uID).getTree(goalValue);
 	}
-	
-	
+
+
 }

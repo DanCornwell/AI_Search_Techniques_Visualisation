@@ -8,19 +8,18 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+
+import dac28.io.TextFileReader;
 
 import dac28.model.Node;
 import dac28.model.Tree;
@@ -35,36 +34,52 @@ import dac28.model.TreeCreator;
 public class CreateController {
 
 	/**
-	 * Radio buttons relating to the trees the user can choose.
-	 */
-	private JRadioButton tree124,tree1355,tree112111;
-	/**
-	 * Radio buttons relating to the searches the user can choose.
-	 */
-	private JRadioButton bfs,dfs;
-	/**
 	 * The goal field the user can enter their goal value in.
 	 */
-	private JTextField goal;
+	protected JTextField goal;
+	/**
+	 * The combo boxes for the different algorithms and trees.
+	 */
+	protected JComboBox<String> algorithmOptions,treeOptions;
+	/**
+	 * String arrays for the algorithms and trees.
+	 */
+	protected final String[] ALGORITHMS, TREES;	
 
 	/**
 	 * Initialises the radio buttons and goal field.
 	 */
 	public CreateController() {
 
-		tree124 = new JRadioButton("1-2-4 Tree");
-		tree124.setSelected(true);	
-		tree1355 = new JRadioButton("1-3-5-5 Tree");
-		tree1355.setSelected(false);
-		tree112111 = new JRadioButton("1-1-2-1-1-1 Tree");
-		tree112111.setSelected(false);
-
-		bfs = new JRadioButton("Breadth First Search");
-		bfs.setSelected(true);
-		dfs = new JRadioButton("Depth First Search");
-		dfs.setSelected(false);	
-
 		goal = new JTextField("");
+
+		ALGORITHMS = getAlgorithms();
+		algorithmOptions = new JComboBox<String>(ALGORITHMS);
+
+		TREES = getTrees();
+		treeOptions = new JComboBox<String>(TREES);
+
+	}
+
+	/**
+	 * Returns the algorithms defined in algorithms.txt in the form of a string array.
+	 *  
+	 * @return string array 
+	 */
+	private String[] getAlgorithms() {
+
+		return TextFileReader.getAlgorithms().toArray(new String[TextFileReader.getAlgorithms().size()]);
+
+	}
+
+	/**
+	 * Returns the trees defined in trees.txt in the form of a string array.
+	 *  
+	 * @return string array 
+	 */
+	private String[] getTrees() {
+
+		return TextFileReader.getTrees().toArray(new String[TextFileReader.getTrees().size()]);
 
 	}
 
@@ -91,41 +106,28 @@ public class CreateController {
 		treeChoices.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
 		treeChoices.add(goal);
-		treeChoices.add(tree124);
-		treeChoices.add(tree1355);
-		treeChoices.add(tree112111);
-		
-		ButtonGroup treeGroup = new ButtonGroup();
-		treeGroup.add(tree124);
-		treeGroup.add(tree1355);
-		treeGroup.add(tree112111);
-		
+		treeChoices.add(treeOptions);
+		treeOptions.setSelectedIndex(0);
+
 		JPanel searchChoices = new JPanel(new GridLayout(0,1));
 		searchChoices.setPreferredSize(new Dimension((WIDTH/2)-10,HEIGHT/2));
 		searchChoices.setBorder(BorderFactory.createLineBorder(Color.black));
 
-		searchChoices.add(bfs);
-		searchChoices.add(dfs);
-
-		ButtonGroup algorithmGroup = new ButtonGroup();
-		algorithmGroup.add(bfs);
-		algorithmGroup.add(dfs);
+		searchChoices.add(algorithmOptions);
+		algorithmOptions.setSelectedIndex(0);
 
 		final JPanel TREE_DIAGRAM = new TreeDiagram();
 		TREE_DIAGRAM.setPreferredSize(new Dimension(WIDTH-20,(HEIGHT/2)-20));
 		TREE_DIAGRAM.setBorder(BorderFactory.createLineBorder(Color.black));
 		TREE_DIAGRAM.setBackground(Color.white);
 
-		for(Enumeration<AbstractButton> buttons = treeGroup.getElements();buttons.hasMoreElements();) {
-			AbstractButton button = buttons.nextElement();
-			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					TREE_DIAGRAM.repaint();
-				}
-			});
-		}
-		
+		treeOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TREE_DIAGRAM.repaint();
+			}
+		});
+
 		panel.add(treeChoices);
 		panel.add(searchChoices);
 		panel.add(TREE_DIAGRAM);
@@ -137,39 +139,39 @@ public class CreateController {
 	/**
 	 * Returns the the unique ID of the selected tree.
 	 * 
-	 * @return string representing the tree's ID
+	 * @return Integer representing the tree's ID
 	 */
-	public String getTreeUID() {
-		
-		if(tree124.isSelected()) {
-			return "tree124";
+	public int getTreeUID() {
+
+		String selectedItem = (String)treeOptions.getSelectedItem();
+
+		int id = 0;
+
+		while(id <= TREES.length-1 && !TREES[id].equals(selectedItem)) {
+			id++;
 		}
-		else if(tree1355.isSelected()) {
-			return "tree1355";
-		}
-		else if(tree112111.isSelected()) {
-			return "tree112111";
-		}
-		return "tree124";
-		
+
+		return id;
+
 	}
-	
+
 	/**
 	 * Returns the unique id of the selected algorithm.
 	 * 
-	 * @return string representing the algorithm's ID
+	 * @return Integer representing the algorithm's ID
 	 */
-	public String getAlgorithmUID() {
-		
-		if(dfs.isSelected()) {
-			return "dfs";
-		}
-		else if(bfs.isSelected()) {
-			return "bfs";
+	public int getAlgorithmUID() {
+
+		String selectedItem = (String)algorithmOptions.getSelectedItem();
+
+		int id = 0;
+
+		while(id <= ALGORITHMS.length-1 && !ALGORITHMS[id].equals(selectedItem)) {
+			id++;
 		}
 
-		return "bfs";
-		
+		return id;
+
 	}
 
 	/**
@@ -207,7 +209,7 @@ public class CreateController {
 
 			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);
 			if(tree==null) return;
-			
+
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
@@ -219,10 +221,10 @@ public class CreateController {
 			int boxsize = 30;
 			// The font size
 			int fontSize = 8;
-			
+
 			// The shrink ratio for the font size
 			final double shrinkRatio = 5.0/6;
-			
+
 			// While the boxes are too big either horizontally or vertically, shrink the box size
 			while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
 				boxsize -= 5;

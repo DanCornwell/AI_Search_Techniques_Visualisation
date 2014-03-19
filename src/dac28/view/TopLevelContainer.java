@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
 import dac28.controller.TreeController;
+import dac28.io.TextFileReader;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
@@ -64,9 +66,14 @@ public class TopLevelContainer {
 	 * Width of the displays.
 	 */
 	private int width = 700;
-
+	/**
+	 * Buttons to control a dual search.
+	 */
 	private JButton step,auto,pause,reset,skip,undo;
 
+	/**
+	 * Constructor for the top level container. Calls initialiseBase.
+	 */
 	public TopLevelContainer() {
 		initialiseBase();
 	}
@@ -80,6 +87,8 @@ public class TopLevelContainer {
 		base = new JFrame("Search Algorithm Visualiser");
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		final List<String> ALGORITHMS = TextFileReader.getAlgorithms();
+		
 		// Create the menu items
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
@@ -124,28 +133,27 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and algorithm with the user supplied information. Return if null.
-				//Tree tree = controller.getTreeCreator().getTree(goal);
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
 				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);;
 				if(algorithm==null) return;
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == "dfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				
+
 				// Set algorithm display title
-				if(controller.getAlgorithmUID() == "dfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					algorithmDisplay.setTitleLabel("Depth First Search");
 				}
-				if(controller.getAlgorithmUID() == "bfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
 					algorithmDisplay.setTitleLabel("Breadth First Search");
 				}
-				
+
 				// initialise the single display
 				initialiseSingleDisplay();
 
@@ -198,37 +206,37 @@ public class TopLevelContainer {
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
-				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm1UID(), tree);
+				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
 				if(algorithm1==null) return;
 				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm2UID(), tree);
 				if(algorithm2==null) return;
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithm1UID() == "dfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(controller.getAlgorithm2UID() == "dfs") {
+				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
 				}
 				// Set algorithm1 display title
-				if(controller.getAlgorithm1UID() == "dfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					algorithmDisplay.setTitleLabel("Depth First Search");
 				}
-				if(controller.getAlgorithm1UID() == "bfs") {
+				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
 					algorithmDisplay.setTitleLabel("Breadth First Search");
 				}
-				
+
 				// Set algorithm2 display title
-				if(controller.getAlgorithm2UID() == "dfs") {
+				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
 					dualAlgorithmDisplay.setTitleLabel("Depth First Search");
 				}
-				if(controller.getAlgorithm2UID() == "bfs") {
+				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
 					dualAlgorithmDisplay.setTitleLabel("Breadth First Search");
 				}
 
@@ -531,7 +539,7 @@ public class TopLevelContainer {
 				pause.setEnabled(true);
 
 				algorithmDisplay.step.doClick();
-				
+
 				// Stepping the 2nd algorithm straight after the first causes unexpected behaviour
 				// Sleep for any amount of time solves this problem
 				try {
@@ -539,7 +547,7 @@ public class TopLevelContainer {
 				} catch (InterruptedException e) {
 					return;
 				}
-				
+
 				dualAlgorithmDisplay.step.doClick();
 
 				try {
@@ -547,7 +555,7 @@ public class TopLevelContainer {
 				} catch (InterruptedException e) {
 					return;
 				}
-				
+
 				if(!algorithmDisplay.step.isEnabled() && !dualAlgorithmDisplay.step.isEnabled()) stopAuto();
 			}
 			toggleButtons();
