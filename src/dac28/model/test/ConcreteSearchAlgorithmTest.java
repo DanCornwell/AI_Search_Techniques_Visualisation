@@ -15,8 +15,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import dac28.model.BreadthFirstSearchCreator;
-import dac28.model.DepthFirstSearchCreator;
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
@@ -61,8 +59,6 @@ public class ConcreteSearchAlgorithmTest {
 		doReturn(3).when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
 
-		bfs = new BreadthFirstSearchCreator().getSearchAlgorithm(tree);
-		dfs = new DepthFirstSearchCreator().getSearchAlgorithm(tree);
 
 	}
 

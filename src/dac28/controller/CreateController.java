@@ -22,10 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import dac28.model.BreadthFirstSearchCreator;
-import dac28.model.DepthFirstSearchCreator;
 import dac28.model.Node;
-import dac28.model.SearchAlgorithmCreator;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
 
@@ -158,20 +155,21 @@ public class CreateController {
 	}
 	
 	/**
-	 * Returns a search algorithm creator, depending on which button is selected.
+	 * Returns the unique id of the selected algorithm.
 	 * 
-	 * @return a search algorithm creator
+	 * @return string representing the algorithm's ID
 	 */
-	public SearchAlgorithmCreator getAlgorithmCreator() {
-
+	public String getAlgorithmUID() {
+		
 		if(dfs.isSelected()) {
-			return new DepthFirstSearchCreator();
+			return "dfs";
 		}
 		else if(bfs.isSelected()) {
-			return new BreadthFirstSearchCreator();
+			return "bfs";
 		}
 
-		return new DepthFirstSearchCreator();
+		return "bfs";
+		
 	}
 
 	/**

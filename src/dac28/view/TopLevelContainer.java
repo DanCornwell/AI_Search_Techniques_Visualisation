@@ -23,11 +23,10 @@ import dac28.controller.AlgorithmController;
 import dac28.controller.CreateController;
 import dac28.controller.DualCreateController;
 import dac28.controller.TreeController;
-import dac28.model.BreadthFirstSearchCreator;
-import dac28.model.DepthFirstSearchCreator;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
+import dac28.model.SearchAlgorithmCreator;
 
 /**
  * The top level container that holds the rest of the displays.
@@ -128,11 +127,11 @@ public class TopLevelContainer {
 				//Tree tree = controller.getTreeCreator().getTree(goal);
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
-				SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
+				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);;
 				if(algorithm==null) return;
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
+				if(controller.getAlgorithmUID() == "dfs") {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
@@ -140,10 +139,10 @@ public class TopLevelContainer {
 				}
 				
 				// Set algorithm display title
-				if(controller.getAlgorithmCreator().getClass() == DepthFirstSearchCreator.class) {
+				if(controller.getAlgorithmUID() == "dfs") {
 					algorithmDisplay.setTitleLabel("Depth First Search");
 				}
-				if(controller.getAlgorithmCreator().getClass() == BreadthFirstSearchCreator.class) {
+				if(controller.getAlgorithmUID() == "bfs") {
 					algorithmDisplay.setTitleLabel("Breadth First Search");
 				}
 				
@@ -199,23 +198,38 @@ public class TopLevelContainer {
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
-				SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
+				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm1UID(), tree);
 				if(algorithm1==null) return;
-				SearchAlgorithm algorithm2 = controller.getAlgorithm2Creator().getSearchAlgorithm(tree);
+				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm2UID(), tree);
 				if(algorithm2==null) return;
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithm1Creator().getClass() == DepthFirstSearchCreator.class) {
+				if(controller.getAlgorithm1UID() == "dfs") {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(controller.getAlgorithm2Creator().getClass() == DepthFirstSearchCreator.class) {
+				if(controller.getAlgorithm2UID() == "dfs") {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
+				}
+				// Set algorithm1 display title
+				if(controller.getAlgorithm1UID() == "dfs") {
+					algorithmDisplay.setTitleLabel("Depth First Search");
+				}
+				if(controller.getAlgorithm1UID() == "bfs") {
+					algorithmDisplay.setTitleLabel("Breadth First Search");
+				}
+				
+				// Set algorithm2 display title
+				if(controller.getAlgorithm2UID() == "dfs") {
+					dualAlgorithmDisplay.setTitleLabel("Depth First Search");
+				}
+				if(controller.getAlgorithm2UID() == "bfs") {
+					dualAlgorithmDisplay.setTitleLabel("Breadth First Search");
 				}
 
 				// initialise the dual display

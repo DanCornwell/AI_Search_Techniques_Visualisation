@@ -48,5 +48,10 @@ class BreadthFirstSearch extends SearchAlgorithm {
 		}
 	}
 
+	@Override
+	SearchAlgorithm getAlgorithm(Tree tree) {
+		return new BreadthFirstSearch(tree);
+	}
+
 
 }

@@ -122,5 +122,11 @@ public abstract class Tree {
 	 */
 	abstract void construct();
 
-	abstract Tree getInstance(int goalValue);
+	/**
+	 * Returns a concrete tree.
+	 * 
+	 * @param goalValue - goal value to initialise tree with
+	 * @return a concrete tree
+	 */
+	abstract Tree getTree(int goalValue);
 }

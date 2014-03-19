@@ -218,5 +218,13 @@ public abstract class SearchAlgorithm {
 		}
 
 	}
+	
+	/**
+	 * Returns a concrete search algorithm
+	 * 
+	 * @param tree - tree instance to initialise algorithm with
+	 * @return a concrete search algorithm
+	 */
+	abstract SearchAlgorithm getAlgorithm(Tree tree);
 
 }

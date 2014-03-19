@@ -51,7 +51,7 @@ class Tree124 extends Tree {
 	}
 
 	@Override
-	Tree getInstance(int goalValue) {
+	Tree getTree(int goalValue) {
 		return new Tree124(goalValue);
 	}
 	
