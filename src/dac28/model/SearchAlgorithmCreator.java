@@ -51,7 +51,6 @@ public class SearchAlgorithmCreator {
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
 					| IllegalArgumentException | InvocationTargetException 
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
 			}
 		}
 	}
