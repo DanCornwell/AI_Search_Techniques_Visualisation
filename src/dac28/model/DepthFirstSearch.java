@@ -3,6 +3,7 @@ package dac28.model;
 import java.util.Stack;
 
 
+
 /**
  * The depth first search algorithm.
  * Implements the search algorithm interface.

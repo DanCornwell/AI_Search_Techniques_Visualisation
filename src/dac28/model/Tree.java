@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
+
 /**
  * Abstract class the defines methods for the search trees.
  * Provides method to return the goal value and root node.
@@ -121,4 +122,5 @@ public abstract class Tree {
 	 */
 	abstract void construct();
 
+	abstract Tree getInstance(int goalValue);
 }

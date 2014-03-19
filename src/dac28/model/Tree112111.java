@@ -1,6 +1,7 @@
 package dac28.model;
 
 
+
 /**
  * The Tree112111 class. Implements the tree interface.
  * This tree has the structure as followed:
@@ -44,5 +45,10 @@ class Tree112111 extends Tree {
 		
 		ROOT.addChild(one);
 	}
-
+	
+	@Override
+	Tree getInstance(int goalValue) {
+		return new Tree112111(goalValue);
+	}
+	
 }

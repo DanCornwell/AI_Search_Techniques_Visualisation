@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+
 /**
  * Defines the interface for the search algorithms.
  * Defines methods to return and set the current node, evaluate the goal and 

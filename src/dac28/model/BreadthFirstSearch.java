@@ -3,6 +3,7 @@ package dac28.model;
 import java.util.LinkedList;
 
 
+
 /**
  * The breadth first search algorithm. 
  * Implements the search algorithm interface.

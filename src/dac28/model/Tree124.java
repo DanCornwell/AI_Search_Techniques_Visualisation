@@ -2,6 +2,7 @@ package dac28.model;
 
 
 
+
 /**
  * The Tree124 class. Implements the tree interface.
  * This tree has the structure as followed:
@@ -49,4 +50,9 @@ class Tree124 extends Tree {
 		
 	}
 
+	@Override
+	Tree getInstance(int goalValue) {
+		return new Tree124(goalValue);
+	}
+	
 }

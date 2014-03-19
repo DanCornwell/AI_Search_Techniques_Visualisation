@@ -27,9 +27,6 @@ import dac28.model.DepthFirstSearchCreator;
 import dac28.model.Node;
 import dac28.model.SearchAlgorithmCreator;
 import dac28.model.Tree;
-import dac28.model.Tree112111Creator;
-import dac28.model.Tree124Creator;
-import dac28.model.Tree1354Creator;
 import dac28.model.TreeCreator;
 
 /**
@@ -43,7 +40,7 @@ public class CreateController {
 	/**
 	 * Radio buttons relating to the trees the user can choose.
 	 */
-	private JRadioButton tree124,tree1354,tree112111;
+	private JRadioButton tree124,tree1355,tree112111;
 	/**
 	 * Radio buttons relating to the searches the user can choose.
 	 */
@@ -60,8 +57,8 @@ public class CreateController {
 
 		tree124 = new JRadioButton("1-2-4 Tree");
 		tree124.setSelected(true);	
-		tree1354 = new JRadioButton("1-3-5-4 Tree");
-		tree1354.setSelected(false);
+		tree1355 = new JRadioButton("1-3-5-5 Tree");
+		tree1355.setSelected(false);
 		tree112111 = new JRadioButton("1-1-2-1-1-1 Tree");
 		tree112111.setSelected(false);
 
@@ -98,12 +95,12 @@ public class CreateController {
 		goal.setPreferredSize(new Dimension(30,20));
 		treeChoices.add(goal);
 		treeChoices.add(tree124);
-		treeChoices.add(tree1354);
+		treeChoices.add(tree1355);
 		treeChoices.add(tree112111);
 		
 		ButtonGroup treeGroup = new ButtonGroup();
 		treeGroup.add(tree124);
-		treeGroup.add(tree1354);
+		treeGroup.add(tree1355);
 		treeGroup.add(tree112111);
 		
 		JPanel searchChoices = new JPanel(new GridLayout(0,1));
@@ -139,27 +136,27 @@ public class CreateController {
 		return panel;
 
 	}
-	
-	/**
-	 * Returns a tree creator, depending on which button is selected.
-	 * 
-	 * @return a tree creator
-	 */
-	public TreeCreator getTreeCreator() {
 
+	/**
+	 * Returns the the unique ID of the selected tree.
+	 * 
+	 * @return string representing the tree's ID
+	 */
+	public String getTreeUID() {
+		
 		if(tree124.isSelected()) {
-			return new Tree124Creator();
+			return "tree124";
 		}
-		else if(tree1354.isSelected()) {
-			return new Tree1354Creator();
+		else if(tree1355.isSelected()) {
+			return "tree1355";
 		}
 		else if(tree112111.isSelected()) {
-			return new Tree112111Creator();
+			return "tree112111";
 		}
-
-		return new Tree124Creator();
+		return "tree124";
+		
 	}
-
+	
 	/**
 	 * Returns a search algorithm creator, depending on which button is selected.
 	 * 
@@ -210,8 +207,9 @@ public class CreateController {
 
 		private void drawTree(Graphics g) {
 
-			Tree tree = getTreeCreator().getTree(0);
-
+			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);
+			if(tree==null) return;
+			
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.

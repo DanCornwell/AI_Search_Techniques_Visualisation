@@ -27,6 +27,7 @@ import dac28.model.BreadthFirstSearchCreator;
 import dac28.model.DepthFirstSearchCreator;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
+import dac28.model.TreeCreator;
 
 /**
  * The top level container that holds the rest of the displays.
@@ -124,7 +125,8 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and algorithm with the user supplied information. Return if null.
-				Tree tree = controller.getTreeCreator().getTree(goal);
+				//Tree tree = controller.getTreeCreator().getTree(goal);
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
 				SearchAlgorithm algorithm = controller.getAlgorithmCreator().getSearchAlgorithm(tree);
 				if(algorithm==null) return;
@@ -195,7 +197,7 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
-				Tree tree = controller.getTreeCreator().getTree(goal);
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) return;
 				SearchAlgorithm algorithm1 = controller.getAlgorithm1Creator().getSearchAlgorithm(tree);
 				if(algorithm1==null) return;
