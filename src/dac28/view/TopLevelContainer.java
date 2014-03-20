@@ -88,7 +88,7 @@ public class TopLevelContainer {
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final List<String> ALGORITHMS = TextFileReader.getAlgorithms();
-		
+
 		// Create the menu items
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
@@ -134,9 +134,23 @@ public class TopLevelContainer {
 
 				// Create a tree and algorithm with the user supplied information. Return if null.
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
-				if(tree==null) return;
+				if(tree==null) {
+					Object[] ok = {"Ok"};
+					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
+							" or did not extend the tree class.", 
+							"Goal Value Error",JOptionPane.YES_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					return;
+				}
 				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);;
-				if(algorithm==null) return;
+				if(algorithm==null) {
+					Object[] ok = {"Ok"};
+					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
+							" or did not extend the search algorithm class.", 
+							"Goal Value Error",JOptionPane.YES_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					return;
+				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
 				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
@@ -159,6 +173,12 @@ public class TopLevelContainer {
 
 				// Put algorithm into an array to allow display to set this algorithm
 				SearchAlgorithm[] algorithms = {algorithm};
+				
+				final Color CURRENT_NODE = Color.yellow;
+				Color[] colors = {CURRENT_NODE};
+				treeDisplay.setCurrentNodeColor(colors);
+				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE);
+				
 				// Create a new tree controller
 				TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
 				// Create a new algorithm controller
@@ -205,11 +225,32 @@ public class TopLevelContainer {
 
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
-				if(tree==null) return;
+				if(tree==null) {
+					Object[] ok = {"Ok"};
+					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
+							" or did not extend the tree class.", 
+							"Goal Value Error",JOptionPane.YES_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					return;
+				}
 				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
-				if(algorithm1==null) return;
+				if(algorithm1==null) {
+					Object[] ok = {"Ok"};
+					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
+							" or did not extend the search algorithm class.", 
+							"Goal Value Error",JOptionPane.YES_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					return;
+				}
 				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm2UID(), tree);
-				if(algorithm2==null) return;
+				if(algorithm2==null) {
+					Object[] ok = {"Ok"};
+					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
+							" or did not extend the search algorithm class.", 
+							"Goal Value Error",JOptionPane.YES_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+					return;
+				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
 				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
@@ -245,6 +286,14 @@ public class TopLevelContainer {
 
 				// put algorithms into an array to allow display to set them
 				SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
+				
+				final Color CURRENT_NODE_1 = Color.pink;
+				final Color CURRENT_NODE_2 = Color.orange;
+				Color[] colors = {CURRENT_NODE_1,CURRENT_NODE_2};
+				treeDisplay.setCurrentNodeColor(colors);
+				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE_1);
+				dualAlgorithmDisplay.setCurrentNodeColor(CURRENT_NODE_2);
+				
 				// Create new tree controller
 				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 				// Create new algorithm controller for algorithm 1

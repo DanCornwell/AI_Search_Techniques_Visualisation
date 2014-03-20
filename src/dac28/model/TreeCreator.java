@@ -49,7 +49,6 @@ public class TreeCreator {
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
 					| IllegalArgumentException | InvocationTargetException 
 					| NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
 			}
 		}
 	}

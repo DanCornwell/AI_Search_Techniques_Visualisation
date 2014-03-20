@@ -40,7 +40,7 @@ public abstract class TreeDisplay {
 	 * Colour used for drawing lines and borders. 
 	 */
 	protected final Color DEFAULT = Color.black;
-	
+		
 	/**
 	 * Initialises a tree panel instance.
 	 * 
@@ -93,6 +93,15 @@ public abstract class TreeDisplay {
 	 */
 	public abstract void setAlgorithm(SearchAlgorithm[] searchAlgorithms);
 
+	/**
+	 * Assigns colours for the current nodes in the tree.
+	 * Subclasses of tree display decide on how many they should use.
+	 * E.g single should only accept an array of length one, dual two etc...
+	 * 
+	 * @param searchAlgorithms - array of search algorithms
+	 */
+	public abstract void setCurrentNodeColor(Color[] colors);
+	
 	/**
 	 * The tree panel superclass.
 	 * Defines the method to draw the tree within the tree display,

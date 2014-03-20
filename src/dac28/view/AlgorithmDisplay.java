@@ -33,7 +33,7 @@ public class AlgorithmDisplay {
 	/**
 	 * Labels representing the current node and whether it is the goal node
 	 */
-	protected JLabel node,atGoal,title,expandedLabel,visitedLabel,currentNode,goalLabel;
+	protected JLabel node,atGoal,title,expandedLabel,visitedLabel,currentNodeLabel,goalLabel;
 	/**
 	 * Labels representing the iteration number and expanded list size
 	 */
@@ -65,7 +65,7 @@ public class AlgorithmDisplay {
 	/**
 	 * Colour for the current node the algorithm is looking at, should match the current node of the tree display.
 	 */
-	private final Color CURRENT_NODE = Color.yellow;
+	private Color currentNode = Color.yellow;
 	/**
 	 * Dimension for the list boxes.
 	 */
@@ -77,7 +77,7 @@ public class AlgorithmDisplay {
 		title = new JLabel("Search Algorithm Data");
 		expandedLabel = new JLabel("Expanded List");
 		visitedLabel = new JLabel("Visited List");
-		currentNode = new JLabel("Current Node: ");
+		currentNodeLabel = new JLabel("Current Node: ");
 		goalLabel = new JLabel("At Goal? : ");
 		iterationNumber = new JLabel("",JLabel.CENTER);
 		iterationNumber.setOpaque(true);
@@ -173,7 +173,7 @@ public class AlgorithmDisplay {
 		}
 		// Panel 5 - holds the current node labels and at goal labels
 		JPanel p5 = getHoldingPanel(panelWidth,panelHeight-20);
-		p5.add(currentNode);
+		p5.add(currentNodeLabel);
 		p5.add(node);
 		p5.add(Box.createRigidArea(new Dimension(40,0)));
 		p5.add(goalLabel);
@@ -300,7 +300,7 @@ public class AlgorithmDisplay {
 		else {
 			atGoal.setText("No");
 			atGoal.setBackground(DEFAULT);
-			node.setBackground(CURRENT_NODE);
+			node.setBackground(currentNode);
 		}
 	}
 
@@ -518,6 +518,15 @@ public class AlgorithmDisplay {
 	 */
 	public void setMaxExpandedSizeLabel(int number) {
 		this.expandedListSize.setText(String.valueOf(number));
+	}
+	
+	/**
+	 * Sets the current node colour for this display.
+	 * 
+	 * @param color - new colour of the current node 
+	 */
+	public void setCurrentNodeColor(Color color) {
+		this.currentNode = color;
 	}
 
 	/**

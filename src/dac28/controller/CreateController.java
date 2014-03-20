@@ -141,7 +141,7 @@ public class CreateController {
 	 * 
 	 * @return Integer representing the tree's ID
 	 */
-	public int getTreeUID() {
+	public final int getTreeUID() {
 
 		String selectedItem = (String)treeOptions.getSelectedItem();
 
@@ -160,7 +160,7 @@ public class CreateController {
 	 * 
 	 * @return Integer representing the algorithm's ID
 	 */
-	public int getAlgorithmUID() {
+	public final int getAlgorithmUID() {
 
 		String selectedItem = (String)algorithmOptions.getSelectedItem();
 
@@ -179,7 +179,7 @@ public class CreateController {
 	 * 
 	 * @return string representing the value entered
 	 */
-	public String getGoal() {
+	public final String getGoal() {
 		return goal.getText();
 	}
 
@@ -208,7 +208,11 @@ public class CreateController {
 		private void drawTree(Graphics g) {
 
 			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);
-			if(tree==null) return;
+			if(tree==null) {
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+				g.drawString("Tree not found", (this.getWidth()/3)+15, this.getHeight()/2);
+				return;
+			}
 
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
@@ -226,16 +230,17 @@ public class CreateController {
 			final double shrinkRatio = 5.0/6;
 
 			// While the boxes are too big either horizontally or vertically, shrink the box size
-			while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
-				boxsize -= 5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
+			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
+				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
+					boxsize -= 5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
+					boxsize -=5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
 			}
-			while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
-				boxsize -=5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
-			}
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-
 			// The x position of the root node.
 			final int ROOT_X_POS = (this.getWidth()/2)-(boxsize/2);
 			// The y position of the root node.

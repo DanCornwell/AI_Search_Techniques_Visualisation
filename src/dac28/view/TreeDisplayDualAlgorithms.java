@@ -29,6 +29,14 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 	 * The second algorithm searching on the tree.
 	 */
 	private SearchAlgorithm searchAlgorithm2;
+	/**
+	 * Colour of the current node of algorithm 1 in the tree display.
+	 */
+	private Color currentNode1;
+	/**
+	 * Colour of the current node of algorithm 2 in the tree display.
+	 */
+	private Color currentNode2;
 	
 	@Override
 	TreePanel getTreePanel() {
@@ -37,9 +45,17 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 	@Override
 	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
-		if(searchAlgorithms.length != 2) return;
+		if(searchAlgorithms.length < 2) return;
 		this.searchAlgorithm1 = searchAlgorithms[0];
 		this.searchAlgorithm2 = searchAlgorithms[1];
+	}
+	
+	@Override
+	public void setCurrentNodeColor(Color[] colors) {
+		if(colors.length < 2) return;
+		this.currentNode1 = colors[0];
+		this.currentNode2 = colors[1];
+
 	}
 
 	/**
@@ -71,10 +87,6 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
-			// Colour of the current node for algorithm 1.
-			final Color CURRENT_NODE_1 = Color.blue;
-			// Colour of the current node for algorithm 2.
-			final Color CURRENT_NODE_2 = Color.orange;
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
 			
@@ -85,16 +97,17 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			final double shrinkRatio = 7.0/8;	
 
 			// While the boxes are too big either horizontally or vertically, shrink the box size
-			while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
-				boxsize -= 5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
+			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
+				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
+					boxsize -= 5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
+					boxsize -=5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
 			}
-			while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
-				boxsize -=5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
-			}
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-
 			
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
@@ -112,20 +125,20 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			}
 			// Both algorithms at same node
 			if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue() && tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
-				g.setColor(CURRENT_NODE_1);
-				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, (boxsize/2)-1, boxsize-1);
-				g.setColor(CURRENT_NODE_2);
+				g.setColor(currentNode1);
+				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize/2, boxsize-1);
+				g.setColor(currentNode2);
 				g.fillRect(ROOT_X_POS+1+(boxsize/2), ROOT_Y_POS+1, (boxsize/2)-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			else {
 				if(tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
-					g.setColor(CURRENT_NODE_2);
+					g.setColor(currentNode2);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
 				if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
-					g.setColor(CURRENT_NODE_1);
+					g.setColor(currentNode1);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
@@ -182,20 +195,20 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 						}
 						// Both algorithms at same node
 						if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue() && children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
-							g.setColor(CURRENT_NODE_1);
-							g.fillRect(xPos+1, yPos+1, (boxsize/2)-1, boxsize-1);
-							g.setColor(CURRENT_NODE_2);
+							g.setColor(currentNode1);
+							g.fillRect(xPos+1, yPos+1, boxsize/2, boxsize-1);
+							g.setColor(currentNode2);
 							g.fillRect(xPos+1+(boxsize/2), yPos+1, (boxsize/2)-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						else {
 							if(children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
-								g.setColor(CURRENT_NODE_2);
+								g.setColor(currentNode2);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
 							if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
-								g.setColor(CURRENT_NODE_1);
+								g.setColor(currentNode1);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
@@ -242,5 +255,6 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 		}
 	}
+
 }
 

@@ -25,6 +25,10 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 	 * The search algorithm being used on the tree.
 	 */
 	private SearchAlgorithm searchAlgorithm;
+	/**
+	 * Colour of the current node in the tree display.
+	 */
+	private Color currentNode;
 
 	@Override
 	TreePanel getTreePanel() {
@@ -33,10 +37,16 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 
 	@Override
 	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
-		if(searchAlgorithms.length != 1) return;
-		searchAlgorithm = searchAlgorithms[0];
+		if(searchAlgorithms.length < 1) return;
+		this.searchAlgorithm = searchAlgorithms[0];
 	}
 
+	@Override
+	public void setCurrentNodeColor(Color[] colors) {
+		if(colors.length < 1) return;
+		this.currentNode = colors[0];
+	}
+	
 	/**
 	 * Single tree panel class, a subclass of tree panel.
 	 * Defines the drawTree method for a tree with a single algorithm.
@@ -68,8 +78,6 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
-			// Colour of the current node.
-			final Color CURRENT_NODE = Color.yellow;
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
 
@@ -80,16 +88,17 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			final double shrinkRatio = 7.0/8;	
 
 			// While the boxes are too big either horizontally or vertically, shrink the box size
-			while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
-				boxsize -= 5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
+			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
+				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
+					boxsize -= 5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
+					boxsize -=5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
 			}
-			while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
-				boxsize -=5;
-				fontSize = (int)Math.round(fontSize * (shrinkRatio));
-			}
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
 			// The y position of the root node.
@@ -106,7 +115,7 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			}
 			// If the root is the current node colour box yellow.
 			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue() && count!=0) {
-				g.setColor(CURRENT_NODE);
+				g.setColor(currentNode);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
@@ -162,7 +171,7 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 						}
 						// If the node is the current node colour is yellow.
 						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
-							g.setColor(CURRENT_NODE);
+							g.setColor(currentNode);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
@@ -210,4 +219,5 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 		}
 
 	}
+	
 }

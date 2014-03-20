@@ -66,7 +66,7 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		}
 		// Panel 4 - holds the current node labels and at goal labels
 		JPanel p4 = getHoldingPanel(panelWidth,panelHeight-20);
-		p4.add(currentNode);
+		p4.add(currentNodeLabel);
 		p4.add(node);
 		p4.add(Box.createRigidArea(new Dimension(40,0)));
 		p4.add(goalLabel);

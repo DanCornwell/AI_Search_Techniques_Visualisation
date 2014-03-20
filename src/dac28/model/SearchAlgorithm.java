@@ -175,6 +175,9 @@ public abstract class SearchAlgorithm {
 	
 	/**
 	 * Defines the logic that the algorithm uses to carry out a step.
+	 * In order for the search algorithm subclass to terminate, this 
+	 * method should call a method that removes an element from expanded.
+	 * E.g expanded.pop() is the case of expanded being a stack
 	 */
 	protected abstract void algorithmLogic();
 	

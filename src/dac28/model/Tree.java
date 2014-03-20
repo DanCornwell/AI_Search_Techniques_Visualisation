@@ -123,7 +123,7 @@ public abstract class Tree {
 	abstract void construct();
 
 	/**
-	 * Returns a concrete tree.
+	 * Returns a concrete instance of the subclass tree
 	 * 
 	 * @param goalValue - goal value to initialise tree with
 	 * @return a concrete tree
