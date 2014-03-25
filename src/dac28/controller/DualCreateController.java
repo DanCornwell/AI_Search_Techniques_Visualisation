@@ -44,6 +44,7 @@ public class DualCreateController extends CreateController {
 	public JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
+		// Box Layout so items are set vertically
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 
 		// width of the window
@@ -53,39 +54,64 @@ public class DualCreateController extends CreateController {
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
+		// Adds the goal input box and label
 		JPanel goalChoice = new JPanel();
 		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
-
 		goalChoice.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
 		goalChoice.add(goal);
 		
+		// Adds the tree options and label
 		JPanel treeChoices = new JPanel();
 		treeChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
-
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
 		
+		// Adds the first search choices and label
 		JPanel searchChoices1 = new JPanel();
 		searchChoices1.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
-
 		searchChoices1.add(new JLabel("Select First Search Algorithm: ",JLabel.RIGHT));
 		searchChoices1.add(algorithmOptions);
 		algorithmOptions.setSelectedIndex(0);
+		algorithmOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// If the algorithm options chosen are the same, change them
+				if(algorithmOptions.getSelectedIndex() == dualAlgorithmOptions.getSelectedIndex()) {
+					if(dualAlgorithmOptions.getSelectedIndex() == 0) {
+						dualAlgorithmOptions.setSelectedIndex(1);
+					}
+					else dualAlgorithmOptions.setSelectedIndex(0);
+				}
+			}
+		});
 
+		// Adds the second search choices and label
 		JPanel searchChoices2 = new JPanel();
 		searchChoices2.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
-
 		searchChoices2.add(new JLabel("Select Second Search Algorithm: ",JLabel.RIGHT));
 		searchChoices2.add(dualAlgorithmOptions);
 		dualAlgorithmOptions.setSelectedIndex(1);
-
+		dualAlgorithmOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// If the algorithm options chosen are the same, change them
+				if(algorithmOptions.getSelectedIndex() == dualAlgorithmOptions.getSelectedIndex()) {
+					if(algorithmOptions.getSelectedIndex() == 0) {
+						algorithmOptions.setSelectedIndex(1);
+					}
+					else algorithmOptions.setSelectedIndex(0);
+				}
+			}
+		});
+		
+		// Tree drawing panel
 		final JPanel TREE_DIAGRAM = new TreeDiagram();
 		TREE_DIAGRAM.setPreferredSize(new Dimension(WIDTH-20,(HEIGHT/2)-20));
 		TREE_DIAGRAM.setBorder(BorderFactory.createLineBorder(Color.black));
 		TREE_DIAGRAM.setBackground(Color.white);
-
+		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -93,6 +119,7 @@ public class DualCreateController extends CreateController {
 			}
 		});
 		
+		// add all the panels to the main panel and then return it
 		panel.add(goalChoice);
 		panel.add(treeChoices);
 		panel.add(searchChoices1);
@@ -144,6 +171,11 @@ public class DualCreateController extends CreateController {
 			drawTree(g);
 		}
 
+		/**
+		 * Draws the tree onto the TREE_DIAGRAM panel
+		 * 
+		 * @param g - graphics
+		 */
 		private void drawTree(Graphics g) {
 
 			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);

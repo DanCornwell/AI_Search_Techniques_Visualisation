@@ -100,32 +100,33 @@ public class CreateController {
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
+		// Adds the goal input box and label
 		JPanel goalChoice = new JPanel();
 		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
-
 		goalChoice.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
 		goalChoice.add(goal);
 		
+		// Adds the tree options and label
 		JPanel treeChoices = new JPanel();
 		treeChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
-
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
 		
+		// Adds the search choices and label
 		JPanel searchChoices = new JPanel();
 		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
-
 		searchChoices.add(new JLabel("Select Search Algorithm: ",JLabel.RIGHT));
 		searchChoices.add(algorithmOptions);
 		algorithmOptions.setSelectedIndex(0);
 
+		// Tree drawing panel
 		final JPanel TREE_DIAGRAM = new TreeDiagram();
 		TREE_DIAGRAM.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
 		TREE_DIAGRAM.setBorder(BorderFactory.createLineBorder(Color.black));
 		TREE_DIAGRAM.setBackground(Color.white);
-
+		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -133,6 +134,7 @@ public class CreateController {
 			}
 		});
 
+		// Add panels onto main panel and returns it
 		panel.add(goalChoice);
 		panel.add(treeChoices);
 		panel.add(searchChoices);
@@ -211,6 +213,11 @@ public class CreateController {
 			drawTree(g);
 		}
 
+		/**
+		 * Draws the tree onto the TREE_DIAGRAM panel
+		 * 
+		 * @param g - graphics
+		 */
 		private void drawTree(Graphics g) {
 
 			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);
