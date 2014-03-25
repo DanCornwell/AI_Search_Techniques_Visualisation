@@ -80,28 +80,6 @@ public class SearchAlgorithmTest {
 	}
 
 	@Test
-	public void testAutoCallsStep() {
-		// Initialise the current node and goal
-		Node currentNode = PowerMockito.mock(Node.class);
-		when(currentNode.getValue()).thenReturn(6);
-		Whitebox.setInternalState(algorithm, "currentNode", currentNode);
-		Whitebox.setInternalState(algorithm, "GOAL", 5);
-
-		// Initialise expanded 
-		@SuppressWarnings("unchecked")
-		List<Node> expanded = mock(List.class);
-		// Return false then true, as to break the while loop
-		when(expanded.isEmpty()).thenReturn(false,true);
-		Whitebox.setInternalState(algorithm, "expanded", expanded);
-		
-		algorithm.auto();
-		// Checks algorithm calls auto
-		verify(algorithm).auto(); 
-		// Checks algorithm calls step twice
-		verify(algorithm).step();
-	}
-
-	@Test
 	public void testGetExpandedReturnsExpandedList() {
 		// Initialise expanded
 		Whitebox.setInternalState(algorithm, "expanded", Mockito.mock(List.class));
@@ -304,32 +282,6 @@ public class SearchAlgorithmTest {
 			e.printStackTrace();
 		}
 
-	}
-	
-	@Test
-	public void testAutoDoesntWorkWhenConditionsNotMet() {
-
-		doReturn(true).when(algorithm).atGoal();
-		algorithm.auto();
-		verify(algorithm).auto();
-		verify(algorithm,never()).step();		
-		
-	}
-	
-	@Test
-	public void testAutoWorksWhenConditionsMet() {
-		
-		@SuppressWarnings("unchecked")
-		List<Node> expanded = mock(List.class);
-		Whitebox.setInternalState(algorithm, "expanded", expanded);
-		doReturn(false).when(algorithm).atGoal();
-		// Return false then true to break auto loop
-		when(expanded.isEmpty()).thenReturn(false,true);
-		doNothing().when(algorithm).step();
-
-		algorithm.auto();
-		verify(algorithm).auto();
-		verify(algorithm).step();
 	}
 
 }

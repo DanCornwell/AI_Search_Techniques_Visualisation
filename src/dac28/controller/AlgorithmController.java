@@ -28,7 +28,7 @@ public class AlgorithmController {
 	 * The tree controller thats controls the tree display.
 	 */
 	private TreeController treeController;
-	
+
 	private int iterationNumber, maxExpandedSize;
 
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
@@ -51,7 +51,7 @@ public class AlgorithmController {
 		AutoListener auto = new AutoListener();
 		this.algorithmDisplay.registerAutoListener(auto);
 		this.algorithmDisplay.registerPauseListener(new PauseListener(auto));
-		
+
 		iterationNumber = 0;
 		maxExpandedSize = 0;
 
@@ -94,7 +94,7 @@ public class AlgorithmController {
 			buttonLogic();
 
 			// Set the buttons to enable or disabled depending on where we are.
-			if(searchAlgorithm.atGoal() || !searchAlgorithm.nodesToExplore()) {
+			if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
 				algorithmDisplay.toggleSkip(false);
@@ -113,7 +113,7 @@ public class AlgorithmController {
 
 			algorithmDisplay.setIterationLabel(iterationNumber);
 			algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
-			
+
 			// Update the tree.
 			treeController.drawTree();
 		}
@@ -159,7 +159,7 @@ public class AlgorithmController {
 			algorithmDisplay.setLabelBackgrounds();
 			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
-			
+
 		}
 
 	}
@@ -264,7 +264,7 @@ public class AlgorithmController {
 
 			// Initialises the display as if it were new.
 			initialiseExpandedList();
-			
+
 			iterationNumber = 0;
 			maxExpandedSize = 0;
 		}
@@ -283,8 +283,17 @@ public class AlgorithmController {
 
 		@Override
 		protected void buttonLogic() {
-			// Skips the algorithm to its final state and then updates the display just like in the step button.
-			searchAlgorithm.auto();
+			// Calls the step button until the end of the search, then updates the display
+			while(!searchAlgorithm.atGoal() && !searchAlgorithm.getExpanded().isEmpty()) {
+				// Create a memento based on the current state.
+				algorithmDisplay.addMemento();
+				// Perform a step of the algorithm.
+				searchAlgorithm.step();
+				iterationNumber++;
+				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
+					maxExpandedSize = searchAlgorithm.getExpanded().size();
+				} 
+			}
 			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -357,10 +366,10 @@ public class AlgorithmController {
 				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
 				algorithmDisplay.setLabelBackgrounds();
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
-				
+
 				algorithmDisplay.setIterationLabel(iterationNumber);
 				algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
-				
+
 				// Update display tree.
 				treeController.drawTree();
 
@@ -379,7 +388,7 @@ public class AlgorithmController {
 			algorithmDisplay.togglePause(false);
 
 			// Set the buttons to enable or disabled depending on where we are.
-			if(searchAlgorithm.atGoal() || !searchAlgorithm.nodesToExplore()) {
+			if(searchAlgorithm.atGoal() || searchAlgorithm.getExpanded().isEmpty()) {
 				algorithmDisplay.toggleAuto(false);
 				algorithmDisplay.toggleStep(false);
 				algorithmDisplay.toggleSkip(false);

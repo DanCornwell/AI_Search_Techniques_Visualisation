@@ -92,18 +92,6 @@ public abstract class SearchAlgorithm {
 	}
 
 	/**
-	 * Repeatedly calls the step method until the goal node is reached
-	 * or the expanded queue is empty.
-	 */
-	public final void auto() {
-
-		while(!atGoal() && !expanded.isEmpty()) {
-			step();
-		}
-
-	}
-
-	/**
 	 * Returns the list of nodes that the algorithm is in course to evaluate.
 	 * 
 	 * @return list representing the nodes ready to be evaluated
@@ -149,15 +137,6 @@ public abstract class SearchAlgorithm {
 			}
 			visited = memento.STATE_VISITED;
 		}
-	}
-	
-	/**
-	 * Returns whether we have nodes left to explore.
-	 * 
-	 * @return true is the expanded list is not empty, false otherwise
-	 */
-	public final boolean nodesToExplore() {
-		return !expanded.isEmpty();
 	}
 	
 	/**

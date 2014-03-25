@@ -17,6 +17,7 @@ import org.powermock.reflect.Whitebox;
 
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
+import dac28.model.SearchAlgorithmCreator;
 import dac28.model.Tree;
 
 /**
@@ -59,7 +60,10 @@ public class ConcreteSearchAlgorithmTest {
 		doReturn(3).when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
 
-
+		// have to use the search algorithm creator here as concrete implementations are hidden
+		// have to use static id's to avoid using the text reader
+		bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(0, tree);
+		dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(1, tree);
 	}
 
 	@Test
@@ -119,7 +123,7 @@ public class ConcreteSearchAlgorithmTest {
 	@Test
 	public void testBFSFinalExpandedAndVisitedLists() {
 
-		bfs.auto();
+		while(!bfs.atGoal() && !bfs.getExpanded().isEmpty()) bfs.step();
 		int[] expandedFinal = {};
 		int[] visitedFinal = {0,1,2,3};
 		for(int i=0;i<bfs.getExpanded().size();i++) {
@@ -134,7 +138,7 @@ public class ConcreteSearchAlgorithmTest {
 	@Test
 	public void testDFSFinalExpandedAndVisitedLists() {
 		
-		dfs.auto();
+		while(!dfs.atGoal() && !dfs.getExpanded().isEmpty()) dfs.step();
 		int[] expandedFinal = {2};
 		int[] visitedFinal = {0,1,3};
 		for(int i=0;i<dfs.getExpanded().size();i++) {

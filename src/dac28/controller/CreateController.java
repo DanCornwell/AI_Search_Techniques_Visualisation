@@ -113,7 +113,7 @@ public class CreateController {
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
-		
+
 		// Adds the search choices and label
 		JPanel searchChoices = new JPanel();
 		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
