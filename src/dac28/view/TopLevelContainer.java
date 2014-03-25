@@ -161,12 +161,7 @@ public class TopLevelContainer {
 				}
 
 				// Set algorithm display title
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
-					algorithmDisplay.setTitleLabel("Depth First Search");
-				}
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
-					algorithmDisplay.setTitleLabel("Breadth First Search");
-				}
+				algorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithmUID()));
 
 				// initialise the single display
 				initialiseSingleDisplay();
@@ -174,6 +169,7 @@ public class TopLevelContainer {
 				// Put algorithm into an array to allow display to set this algorithm
 				SearchAlgorithm[] algorithms = {algorithm};
 				
+				// Define colour for the current node and set it for both displays
 				final Color CURRENT_NODE = Color.yellow;
 				Color[] colors = {CURRENT_NODE};
 				treeDisplay.setCurrentNodeColor(colors);
@@ -266,20 +262,9 @@ public class TopLevelContainer {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
 				}
 				// Set algorithm1 display title
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
-					algorithmDisplay.setTitleLabel("Depth First Search");
-				}
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
-					algorithmDisplay.setTitleLabel("Breadth First Search");
-				}
-
+				algorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithmUID()));
 				// Set algorithm2 display title
-				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
-					dualAlgorithmDisplay.setTitleLabel("Depth First Search");
-				}
-				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("BreadthFirstSearch")) {
-					dualAlgorithmDisplay.setTitleLabel("Breadth First Search");
-				}
+				dualAlgorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithm2UID()));
 
 				// initialise the dual display
 				initialiseDualDisplay();
@@ -287,6 +272,7 @@ public class TopLevelContainer {
 				// put algorithms into an array to allow display to set them
 				SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
 				
+				// Set colours for both current nodes and set them for each display
 				final Color CURRENT_NODE_1 = Color.pink;
 				final Color CURRENT_NODE_2 = Color.orange;
 				Color[] colors = {CURRENT_NODE_1,CURRENT_NODE_2};
@@ -409,11 +395,12 @@ public class TopLevelContainer {
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
-
-		// add the master button panel
+		
+		// create master button panel
 		JPanel p = new JPanel();
 		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));
-		p.setBackground(Color.yellow);
+
+		// add buttons to master button panel
 		step = new JButton("Step");
 		step.addActionListener(new ActionListener(){
 			@Override
@@ -465,6 +452,7 @@ public class TopLevelContainer {
 		});
 
 		// add buttons and disable pause and undo buttons
+		p.add(new JLabel("Dual Algorithm Buttons: ",JLabel.CENTER));
 		p.add(step);
 		p.add(auto);
 		p.add(undo);

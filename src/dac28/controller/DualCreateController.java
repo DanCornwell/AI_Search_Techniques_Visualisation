@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,35 +44,40 @@ public class DualCreateController extends CreateController {
 	public JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 
 		// width of the window
-		final int WIDTH = 600;
+		final int WIDTH = 400;
 		// height of the window
-		final int HEIGHT = 500;
+		final int HEIGHT = 550;
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
-		JPanel treeChoices = new JPanel(new GridLayout(0,1));
-		treeChoices.setPreferredSize(new Dimension((WIDTH/3)-10,HEIGHT/2));
-		treeChoices.setBorder(BorderFactory.createLineBorder(Color.black));
+		JPanel goalChoice = new JPanel();
+		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
 
-		treeChoices.add(new JLabel("Enter value of the goal node: "));
+		goalChoice.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
-		treeChoices.add(goal);
+		goalChoice.add(goal);
+		
+		JPanel treeChoices = new JPanel();
+		treeChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
+
+		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
+		
+		JPanel searchChoices1 = new JPanel();
+		searchChoices1.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
 
-		JPanel searchChoices1 = new JPanel(new GridLayout(0,1));
-		searchChoices1.setPreferredSize(new Dimension((WIDTH/3)-10,HEIGHT/2));
-		searchChoices1.setBorder(BorderFactory.createLineBorder(Color.black));
-
+		searchChoices1.add(new JLabel("Select First Search Algorithm: ",JLabel.RIGHT));
 		searchChoices1.add(algorithmOptions);
 		algorithmOptions.setSelectedIndex(0);
 
-		JPanel searchChoices2 = new JPanel(new GridLayout(0,1));
-		searchChoices2.setPreferredSize(new Dimension((WIDTH/3)-10,HEIGHT/2));
-		searchChoices2.setBorder(BorderFactory.createLineBorder(Color.black));
+		JPanel searchChoices2 = new JPanel();
+		searchChoices2.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
 
+		searchChoices2.add(new JLabel("Select Second Search Algorithm: ",JLabel.RIGHT));
 		searchChoices2.add(dualAlgorithmOptions);
 		dualAlgorithmOptions.setSelectedIndex(1);
 
@@ -88,6 +93,7 @@ public class DualCreateController extends CreateController {
 			}
 		});
 		
+		panel.add(goalChoice);
 		panel.add(treeChoices);
 		panel.add(searchChoices1);
 		panel.add(searchChoices2);
