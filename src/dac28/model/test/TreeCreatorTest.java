@@ -71,7 +71,7 @@ public class TreeCreatorTest {
 		hash.put(id, tree);
 
 		try {
-			PowerMockito.when(tree, "getTree", 0).thenReturn((Tree)tree);
+			PowerMockito.when(tree, "getTree", 0).thenReturn(tree);
 
 		} catch (Exception e) {
 			e.printStackTrace();
