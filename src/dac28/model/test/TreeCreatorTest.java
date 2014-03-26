@@ -60,29 +60,6 @@ public class TreeCreatorTest {
 	}
 	
 	@Test
-	public void testGetTreeReturnsTreeWithValidID() {
-		
-		Tree tree = PowerMockito.mock(Tree.class);
-		HashMap<Integer,Tree> hash = Whitebox.getInternalState(creator, "trees");
-		int id = 5;
-		while(hash.containsKey(id)) {
-			id++;
-		}
-		hash.put(id, tree);
-
-		try {
-			PowerMockito.when(tree, "getTree", 0).thenReturn(tree);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		assertTrue(hash.containsKey(id));
-		assertTrue(tree == creator.getTree(id, 0));
-
-	}
-	
-	@Test
 	public void testGetTreeReturnsNullWithInvalidID() {
 		
 		int id = 5;

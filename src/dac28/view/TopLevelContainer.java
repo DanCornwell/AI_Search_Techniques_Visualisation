@@ -88,7 +88,7 @@ public class TopLevelContainer {
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final List<String> ALGORITHMS = TextFileReader.getAlgorithms();
-
+		
 		// Create the menu items
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
@@ -168,13 +168,13 @@ public class TopLevelContainer {
 
 				// Put algorithm into an array to allow display to set this algorithm
 				SearchAlgorithm[] algorithms = {algorithm};
-				
+
 				// Define colour for the current node and set it for both displays
 				final Color CURRENT_NODE = Color.yellow;
 				Color[] colors = {CURRENT_NODE};
 				treeDisplay.setCurrentNodeColor(colors);
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE);
-				
+
 				// Create a new tree controller
 				TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
 				// Create a new algorithm controller
@@ -271,7 +271,7 @@ public class TopLevelContainer {
 
 				// put algorithms into an array to allow display to set them
 				SearchAlgorithm[] searchAlgorithms = {algorithm1,algorithm2};
-				
+
 				// Set colours for both current nodes and set them for each display
 				final Color CURRENT_NODE_1 = Color.pink;
 				final Color CURRENT_NODE_2 = Color.orange;
@@ -279,7 +279,7 @@ public class TopLevelContainer {
 				treeDisplay.setCurrentNodeColor(colors);
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE_1);
 				dualAlgorithmDisplay.setCurrentNodeColor(CURRENT_NODE_2);
-				
+
 				// Create new tree controller
 				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 				// Create new algorithm controller for algorithm 1
@@ -395,7 +395,7 @@ public class TopLevelContainer {
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
-		
+
 		// create master button panel
 		JPanel p = new JPanel();
 		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));

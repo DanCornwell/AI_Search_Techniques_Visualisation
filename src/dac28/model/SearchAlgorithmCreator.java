@@ -65,6 +65,10 @@ public class SearchAlgorithmCreator {
 		return instance;
 	}
 
+	public void putAlgorithm(int uID,SearchAlgorithm algorithm) {
+		algorithms.put(uID, algorithm);
+	}
+	
 	/**
 	 * Retrieves a search algorithm from the hash.
 	 * 

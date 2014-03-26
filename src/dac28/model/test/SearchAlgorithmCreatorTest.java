@@ -53,30 +53,6 @@ public class SearchAlgorithmCreatorTest {
 	}
 	
 	@Test
-	public void testGetTreeReturnsTreeWithValidID() {
-		
-		SearchAlgorithm algorithm = Mockito.mock(SearchAlgorithm.class);
-		Tree tree = Mockito.mock(Tree.class);
-		HashMap<Integer,SearchAlgorithm> hash = Whitebox.getInternalState(creator, "algorithms");
-		int id = 5;
-		while(hash.containsKey(id)) {
-			id++;
-		}
-		hash.put(id, algorithm);
-
-		try {
-			PowerMockito.when(algorithm, "getAlgorithm", tree).thenReturn(algorithm);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		assertTrue(hash.containsKey(id));
-		assertTrue(algorithm == creator.getAlgorithm(id, tree));
-
-	}
-	
-	@Test
 	public void testGetTreeReturnsNullWithInvalidID() {
 		
 		int id = 5;
