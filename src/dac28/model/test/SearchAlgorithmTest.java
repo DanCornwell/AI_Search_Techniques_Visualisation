@@ -154,7 +154,7 @@ public class SearchAlgorithmTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Mocks the inner class and makes the memento pop this moc
+		// Mocks the inner class and makes the memento pop this mock
 		@SuppressWarnings("unchecked")
 		Object o = PowerMockito.mock(inner);
 		LinkedList<Node> list = new LinkedList<Node>();

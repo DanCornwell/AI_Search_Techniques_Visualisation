@@ -62,6 +62,7 @@ public class ConcreteSearchAlgorithmTest {
 
 		// have to use the search algorithm creator here as concrete implementations are hidden
 		// have to use static id's to avoid using the text reader
+		// no flexible way to do this, if order is changed in text file change numbers to reflect this
 		bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(0, tree);
 		dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(1, tree);
 	}
