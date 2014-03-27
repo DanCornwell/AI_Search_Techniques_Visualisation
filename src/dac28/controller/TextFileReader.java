@@ -1,4 +1,4 @@
-package dac28.io;
+package dac28.controller;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 /**
- * File reader class.
+ * File reader class. 
+ * Reads the files containing the algorithms and trees.
  * 
  * @author Dan Cornwell
  *

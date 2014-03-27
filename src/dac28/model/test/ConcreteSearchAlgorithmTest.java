@@ -15,6 +15,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import dac28.controller.TextFileReader;
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 import dac28.model.SearchAlgorithmCreator;
@@ -31,11 +32,11 @@ import dac28.model.Tree;
 @PowerMockIgnore("org.apache.log4j.*")
 public class ConcreteSearchAlgorithmTest {
 
-	private SearchAlgorithm bfs,dfs;
+	private Tree tree;
 
 	@Before
 	public void setup() {
-		Tree tree = PowerMockito.mock(Tree.class);
+		tree = PowerMockito.mock(Tree.class);
 		Node root = PowerMockito.mock(Node.class);
 		Node left = PowerMockito.mock(Node.class);
 		Node right = PowerMockito.mock(Node.class);
@@ -59,17 +60,18 @@ public class ConcreteSearchAlgorithmTest {
 		
 		doReturn(3).when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
-
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// have to use static id's to avoid using the text reader
-		// no flexible way to do this, if order is changed in text file change numbers to reflect this
-		bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(0, tree);
-		dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(1, tree);
+		
 	}
 
 	@Test
 	public void testBFSAlgorithmLogic() {
-
+		
+		// have to use the search algorithm creator here as concrete implementations are hidden
+		// also needs use of the text file reader to avoid static ids
+		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
+		assertTrue(bfsID!=-1);
+		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
+		
 		LinkedList<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
 		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
 		Whitebox.setInternalState(bfs, "expanded", expandedSpy);
@@ -95,6 +97,12 @@ public class ConcreteSearchAlgorithmTest {
 	}
 	
 	public void testDFSAlgorithmLogic() {
+		
+		// have to use the search algorithm creator here as concrete implementations are hidden
+		// also needs use of the text file reader to avoid static ids		
+		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
+		assertTrue(dfsID!=-1);
+		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
 		
 		LinkedList<Node> expanded = Whitebox.getInternalState(dfs, "expanded");
 		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
@@ -124,6 +132,10 @@ public class ConcreteSearchAlgorithmTest {
 	@Test
 	public void testBFSFinalExpandedAndVisitedLists() {
 
+		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
+		assertTrue(bfsID!=-1);
+		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
+		
 		while(!bfs.atGoal() && !bfs.getExpanded().isEmpty()) bfs.step();
 		int[] expandedFinal = {};
 		int[] visitedFinal = {0,1,2,3};
@@ -138,6 +150,10 @@ public class ConcreteSearchAlgorithmTest {
 	
 	@Test
 	public void testDFSFinalExpandedAndVisitedLists() {
+		
+		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
+		assertTrue(dfsID!=-1);
+		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
 		
 		while(!dfs.atGoal() && !dfs.getExpanded().isEmpty()) dfs.step();
 		int[] expandedFinal = {2};

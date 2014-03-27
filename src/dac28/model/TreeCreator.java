@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
-import dac28.io.TextFileReader;
+import dac28.controller.TextFileReader;
 
 /**
  * The tree creator class. 
