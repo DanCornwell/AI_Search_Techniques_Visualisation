@@ -4,6 +4,7 @@ import dac28.controller.TextFileReader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class SearchAlgorithmCreator {
 		if(algorithmNames == null) return;
 
 		int id = 0;
-		Tree tree = new Tree124(0);
+		Tree tree = new Tree124("0",new LinkedList<String>());
 
 		for(String algorithmName: algorithmNames) {
 			try {

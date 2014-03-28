@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -86,8 +85,6 @@ public class TopLevelContainer {
 		// Create the base frame
 		base = new JFrame("Search Algorithm Visualiser");
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		final List<String> ALGORITHMS = TextFileReader.getAlgorithms();
 		
 		// Create the menu items
 		JMenuBar menuBar = new JMenuBar();
@@ -105,7 +102,7 @@ public class TopLevelContainer {
 
 				CreateController controller = new CreateController();
 
-				int goal = 0;
+				String goal = "";
 
 				while(true) {
 
@@ -115,7 +112,7 @@ public class TopLevelContainer {
 					if(result == JOptionPane.OK_OPTION) {
 
 						try {
-							goal = Integer.parseInt(controller.getGoal());
+							goal = controller.getGoal();
 							break;
 						}
 						catch(NumberFormatException error) {
@@ -133,7 +130,8 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and algorithm with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal, controller.getNodeValues());
+				//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
@@ -153,7 +151,7 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
@@ -161,7 +159,7 @@ public class TopLevelContainer {
 				}
 
 				// Set algorithm display title
-				algorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithmUID()));
+				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithmUID()));
 
 				// initialise the single display
 				initialiseSingleDisplay();
@@ -192,7 +190,7 @@ public class TopLevelContainer {
 
 				DualCreateController controller = new DualCreateController();
 
-				int goal = 0;
+				String goal = "";
 
 				while(true) {
 
@@ -202,7 +200,7 @@ public class TopLevelContainer {
 					if(result == JOptionPane.OK_OPTION) {
 
 						try {
-							goal = Integer.parseInt(controller.getGoal());
+							goal = controller.getGoal();
 							break;
 						}
 						catch(NumberFormatException error) {
@@ -220,7 +218,8 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal, controller.getNodeValues());
+				//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
@@ -249,22 +248,22 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(controller.getAlgorithm2UID() == ALGORITHMS.indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
 				}
 				// Set algorithm1 display title
-				algorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithmUID()));
+				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithmUID()));
 				// Set algorithm2 display title
-				dualAlgorithmDisplay.setTitleLabel(ALGORITHMS.get(controller.getAlgorithm2UID()));
+				dualAlgorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithm2UID()));
 
 				// initialise the dual display
 				initialiseDualDisplay();

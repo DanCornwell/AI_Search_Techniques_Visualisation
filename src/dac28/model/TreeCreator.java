@@ -2,7 +2,9 @@ package dac28.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import dac28.controller.TextFileReader;
 
@@ -43,7 +45,7 @@ public class TreeCreator {
 			try {
 
 				Class<?> tree = Class.forName("dac28.model.".concat(treeName));
-				Tree treeInstance = (Tree) tree.getDeclaredConstructor(int.class).newInstance(0);
+				Tree treeInstance = (Tree) tree.getDeclaredConstructor(String.class,Queue.class).newInstance("",new LinkedList<String>());
 				trees.put(id, treeInstance);
 				id++;
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
@@ -68,13 +70,14 @@ public class TreeCreator {
 	 * 
 	 * @param uID - id of the tree to get
 	 * @param goalValue - the goal value of the tree
+	 * @param values - a queue of strings for the node values
 	 * @return a concrete tree with a defined goal value
 	 */
-	public Tree getTree(int uID,int goalValue) {
+	public Tree getTree(int uID,String goalValue,Queue<String> values) {
 
 		if(!trees.containsKey(uID)) return null;
 
-		return trees.get(uID).getTree(goalValue);
+		return trees.get(uID).getTree(goalValue,values);
 	}
 
 

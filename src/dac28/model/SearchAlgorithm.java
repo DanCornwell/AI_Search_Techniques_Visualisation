@@ -26,9 +26,9 @@ public abstract class SearchAlgorithm {
 	 */
 	protected Node currentNode;
 	/**
-	 * The integer representing where the goal node is.
+	 * The String representing where the goal node is.
 	 */
-	private final int GOAL;
+	private final String GOAL;
 	/**
 	 * List representing the nodes the algorithm has traversed.
 	 */
@@ -79,7 +79,7 @@ public abstract class SearchAlgorithm {
 	 * @return true if the current node is the goal node, false otherwise
 	 */
 	public final boolean atGoal() {
-		return currentNode.getValue() == GOAL;
+		return currentNode.getValue().equals(GOAL);
 	}
 
 	/**

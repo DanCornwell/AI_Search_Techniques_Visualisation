@@ -18,7 +18,7 @@ public abstract class Tree {
 	/**
 	 * The goal value.
 	 */
-	private final int GOAL;
+	private final String GOAL;
 	/**
 	 * The root node, any tree will always have a root node.
 	 */
@@ -27,16 +27,27 @@ public abstract class Tree {
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.
-	 * Also calls the construct method to construct the tree. This method will be defined
-	 * by subclasses. 
+	 * If the values parameter is empty, then it will be used to set the node values.
 	 * 
-	 * @param GOAL - integer to set the goal node
+	 * @param GOAL - String to the set the goal node
+	 * @param values - a queue of strings that will set the node values, can empty list to use default values
 	 */
-	Tree(final int GOAL) {
+	Tree(final String GOAL,Queue<String> values) {
 
 		this.GOAL = GOAL;
-		ROOT = new Node(0);
-		construct();
+		
+		if(!values.isEmpty()) {
+			
+			ROOT = new Node(values.poll());
+			construct(values);
+		}
+		
+		// Use default number values for node values
+		else {
+			
+			ROOT = new Node("0");
+			construct();
+		}
 
 	}
 
@@ -45,7 +56,7 @@ public abstract class Tree {
 	 * 
 	 * @return - the goal variable
 	 */
-	public final int getGoal() {
+	public final String getGoal() {
 		return GOAL;
 	}
 
@@ -67,7 +78,7 @@ public abstract class Tree {
 	public final int getTreeDepth() {
 		return getTreeDepth(ROOT);
 	}
-	
+
 	/**
 	 * Returns the maximum depth from the given node via recursion.
 	 * 
@@ -106,9 +117,9 @@ public abstract class Tree {
 					children.add(child);
 				}
 			}
-			
+
 			if(children.size() > width) width = children.size();
-			
+
 			// If children list is empty then parent list will be empty and hence loop terminates
 			parents.addAll(children);
 			children.clear();
@@ -118,15 +129,25 @@ public abstract class Tree {
 	}
 
 	/**
-	 * Creates nodes and connects them to the root node.
+	 * Creates nodes and connects them to the root node using default number values.
 	 */
 	abstract void construct();
 
 	/**
-	 * Returns a concrete instance of the subclass tree
+	 * Creates nodes with specified values and connected them to the root node.
+	 * 
+	 * @param values - queue of values that can be polled for the values of the nodes
+	 */
+	abstract void construct(Queue<String> values);
+
+	/**
+	 * Returns a concrete instance of the subclass tree.
+	 * If the values is empty, default values will be used.
 	 * 
 	 * @param goalValue - goal value to initialise tree with
+	 * @param values - values to set the nodes. If this is empty, default values are supplied
 	 * @return a concrete tree
 	 */
-	abstract Tree getTree(int goalValue);
-}
+	abstract Tree getTree(String goalValue,Queue<String> values);
+
+} 

@@ -42,13 +42,13 @@ public class ConcreteSearchAlgorithmTest {
 		Node right = PowerMockito.mock(Node.class);
 		Node left_left = PowerMockito.mock(Node.class);
 
-		doReturn(0).when(root).getValue();
+		doReturn("0").when(root).getValue();
 		doReturn(new LinkedList<Node>(Arrays.asList(left,right))).when(root).getChildren();
-		doReturn(1).when(left).getValue();
+		doReturn("1").when(left).getValue();
 		doReturn(new LinkedList<Node>(Arrays.asList(left_left))).when(left).getChildren();
-		doReturn(2).when(right).getValue();
+		doReturn("2").when(right).getValue();
 		doReturn(new LinkedList<Node>()).when(right).getChildren();
-		doReturn(3).when(left_left).getValue();
+		doReturn("3").when(left_left).getValue();
 		doReturn(new LinkedList<Node>()).when(left_left).getChildren();
 
 		try {
@@ -58,7 +58,7 @@ public class ConcreteSearchAlgorithmTest {
 			e.printStackTrace();
 		}
 		
-		doReturn(3).when(tree).getGoal();
+		doReturn("3").when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
 		
 	}
@@ -137,13 +137,13 @@ public class ConcreteSearchAlgorithmTest {
 		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
 		
 		while(!bfs.atGoal() && !bfs.getExpanded().isEmpty()) bfs.step();
-		int[] expandedFinal = {};
-		int[] visitedFinal = {0,1,2,3};
+		String[] expandedFinal = {};
+		String[] visitedFinal = {"0","1","2","3"};
 		for(int i=0;i<bfs.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",bfs.getExpanded().get(i).getValue() == expandedFinal[i]);
+			assertTrue("An expanded value did not match",bfs.getExpanded().get(i).getValue().equals(expandedFinal[i]));
 		}
 		for(int j=0;j<bfs.getVisited().size();j++) {
-			assertTrue("An visited value did not match",bfs.getVisited().get(j).getValue() == visitedFinal[j]);
+			assertTrue("An visited value did not match",bfs.getVisited().get(j).getValue().equals(visitedFinal[j]));
 		}
 		
 	}
@@ -156,13 +156,13 @@ public class ConcreteSearchAlgorithmTest {
 		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
 		
 		while(!dfs.atGoal() && !dfs.getExpanded().isEmpty()) dfs.step();
-		int[] expandedFinal = {2};
-		int[] visitedFinal = {0,1,3};
+		String[] expandedFinal = {"2"};
+		String[] visitedFinal = {"0","1","3"};
 		for(int i=0;i<dfs.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",dfs.getExpanded().get(i).getValue() == expandedFinal[i]);
+			assertTrue("An expanded value did not match",dfs.getExpanded().get(i).getValue().equals(expandedFinal[i]));
 		}
 		for(int j=0;j<dfs.getVisited().size();j++) {
-			assertTrue("An visited value did not match",dfs.getVisited().get(j).getValue() == visitedFinal[j]);
+			assertTrue("An visited value did not match",dfs.getVisited().get(j).getValue().equals(visitedFinal[j]));
 		}
 		
 	}

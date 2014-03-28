@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import dac28.model.Node;
 import dac28.model.Tree;
@@ -34,7 +35,7 @@ public class DualCreateController extends CreateController {
 	 * Combo box relating to the 2nd algorithm.
 	 */
 	private JComboBox<String> dualAlgorithmOptions = new JComboBox<String>(ALGORITHMS);
-	
+
 	/**
 	 * Returns a dialog window allowing the user to choose the search.
 	 * 
@@ -60,14 +61,14 @@ public class DualCreateController extends CreateController {
 		goalChoice.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
 		goalChoice.add(goal);
-		
+
 		// Adds the tree options and label
 		JPanel treeChoices = new JPanel();
 		treeChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
-		
+
 		// Adds the first search choices and label
 		JPanel searchChoices1 = new JPanel();
 		searchChoices1.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
@@ -105,31 +106,32 @@ public class DualCreateController extends CreateController {
 				}
 			}
 		});
-		
+
 		// Tree drawing panel
-		final JPanel TREE_DIAGRAM = new TreeDiagram();
-		TREE_DIAGRAM.setPreferredSize(new Dimension(WIDTH-20,(HEIGHT/2)-20));
-		TREE_DIAGRAM.setBorder(BorderFactory.createLineBorder(Color.black));
-		TREE_DIAGRAM.setBackground(Color.white);
+		treeDiagram = new TreeDiagram();
+		treeDiagram.setLayout(null);
+		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
+		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));
+		treeDiagram.setBackground(Color.white);
 		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TREE_DIAGRAM.repaint();
+				treeDiagram.repaint();
 			}
 		});
-		
+
 		// add all the panels to the main panel and then return it
 		panel.add(goalChoice);
 		panel.add(treeChoices);
 		panel.add(searchChoices1);
 		panel.add(searchChoices2);
-		panel.add(TREE_DIAGRAM);
+		panel.add(treeDiagram);
 
 		return panel;
 
 	}
-	
+
 	/**
 	 * Returns the unique id of the 2nd selected algorithm.
 	 * 
@@ -148,7 +150,7 @@ public class DualCreateController extends CreateController {
 		return id;
 
 	}
-	
+
 	/**
 	 * Panel that draws a visualisation for the trees.
 	 * 
@@ -178,7 +180,7 @@ public class DualCreateController extends CreateController {
 		 */
 		private void drawTree(Graphics g) {
 
-			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), 0);
+			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), "", new LinkedList<String>());
 			if(tree==null) {
 				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 				g.drawString("Tree not found", (this.getWidth()/3)+15, this.getHeight()/2);
@@ -189,6 +191,8 @@ public class DualCreateController extends CreateController {
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
+			// Clear the text fields list
+			nodeValues.clear();
 
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
@@ -196,10 +200,10 @@ public class DualCreateController extends CreateController {
 			int boxsize = 30;
 			// The font size
 			int fontSize = 8;
-			
+
 			// The shrink ratio for the font size
 			final double shrinkRatio = 5.0/6;
-			
+
 			// While the boxes are too big either horizontally or vertically, shrink the box size
 			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
 				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
@@ -219,8 +223,13 @@ public class DualCreateController extends CreateController {
 
 			// Draws the root node, with its value inside it. 
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);		
-			g.drawString(String.valueOf(tree.getRoot().getValue()), ROOT_X_POS+(boxsize/2), ROOT_Y_POS+(boxsize/2));
-
+			// Create the text field box for the root node
+			int defaultValue = 0;
+			JTextField rootValue = new JTextField(String.valueOf(defaultValue++));
+			rootValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+			rootValue.setBounds(ROOT_X_POS+10, ROOT_Y_POS+5, 20, 20);
+			rootValue.setBorder(null);
+			nodeValues.add(rootValue);
 			// The line connection point of the root node. This will be the bottom centre of the box.
 			Point rootPoint = new Point(ROOT_X_POS+(boxsize/2),ROOT_Y_POS+boxsize);
 
@@ -263,7 +272,12 @@ public class DualCreateController extends CreateController {
 						int yPos = nodeLevel*(this.getHeight()/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);			
-						g.drawString(String.valueOf(children.get(i).getValue()), xPos+(boxsize/2), yPos+(boxsize/2));
+						// Create the text field box for the child node
+						JTextField childValue = new JTextField(String.valueOf(defaultValue++));
+						childValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+						childValue.setBounds(xPos+10, yPos+5, 20, 20);
+						childValue.setBorder(null);
+						nodeValues.add(childValue);
 
 						// The child line connection point. This will be the top middle of the box.
 						Point childCoord = new Point(xPos+(boxsize/2),yPos);
@@ -301,6 +315,11 @@ public class DualCreateController extends CreateController {
 			// Draw all the lines within the line coordinates HashMap
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
+			}
+
+			// Add all text fields
+			for(JTextField textFields: nodeValues) {
+				treeDiagram.add(textFields);
 			}
 
 		}

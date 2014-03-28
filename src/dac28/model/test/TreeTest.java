@@ -40,9 +40,9 @@ public class TreeTest {
 
 	@Test
 	public void testGetGoal() {
-		Whitebox.setInternalState(tree, "GOAL", 4);
+		Whitebox.setInternalState(tree, "GOAL","4");
 		// Checks GOAL matches assigned GOAL (as it would be in a constructor)
-		assertEquals("Goal node was not set to 4",4,tree.getGoal());
+		assertEquals("Goal node was not set to 4","4",tree.getGoal());
 		// Checks that getGoal returns the tree's GOAL variable
 		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "GOAL"),tree.getGoal());
 		// Checks calls getGoal

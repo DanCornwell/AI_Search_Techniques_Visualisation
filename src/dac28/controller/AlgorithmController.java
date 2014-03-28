@@ -145,11 +145,11 @@ public class AlgorithmController {
 				maxExpandedSize = searchAlgorithm.getExpanded().size();
 			}
 			// Get the new values of the expanded and visited lists.
-			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+			LinkedList<String> expandedValues = new LinkedList<String>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
 			}
-			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+			LinkedList<String> visitedValues = new LinkedList<String>();
 			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
@@ -294,11 +294,11 @@ public class AlgorithmController {
 					maxExpandedSize = searchAlgorithm.getExpanded().size();
 				} 
 			}
-			LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+			LinkedList<String> expandedValues = new LinkedList<String>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
 			}
-			LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+			LinkedList<String> visitedValues = new LinkedList<String>();
 			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
@@ -355,11 +355,11 @@ public class AlgorithmController {
 				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
 					maxExpandedSize = searchAlgorithm.getExpanded().size();
 				}
-				LinkedList<Integer> expandedValues = new LinkedList<Integer>();
+				LinkedList<String> expandedValues = new LinkedList<String>();
 				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
 				}
-				LinkedList<Integer> visitedValues = new LinkedList<Integer>();
+				LinkedList<String> visitedValues = new LinkedList<String>();
 				for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 					visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 				}

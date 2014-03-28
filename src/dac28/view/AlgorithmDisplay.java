@@ -417,12 +417,12 @@ public class AlgorithmDisplay {
 	}
 
 	/**
-	 * Updates the two lists values with two given lists of integers.
+	 * Updates the two lists values with two given lists of strings.
 	 * 
 	 * @param expandedValues - new values for the expanded list
 	 * @param visitedValues - new values for the visited list
 	 */
-	public void setLabelValues(List<Integer> expandedValues, LinkedList<Integer> visitedValues) {
+	public void setLabelValues(List<String> expandedValues, LinkedList<String> visitedValues) {
 
 		// Length check
 		if(expandedValues.size() > expandedList.size() || visitedValues.size() > visitedList.size()) {

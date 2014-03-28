@@ -14,7 +14,7 @@ public class Node {
 	/**
 	 * The value of the node.
 	 */
-	private final int VALUE;
+	private final String VALUE;
 	/**
 	 * A list containing any children of the node.
 	 */
@@ -24,9 +24,9 @@ public class Node {
 	 * Constructor.
 	 * Assigns the value of VALUE and initialises the children list.
 	 * 
-	 * @param VALUE - the integer value of the VALUE variable
+	 * @param VALUE - the string value of the VALUE variable
 	 */
-	Node(final int VALUE) {
+	Node(final String VALUE) {
 
 		this.VALUE = VALUE;
 		children = new LinkedList<Node>();
@@ -38,7 +38,7 @@ public class Node {
 	 * 
 	 * @return the VALUE variable
 	 */
-	public final int getValue() {
+	public final String getValue() {
 		return VALUE;
 	}
 

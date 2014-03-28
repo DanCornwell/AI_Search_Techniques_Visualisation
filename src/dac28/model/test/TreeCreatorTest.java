@@ -3,6 +3,7 @@ package dac28.model.test;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class TreeCreatorTest {
 		Mockito.when(hash.get(ID)).thenReturn(Mockito.mock(Tree.class));
 		Whitebox.setInternalState(creator, "trees", hash);
 
-		creator.getTree(ID, 0);
+		creator.getTree(ID, "0",new LinkedList<String>());
 		Mockito.verify(hash).containsKey(ID);
 		Mockito.verify(hash).get(ID);
 	}
@@ -68,7 +69,7 @@ public class TreeCreatorTest {
 			id++;
 		}
 		
-		assertTrue(creator.getTree(id, 0) == null);
+		assertTrue(creator.getTree(id, "0",new LinkedList<String>()) == null);
 		
 	}
 	

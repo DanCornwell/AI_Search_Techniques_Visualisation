@@ -108,13 +108,13 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			// Will also colour the box the appropriate colour.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
 			// If root is the goal colour box red.
-			if(tree.getRoot().getValue() == tree.getGoal()) {
+			if(tree.getRoot().getValue().equals(tree.getGoal())) {
 				g.setColor(GOAL_NODE);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			// If the root is the current node colour box yellow.
-			if(tree.getRoot().getValue() == searchAlgorithm.getCurrentNode().getValue() && count!=0) {
+			if(tree.getRoot().getValue().equals(searchAlgorithm.getCurrentNode().getValue()) && count!=0) {
 				g.setColor(currentNode);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
@@ -164,13 +164,13 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);
 						// If the node is the goal colour it red.
-						if(children.get(i).getValue() == tree.getGoal()) {
+						if(children.get(i).getValue().equals(tree.getGoal())) {
 							g.setColor(GOAL_NODE);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						// If the node is the current node colour is yellow.
-						if(children.get(i).getValue() == searchAlgorithm.getCurrentNode().getValue()) {
+						if(children.get(i).getValue().equals(searchAlgorithm.getCurrentNode().getValue())) {
 							g.setColor(currentNode);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);

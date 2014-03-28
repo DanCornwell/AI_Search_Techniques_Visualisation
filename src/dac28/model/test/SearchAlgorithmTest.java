@@ -37,10 +37,10 @@ public class SearchAlgorithmTest {
 	public void testGetCurrentNodeReturnsCurrentNode() {
 		// Initialise the current node
 		Node currentNode = PowerMockito.mock(Node.class);
-		when(currentNode.getValue()).thenReturn(5);
+		when(currentNode.getValue()).thenReturn("5");
 		Whitebox.setInternalState(algorithm, "currentNode", currentNode);
 
-		assertEquals("getCurrentNode did not return the currentNode",5,algorithm.getCurrentNode().getValue());
+		assertEquals("getCurrentNode did not return the currentNode","5",algorithm.getCurrentNode().getValue());
 
 		// Checks algorithm calls getCurrentNode
 		verify(algorithm).getCurrentNode();
@@ -51,15 +51,15 @@ public class SearchAlgorithmTest {
 		// Initialise new current node
 		Node node = PowerMockito.mock(Node.class);
 		// Initialise goal value
-		Whitebox.setInternalState(algorithm, "GOAL", 4);
+		Whitebox.setInternalState(algorithm, "GOAL", "4");
 		// Set current node to a non goal value
-		when(node.getValue()).thenReturn(2);
+		when(node.getValue()).thenReturn("2");
 		Whitebox.setInternalState(algorithm, "currentNode", node);
 		// Checks incorrect node is not the goal
 		assertFalse("At goal node when shouldn't be",algorithm.atGoal());
 
 		// Sets current node to goal value
-		when(node.getValue()).thenReturn(4);
+		when(node.getValue()).thenReturn("4");
 		// Checks incorrect node is not the goal
 		assertTrue("Was not at goal node when we should be",algorithm.atGoal());
 
@@ -96,7 +96,7 @@ public class SearchAlgorithmTest {
 	public void testResetClearsListAndSetsRoot() {
 		// Initialise variables
 		Node node = PowerMockito.mock(Node.class);
-		when(node.getValue()).thenReturn(5);
+		when(node.getValue()).thenReturn("5");
 		Whitebox.setInternalState(algorithm, "ROOT", node);
 		@SuppressWarnings("unchecked")
 		LinkedList<Node> visited = Mockito.mock(LinkedList.class);
@@ -194,9 +194,9 @@ public class SearchAlgorithmTest {
 		Whitebox.setInternalState(algorithm, "expanded", expanded);
 		Node node = PowerMockito.mock(Node.class);
 		// Initialise goal value
-		Whitebox.setInternalState(algorithm, "GOAL", 4);
+		Whitebox.setInternalState(algorithm, "GOAL", "4");
 		// Set current node to a non goal value
-		when(node.getValue()).thenReturn(2);
+		when(node.getValue()).thenReturn("2");
 		Whitebox.setInternalState(algorithm, "currentNode", node);
 		doReturn(new LinkedList<Node>()).when(algorithm).getVisited();
 		

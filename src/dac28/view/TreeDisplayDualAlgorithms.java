@@ -118,13 +118,13 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			// Will also colour the box the appropriate colour.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
 			// If root is the goal colour box red.
-			if(tree.getRoot().getValue() == tree.getGoal()) {
+			if(tree.getRoot().getValue().equals(tree.getGoal())) {
 				g.setColor(GOAL_NODE);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			// Both algorithms at same node
-			if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue() && tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+			if(tree.getRoot().getValue().equals(searchAlgorithm1.getCurrentNode().getValue()) && tree.getRoot().getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
 				g.setColor(currentNode1);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize/2, boxsize-1);
 				g.setColor(currentNode2);
@@ -132,12 +132,12 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 				g.setColor(DEFAULT);
 			}
 			else {
-				if(tree.getRoot().getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+				if(tree.getRoot().getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
 					g.setColor(currentNode2);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
-				if(tree.getRoot().getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
+				if(tree.getRoot().getValue().equals(searchAlgorithm1.getCurrentNode().getValue())) {
 					g.setColor(currentNode1);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
@@ -188,13 +188,13 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);
 						// If the node is the goal colour it red.
-						if(children.get(i).getValue() == tree.getGoal()) {
+						if(children.get(i).getValue().equals(tree.getGoal())) {
 							g.setColor(GOAL_NODE);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						// Both algorithms at same node
-						if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue() && children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+						if(children.get(i).getValue().equals(searchAlgorithm1.getCurrentNode().getValue()) && children.get(i).getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
 							g.setColor(currentNode1);
 							g.fillRect(xPos+1, yPos+1, boxsize/2, boxsize-1);
 							g.setColor(currentNode2);
@@ -202,12 +202,12 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 							g.setColor(DEFAULT);
 						}
 						else {
-							if(children.get(i).getValue() == searchAlgorithm2.getCurrentNode().getValue()) {
+							if(children.get(i).getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
 								g.setColor(currentNode2);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
-							if(children.get(i).getValue() == searchAlgorithm1.getCurrentNode().getValue()) {
+							if(children.get(i).getValue().equals(searchAlgorithm1.getCurrentNode().getValue())) {
 								g.setColor(currentNode1);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);

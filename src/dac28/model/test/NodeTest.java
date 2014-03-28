@@ -27,7 +27,7 @@ public class NodeTest {
 	@Before
 	public void setup() {
 		try {
-			Node node = Whitebox.invokeConstructor(Node.class, 4);
+			Node node = Whitebox.invokeConstructor(Node.class,new Class[] { String.class }, new Object[] { "4" });
 			spy = PowerMockito.spy(node);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class NodeTest {
 	
 	@Test
 	public void testGetValueReturnsCorrectValue() {
-		assertEquals("Incorrect value was returned",4,spy.getValue());
+		assertEquals("Incorrect value was returned","4",spy.getValue());
 		Mockito.verify(spy).getValue();
 	}
 	
@@ -62,7 +62,6 @@ public class NodeTest {
 		}
 		Mockito.verify(spy,times(2)).getChildren();
 	}
-	
 	
 
 }
