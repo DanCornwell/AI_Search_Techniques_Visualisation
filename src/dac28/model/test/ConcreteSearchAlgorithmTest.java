@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +70,7 @@ public class ConcreteSearchAlgorithmTest {
 		// have to use the search algorithm creator here as concrete implementations are hidden
 		// also needs use of the text file reader to avoid static ids
 		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
-		assertTrue(bfsID!=-1);
+		assertTrue("Algorithm was not found in list",bfsID!=-1);
 		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
 		
 		LinkedList<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
@@ -96,16 +97,17 @@ public class ConcreteSearchAlgorithmTest {
 		verify(expandedSpy,atLeast(1)).add(any(Node.class));
 	}
 	
+	@Test
 	public void testDFSAlgorithmLogic() {
 		
 		// have to use the search algorithm creator here as concrete implementations are hidden
 		// also needs use of the text file reader to avoid static ids		
 		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
-		assertTrue(dfsID!=-1);
+		assertTrue("Algorithm was not found in list",dfsID!=-1);
 		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
 		
-		LinkedList<Node> expanded = Whitebox.getInternalState(dfs, "expanded");
-		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
+		Stack<Node> expanded = Whitebox.getInternalState(dfs, "expanded");
+		Stack<Node> expandedSpy = PowerMockito.spy(expanded);
 		Whitebox.setInternalState(dfs, "expanded", expandedSpy);
 		LinkedList<Node> visited = Whitebox.getInternalState(dfs, "visited");
 		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
@@ -125,15 +127,49 @@ public class ConcreteSearchAlgorithmTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		verify(expandedSpy,atLeast(1)).add(any(Node.class));
+		verify(expandedSpy,atLeast(1)).push(any(Node.class));
 		
 	}
 
 	@Test
+	public void testIterativeDeepeningAlgorithmLogic() {
+		
+		// have to use the search algorithm creator here as concrete implementations are hidden
+		// also needs use of the text file reader to avoid static ids		
+		int deepID = TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch");
+		assertTrue("Algorithm was not found in list",deepID!=-1);
+		SearchAlgorithm deep = SearchAlgorithmCreator.getInstance().getAlgorithm(deepID, tree);
+		
+		Stack<Node> expanded = Whitebox.getInternalState(deep, "expanded");
+		Stack<Node> expandedSpy = PowerMockito.spy(expanded);
+		Whitebox.setInternalState(deep, "expanded", expandedSpy);
+		LinkedList<Node> visited = Whitebox.getInternalState(deep, "visited");
+		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
+		Whitebox.setInternalState(deep, "visited", visitedSpy);
+		Node currentNode = Whitebox.getInternalState(deep, "currentNode");		
+		
+		Node nextToExpanded = expanded.peek();
+		try {
+			Whitebox.invokeMethod(deep, "algorithmLogic");
+		}
+		catch (Exception e) {
+		}
+		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
+		verify(visitedSpy).add(any(Node.class));
+		try {
+			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		verify(expandedSpy,atLeast(1)).add(any(Integer.class),any(Node.class));
+		
+	}
+	
+	@Test
 	public void testBFSFinalExpandedAndVisitedLists() {
 
 		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
-		assertTrue(bfsID!=-1);
+		assertTrue("Algorithm was not found in list",bfsID!=-1);
 		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
 		
 		while(!bfs.atGoal() && !bfs.getExpanded().isEmpty()) bfs.step();
@@ -152,7 +188,7 @@ public class ConcreteSearchAlgorithmTest {
 	public void testDFSFinalExpandedAndVisitedLists() {
 		
 		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
-		assertTrue(dfsID!=-1);
+		assertTrue("Algorithm was not found in list",dfsID!=-1);
 		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
 		
 		while(!dfs.atGoal() && !dfs.getExpanded().isEmpty()) dfs.step();

@@ -258,6 +258,8 @@ public class CreateController {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 			// Clear the text fields list
 			nodeValues.clear();
+			// Remove text fields from tree diagram
+			treeDiagram.removeAll();
 			
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
