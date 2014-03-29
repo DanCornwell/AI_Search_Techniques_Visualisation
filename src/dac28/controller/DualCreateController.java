@@ -69,6 +69,13 @@ public class DualCreateController extends CreateController {
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);
+		// Call repaint on the tree whenever an item in the combo box is selected
+		treeOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				treeDiagram.repaint();
+			}
+		});
 
 		// Adds the first search choices and label
 		JPanel searchChoices1 = new JPanel();
@@ -122,13 +129,6 @@ public class DualCreateController extends CreateController {
 		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
 		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));
 		treeDiagram.setBackground(Color.white);
-		// Call repaint on the tree whenever an item in the combo box is selected
-		treeOptions.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				treeDiagram.repaint();
-			}
-		});
 
 		// add all the panels to the main panel and then return it
 		panel.add(goalChoice);

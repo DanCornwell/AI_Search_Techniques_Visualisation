@@ -478,6 +478,9 @@ public class TopLevelContainer {
 
 	}
 
+	/**
+	 * Enables/disables the buttons based on the state of the 2 algorithm displays
+	 */
 	private void toggleButtons() {
 		// Set the buttons to enable or disabled depending on where we are.
 		if(!algorithmDisplay.step.isEnabled() && !dualAlgorithmDisplay.step.isEnabled()) {
@@ -497,7 +500,13 @@ public class TopLevelContainer {
 			undo.setEnabled(false);
 		}
 	}
-
+	
+	/**
+	 * Abstract class for the button listeners.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private abstract class ButtonListener implements ActionListener {
 
 		@Override
@@ -514,6 +523,12 @@ public class TopLevelContainer {
 
 	}
 
+	/**
+	 * Listens to the auto button on the master button panel.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class AutoListener extends ButtonListener {
 
 		/**
@@ -529,6 +544,13 @@ public class TopLevelContainer {
 
 
 	}
+	
+	/**
+	 * Listens to the pause button on the master button panel.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class PauseListener extends ButtonListener {
 
 		/**
@@ -560,6 +582,12 @@ public class TopLevelContainer {
 
 	}
 
+	/**
+	 * Thread to control pressing the auto button.
+	 * 
+	 * @author Dan Cornwell
+	 *
+	 */
 	private class AutoThread extends Thread {
 
 		/**

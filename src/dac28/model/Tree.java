@@ -21,7 +21,9 @@ public abstract class Tree {
 	 * The root node, any tree will always have a root node.
 	 */
 	protected final Node ROOT;
-	
+	/**
+	 * A queue of integers representing the path cost between nodes.
+	 */
 	private Queue<Integer> pathCosts;
 		
 	/**
@@ -129,12 +131,23 @@ public abstract class Tree {
 
 	}
 	
+	/**
+	 * Sets the path cost queue.
+	 * This method should be called if user input for path costs is required.
+	 * 
+	 * @param costs - new path costs for the tree
+	 */
 	public void setPathCosts(Queue<Integer> costs) {
 		this.pathCosts = costs;
 	}
 	
+	/**
+	 * Returns the path cost queue.
+	 * 
+	 * @return a queue of integers representing the path costs
+	 */
 	public Queue<Integer> getPathCosts() {
-		return pathCosts;
+		return new LinkedList<Integer>(pathCosts);
 	}
 	
 	/**

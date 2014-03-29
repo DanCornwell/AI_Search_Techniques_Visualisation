@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -94,6 +95,28 @@ public class TreeTest {
 		assertTrue("Incorrect width was returned",2==tree.getTreeWidth());
 		// Verify method call
 		verify(tree).getTreeWidth();
+	}
+	
+	@Test
+	public void testGetPathCosts() {
+		Queue<Integer> queue = new LinkedList<Integer>();
+		Whitebox.setInternalState(tree, "pathCosts", queue);
+		assertTrue("path cost queue was not returned",tree.getPathCosts().equals(queue));
+		verify(tree,atLeast(1)).getPathCosts();
+	}
+	
+	@Test
+	public void testSetPathCosts() {
+		
+		Queue<Integer> queue = new LinkedList<Integer>();
+		Whitebox.setInternalState(tree, "pathCosts", queue);
+
+		Queue<Integer> newQueue = new LinkedList<Integer>();
+		tree.setPathCosts(newQueue);
+		
+		assertTrue("new path cost queue was not returned",tree.getPathCosts().equals(newQueue));
+		verify(tree,atLeast(1)).setPathCosts(newQueue);
+		
 	}
 	
 }
