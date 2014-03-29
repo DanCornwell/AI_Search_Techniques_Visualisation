@@ -55,6 +55,7 @@ public class TextFileReader {
 		BufferedReader reader = new BufferedReader(new FileReader(ALGORITHMS_TXT));
 		String line = null;
 		while ((line = reader.readLine()) != null) {
+			line.trim();
 			algorithms.add(line);
 		}
 		reader.close();
@@ -104,6 +105,7 @@ public class TextFileReader {
 		BufferedReader reader = new BufferedReader(new FileReader(TREES_TXT));
 		String line = null;
 		while ((line = reader.readLine()) != null) {
+			line.trim();
 			trees.add(line);
 		}
 		reader.close();

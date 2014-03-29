@@ -3,8 +3,6 @@ package dac28.model;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
-
 /**
  * Abstract class the defines methods for the search trees.
  * Provides method to return the goal value and root node.
@@ -23,7 +21,9 @@ public abstract class Tree {
 	 * The root node, any tree will always have a root node.
 	 */
 	protected final Node ROOT;
-
+	
+	private Queue<Integer> pathCosts;
+		
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.
@@ -48,8 +48,9 @@ public abstract class Tree {
 			ROOT = new Node("0");
 			construct();
 		}
-
-	}
+		
+		pathCosts = new LinkedList<Integer>();
+	} 
 
 	/**
 	 * Returns the goal value.
@@ -127,7 +128,15 @@ public abstract class Tree {
 		return width;
 
 	}
-
+	
+	public void setPathCosts(Queue<Integer> costs) {
+		this.pathCosts = costs;
+	}
+	
+	public Queue<Integer> getPathCosts() {
+		return pathCosts;
+	}
+	
 	/**
 	 * Creates nodes and connects them to the root node using default number values.
 	 */

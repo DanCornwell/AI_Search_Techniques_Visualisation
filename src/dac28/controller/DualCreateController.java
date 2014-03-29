@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -85,6 +86,10 @@ public class DualCreateController extends CreateController {
 					}
 					else dualAlgorithmOptions.setSelectedIndex(0);
 				}
+				// Call repaint on the tree if uniform cost search is chosen (to add path cost inputs)
+				if(algorithmOptions.getSelectedIndex() == Arrays.asList(ALGORITHMS).indexOf("UniformCostSearch")) {
+					treeDiagram.repaint();
+				}
 			}
 		});
 
@@ -103,6 +108,10 @@ public class DualCreateController extends CreateController {
 						algorithmOptions.setSelectedIndex(1);
 					}
 					else algorithmOptions.setSelectedIndex(0);
+				}
+				// Call repaint on the tree if uniform cost search is chosen (to add path cost inputs)
+				if(dualAlgorithmOptions.getSelectedIndex() == Arrays.asList(ALGORITHMS).indexOf("UniformCostSearch")) {
+					treeDiagram.repaint();
 				}
 			}
 		});
@@ -193,6 +202,7 @@ public class DualCreateController extends CreateController {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 			// Clear the text fields list
 			nodeValues.clear();
+			pathValues.clear();
 			// Remove text fields from tree diagram
 			treeDiagram.removeAll();
 
@@ -292,6 +302,16 @@ public class DualCreateController extends CreateController {
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
+							
+							// If we are using uniform cost search then add text field allowing path cost
+							if(algorithmOptions.getSelectedItem().equals("UniformCostSearch")
+									|| dualAlgorithmOptions.getSelectedItem().equals("UniformCostSearch")) {
+								JTextField lineValue = new JTextField("1");
+								lineValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+								lineValue.setBounds(((childCoord.x+parentCoord.x)/2), (childCoord.y+parentCoord.y)/2, 15, 15);
+								pathValues.add(lineValue);
+							}
+							
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {
@@ -322,6 +342,9 @@ public class DualCreateController extends CreateController {
 			// Add all text fields
 			for(JTextField textFields: nodeValues) {
 				treeDiagram.add(textFields);
+			}
+			for(JTextField pathFields: pathValues) {
+				treeDiagram.add(pathFields);
 			}
 
 		}

@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -140,6 +142,13 @@ public class TopLevelContainer {
 							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
 					return;
 				}
+				
+				Queue<Integer> costs = new LinkedList<Integer>();
+				for(String s: controller.getPathValues()) {
+					costs.add(Integer.parseInt(s));
+				}
+				tree.setPathCosts(costs);
+				
 				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);;
 				if(algorithm==null) {
 					Object[] ok = {"Ok"};
@@ -151,7 +160,8 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
+						|| controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
@@ -248,13 +258,15 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
+						|| controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")) {
+				if(controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
+						|| controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {

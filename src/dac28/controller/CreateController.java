@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,7 +55,11 @@ public class CreateController {
 	 * List of the node input text fields.
 	 */
 	protected List<JTextField> nodeValues;
-	
+	/**
+	 * List of the path input text fields.
+	 */
+	protected List<JTextField> pathValues;
+
 	/**
 	 * Initialises the radio buttons and goal field.
 	 */
@@ -67,8 +72,10 @@ public class CreateController {
 
 		TREES = getTrees();
 		treeOptions = new JComboBox<String>(TREES);
-		
+
 		nodeValues = new LinkedList<JTextField>();
+
+		pathValues = new LinkedList<JTextField>();
 
 	}
 
@@ -117,27 +124,13 @@ public class CreateController {
 		goalChoice.add(new JLabel("Enter value of the goal node: "));
 		goal.setPreferredSize(new Dimension(30,20));
 		goalChoice.add(goal);
-		
+
 		// Adds the tree options and label
 		JPanel treeChoices = new JPanel();
 		treeChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
-		treeOptions.setSelectedIndex(0);
-
-		// Adds the search choices and label
-		JPanel searchChoices = new JPanel();
-		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
-		searchChoices.add(new JLabel("Select Search Algorithm: ",JLabel.RIGHT));
-		searchChoices.add(algorithmOptions);
-		algorithmOptions.setSelectedIndex(0);
-
-		// Tree drawing panel
-		treeDiagram = new TreeDiagram();
-		treeDiagram.setLayout(null);
-		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
-		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));
-		treeDiagram.setBackground(Color.white);
+		treeOptions.setSelectedIndex(0);	
 		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
@@ -145,6 +138,29 @@ public class CreateController {
 				treeDiagram.repaint();
 			}
 		});
+
+		// Adds the search choices and label
+		JPanel searchChoices = new JPanel();
+		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
+		searchChoices.add(new JLabel("Select Search Algorithm: ",JLabel.RIGHT));
+		searchChoices.add(algorithmOptions);
+		algorithmOptions.setSelectedIndex(0);
+		// Call repaint on the tree if uniform cost search is chosen (to add path cost inputs)
+		algorithmOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(algorithmOptions.getSelectedIndex() == Arrays.asList(ALGORITHMS).indexOf("UniformCostSearch")) {
+					treeDiagram.repaint();
+				}
+			}
+		});
+
+		// Tree drawing panel
+		treeDiagram = new TreeDiagram();
+		treeDiagram.setLayout(null);
+		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
+		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));
+		treeDiagram.setBackground(Color.white);
 
 		// Add panels onto main panel and returns it
 		panel.add(goalChoice);
@@ -202,9 +218,9 @@ public class CreateController {
 	public final String getGoal() {
 		return goal.getText();
 	}
-	
+
 	/**
-	 * Returns the string values in the text fields.
+	 * Returns the string values in the node text fields.
 	 * 
 	 * @return queue of string values for the nodes
 	 */
@@ -217,10 +233,23 @@ public class CreateController {
 	}
 
 	/**
+	 * Returns the string values in the path text fields.
+	 * 
+	 * @return queue of string values for the paths
+	 */
+	public final Queue<String> getPathValues() {
+		Queue<String> values = new LinkedList<String>();
+		for(JTextField field: pathValues) {
+			values.add(field.getText());
+		}
+		return values;
+	}
+
+	/**
 	 * Panel that draws a visualisation for the trees.
 	 * 
 	 * @author Dan Cornwell
-	 *
+	 * 
 	 */
 	private class TreeDiagram extends JPanel {
 
@@ -258,9 +287,10 @@ public class CreateController {
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
 			// Clear the text fields list
 			nodeValues.clear();
+			pathValues.clear();
 			// Remove text fields from tree diagram
 			treeDiagram.removeAll();
-			
+
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
 			// Size of the boxes to be drawn
@@ -287,7 +317,7 @@ public class CreateController {
 			final int ROOT_X_POS = (this.getWidth()/2)-(boxsize/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = (this.getHeight()/TREE_DEPTH)/4;
-			
+
 			// Draws the root node box
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);		
 			// Create the text field box for the root node
@@ -358,6 +388,15 @@ public class CreateController {
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
+
+							// If we are using uniform cost search then add text field allowing path cost
+							if(algorithmOptions.getSelectedItem().equals("UniformCostSearch")) {
+								JTextField lineValue = new JTextField("1");
+								lineValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+								lineValue.setBounds(((childCoord.x+parentCoord.x)/2), (childCoord.y+parentCoord.y)/2, 15, 15);
+								pathValues.add(lineValue);
+							}	
+
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {
@@ -384,10 +423,13 @@ public class CreateController {
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
-			
+
 			// Add all text fields
 			for(JTextField textFields: nodeValues) {
 				treeDiagram.add(textFields);
+			}
+			for(JTextField pathFields: pathValues) {
+				treeDiagram.add(pathFields);
 			}
 
 		}

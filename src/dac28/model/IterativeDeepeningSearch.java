@@ -3,6 +3,14 @@ package dac28.model;
 import java.util.HashMap;
 import java.util.Stack;
 
+/**
+ * Iterative Deepening Search.
+ * Works like a depth first search, however will stop at a given limit and
+ * expanded the remaining nodes above this limit before moving on.
+ * 
+ * @author Dan Cornwell
+ *
+ */
 public class IterativeDeepeningSearch extends SearchAlgorithm {
 
 	/**
@@ -14,6 +22,13 @@ public class IterativeDeepeningSearch extends SearchAlgorithm {
 	 */
 	private HashMap<Node,Integer> nodeLevels;
 
+	/**
+	 * Constructor.
+	 * Initialises the expanded lists and puts root on to it.
+	 * Initialises the HashMap and puts the root with a value of 1 into it.
+	 * 
+	 * @param TREE - the tree to search upon
+	 */
 	protected IterativeDeepeningSearch(Tree TREE) {
 		
 		super(TREE);
@@ -23,8 +38,8 @@ public class IterativeDeepeningSearch extends SearchAlgorithm {
 		((Stack<Node>) expanded).push(ROOT);
 		// Initialise HashMap
 		nodeLevels = new HashMap<Node,Integer>();
-		// Add root to the HashMap with its level (root has a level 0)
-		nodeLevels.put(ROOT, 0);
+		// Add root to the HashMap with its level (root has a level 1)
+		nodeLevels.put(ROOT, 1);
 	}
 
 	@Override
