@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
@@ -20,15 +21,6 @@ import dac28.model.SearchAlgorithm;
  *
  */
 public class TreeDisplaySingleAlgorithm extends TreeDisplay {
-
-	/**
-	 * The search algorithm being used on the tree.
-	 */
-	private SearchAlgorithm searchAlgorithm;
-	/**
-	 * Colour of the current node in the tree display.
-	 */
-	private Color currentNode;
 
 	@Override
 	TreePanel getTreePanel() {
@@ -107,13 +99,13 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 			// Draws the root node, with its values inside it. 
 			// Will also colour the box the appropriate colour.
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
-			// If root is the goal colour box red.
+			// If root is the goal colour box goal node colour.
 			if(tree.getRoot().getValue().equals(tree.getGoal())) {
 				g.setColor(GOAL_NODE);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
-			// If the root is the current node colour box yellow.
+			// If the root is the current node colour is current node colour.
 			if(tree.getRoot().getValue().equals(searchAlgorithm.getCurrentNode().getValue()) && count!=0) {
 				g.setColor(currentNode);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
@@ -138,7 +130,10 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 
 			// Integer representing the node level we are on. Root is considered to be level 0.
 			int nodeLevel = 1;
-
+		
+			// Queue containing the path costs for the tree. If this is empty no path costs will be drawn.
+			Queue<Integer> costs = tree.getPathCosts();
+			
 			// While elements exist within parents list.
 			while(!parents.isEmpty()) {
 
@@ -163,13 +158,13 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);
-						// If the node is the goal colour it red.
+						// If the node is the goal colour it goal node colour.
 						if(children.get(i).getValue().equals(tree.getGoal())) {
 							g.setColor(GOAL_NODE);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
-						// If the node is the current node colour is yellow.
+						// If the node is the current node colour it current node colour.
 						if(children.get(i).getValue().equals(searchAlgorithm.getCurrentNode().getValue())) {
 							g.setColor(currentNode);
 							g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
@@ -184,10 +179,19 @@ public class TreeDisplaySingleAlgorithm extends TreeDisplay {
 						if(!parentCoords.isEmpty()) {
 							// Get the first parent coordinate.
 							Point parentCoord = parentCoords.remove();
+							
 							// Add this coordinate with the child's coordinate to the line coordinates HashMap.
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
+							
+							// If path costs exist then display them on the lines
+							if(!costs.isEmpty()) {
+								int value = 1;
+								if(costs.peek()!=null) value = costs.poll();
+								g.drawString(String.valueOf(value),10+(childCoord.x+parentCoord.x)/2, 5+(childCoord.y+parentCoord.y)/2);
+							}	
+							
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {

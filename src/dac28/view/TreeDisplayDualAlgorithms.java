@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Map.Entry;
 
 import dac28.model.Node;
@@ -22,21 +23,13 @@ import dac28.model.SearchAlgorithm;
 public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 	/**
-	 * The first algorithm searching on the tree.
-	 */
-	private SearchAlgorithm searchAlgorithm1;
-	/**
 	 * The second algorithm searching on the tree.
 	 */
-	private SearchAlgorithm searchAlgorithm2;
+	private SearchAlgorithm dualSearchAlgorithm;
 	/**
-	 * Colour of the current node of algorithm 1 in the tree display.
+	 * Colour of the current node of dual algorithm in the tree display.
 	 */
-	private Color currentNode1;
-	/**
-	 * Colour of the current node of algorithm 2 in the tree display.
-	 */
-	private Color currentNode2;
+	private Color dualCurrentNode;
 	
 	@Override
 	TreePanel getTreePanel() {
@@ -46,15 +39,15 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 	@Override
 	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
 		if(searchAlgorithms.length < 2) return;
-		this.searchAlgorithm1 = searchAlgorithms[0];
-		this.searchAlgorithm2 = searchAlgorithms[1];
+		this.searchAlgorithm = searchAlgorithms[0];
+		this.dualSearchAlgorithm = searchAlgorithms[1];
 	}
 	
 	@Override
 	public void setCurrentNodeColor(Color[] colors) {
 		if(colors.length < 2) return;
-		this.currentNode1 = colors[0];
-		this.currentNode2 = colors[1];
+		this.currentNode = colors[0];
+		this.dualCurrentNode = colors[1];
 
 	}
 
@@ -76,7 +69,7 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 		public void drawTree(Graphics g) {
 
 			// If we have no tree or algorithms return.
-			if(tree==null || searchAlgorithm1==null || searchAlgorithm2==null) {
+			if(tree==null || searchAlgorithm==null || dualSearchAlgorithm==null) {
 				return;
 			}
 
@@ -124,21 +117,21 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 				g.setColor(DEFAULT);
 			}
 			// Both algorithms at same node
-			if(tree.getRoot().getValue().equals(searchAlgorithm1.getCurrentNode().getValue()) && tree.getRoot().getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
-				g.setColor(currentNode1);
+			if(tree.getRoot().getValue().equals(searchAlgorithm.getCurrentNode().getValue()) && tree.getRoot().getValue().equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
+				g.setColor(currentNode);
 				g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize/2, boxsize-1);
-				g.setColor(currentNode2);
+				g.setColor(dualCurrentNode);
 				g.fillRect(ROOT_X_POS+1+(boxsize/2), ROOT_Y_POS+1, (boxsize/2)-1, boxsize-1);
 				g.setColor(DEFAULT);
 			}
 			else {
-				if(tree.getRoot().getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
-					g.setColor(currentNode2);
+				if(tree.getRoot().getValue().equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
+					g.setColor(dualCurrentNode);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
-				if(tree.getRoot().getValue().equals(searchAlgorithm1.getCurrentNode().getValue())) {
-					g.setColor(currentNode1);
+				if(tree.getRoot().getValue().equals(searchAlgorithm.getCurrentNode().getValue())) {
+					g.setColor(currentNode);
 					g.fillRect(ROOT_X_POS+1, ROOT_Y_POS+1, boxsize-1, boxsize-1);
 					g.setColor(DEFAULT);
 				}
@@ -163,6 +156,9 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			// Integer representing the node level we are on. Root is considered to be level 0.
 			int nodeLevel = 1;
 
+			// Queue containing the path costs for the tree. If this is empty no path costs will be drawn.
+			Queue<Integer> costs = tree.getPathCosts();
+			
 			// While elements exist within parents list.
 			while(!parents.isEmpty()) {
 
@@ -194,21 +190,21 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 							g.setColor(DEFAULT);
 						}
 						// Both algorithms at same node
-						if(children.get(i).getValue().equals(searchAlgorithm1.getCurrentNode().getValue()) && children.get(i).getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
-							g.setColor(currentNode1);
+						if(children.get(i).getValue().equals(searchAlgorithm.getCurrentNode().getValue()) && children.get(i).getValue().equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
+							g.setColor(currentNode);
 							g.fillRect(xPos+1, yPos+1, boxsize/2, boxsize-1);
-							g.setColor(currentNode2);
+							g.setColor(dualCurrentNode);
 							g.fillRect(xPos+1+(boxsize/2), yPos+1, (boxsize/2)-1, boxsize-1);
 							g.setColor(DEFAULT);
 						}
 						else {
-							if(children.get(i).getValue().equals(searchAlgorithm2.getCurrentNode().getValue())) {
-								g.setColor(currentNode2);
+							if(children.get(i).getValue().equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
+								g.setColor(dualCurrentNode);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
-							if(children.get(i).getValue().equals(searchAlgorithm1.getCurrentNode().getValue())) {
-								g.setColor(currentNode1);
+							if(children.get(i).getValue().equals(searchAlgorithm.getCurrentNode().getValue())) {
+								g.setColor(currentNode);
 								g.fillRect(xPos+1, yPos+1, boxsize-1, boxsize-1);
 								g.setColor(DEFAULT);
 							}
@@ -222,10 +218,19 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 						if(!parentCoords.isEmpty()) {
 							// Get the first parent coordinate.
 							Point parentCoord = parentCoords.remove();
+							
 							// Add this coordinate with the child's coordinate to the line coordinates HashMap.
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
+							
+							// If path costs exist then display them on the lines
+							if(!costs.isEmpty()) {
+								int value = 1;
+								if(costs.peek()!=null) value = costs.poll();
+								g.drawString(String.valueOf(value),10+(childCoord.x+parentCoord.x)/2, 5+(childCoord.y+parentCoord.y)/2);
+							}	
+							
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {

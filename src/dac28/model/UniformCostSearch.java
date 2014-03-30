@@ -1,12 +1,10 @@
 package dac28.model;
 
-import java.awt.Point;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Map.Entry;
 
 /**
  * Uniform cost search class.

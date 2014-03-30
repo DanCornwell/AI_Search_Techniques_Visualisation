@@ -40,7 +40,15 @@ public abstract class TreeDisplay {
 	 * Colour used for drawing lines and borders. 
 	 */
 	protected final Color DEFAULT = Color.black;
-		
+	/**
+	 * The search algorithm being used on the tree.
+	 */
+	protected SearchAlgorithm searchAlgorithm;
+	/**
+	 * Colour of the current node in the tree display.
+	 */
+	protected Color currentNode;
+	
 	/**
 	 * Initialises a tree panel instance.
 	 * 

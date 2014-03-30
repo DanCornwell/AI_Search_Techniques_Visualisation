@@ -143,13 +143,15 @@ public class TopLevelContainer {
 					return;
 				}
 				
+				// Get the path costs from the user input, then set the tree with it
 				Queue<Integer> costs = new LinkedList<Integer>();
 				for(String s: controller.getPathValues()) {
 					costs.add(Integer.parseInt(s));
 				}
 				tree.setPathCosts(costs);
 				
-				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);;
+				// Get the algorithm from the user input
+				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
 				if(algorithm==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -229,7 +231,6 @@ public class TopLevelContainer {
 
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
 				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal, controller.getNodeValues());
-				//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
@@ -238,6 +239,15 @@ public class TopLevelContainer {
 							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
 					return;
 				}
+				
+				// Get the path costs from the user input, then set the tree with it
+				Queue<Integer> costs = new LinkedList<Integer>();
+				for(String s: controller.getPathValues()) {
+					costs.add(Integer.parseInt(s));
+				}
+				tree.setPathCosts(costs);
+				
+				// Get the first algorithm from the user input		
 				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
 				if(algorithm1==null) {
 					Object[] ok = {"Ok"};
@@ -247,6 +257,7 @@ public class TopLevelContainer {
 							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
 					return;
 				}
+				// Get the second algorithm from the user input		
 				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm2UID(), tree);
 				if(algorithm2==null) {
 					Object[] ok = {"Ok"};
