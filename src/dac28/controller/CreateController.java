@@ -17,9 +17,11 @@ import java.util.Queue;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 
@@ -118,6 +120,53 @@ public class CreateController {
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
+		// Node name buttons
+		// final button since it is used within the tree changer ActionListener
+		final JRadioButton NUMBER = new JRadioButton("Numeric");
+		NUMBER.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int name = 0;
+				for(JTextField field: nodeValues) {
+					field.setText(String.valueOf(name++));
+					field.setEditable(false);
+				}
+			}
+		});
+		JRadioButton alpha = new JRadioButton("Alphabetic");
+		alpha.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+				int index = 0;
+				for(JTextField field: nodeValues) {
+					field.setText(String.valueOf(alphabet[index++]).toUpperCase());
+					// avoid null pointer by reseting the index
+					if(index==alphabet.length-1) index = 0;
+					field.setEditable(false);
+				}			
+			}
+		});
+		JRadioButton custom = new JRadioButton("Custom");
+		custom.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for(JTextField field: nodeValues) {
+					field.setEditable(true);
+				}	
+			}
+		});
+		ButtonGroup nodeNames = new ButtonGroup();
+		nodeNames.add(NUMBER);
+		nodeNames.add(alpha);
+		nodeNames.add(custom);
+		NUMBER.setSelected(true);
+		JPanel nodeNamesPanel = new JPanel();
+		nodeNamesPanel.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
+		nodeNamesPanel.add(NUMBER);
+		nodeNamesPanel.add(alpha);
+		nodeNamesPanel.add(custom);
+		
 		// Adds the goal input box and label
 		JPanel goalChoice = new JPanel();
 		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
@@ -135,6 +184,7 @@ public class CreateController {
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				NUMBER.setSelected(true);
 				treeDiagram.repaint();
 			}
 		});
@@ -167,6 +217,7 @@ public class CreateController {
 		panel.add(treeChoices);
 		panel.add(searchChoices);
 		panel.add(treeDiagram);
+		panel.add(nodeNamesPanel);
 
 		return panel;
 
@@ -426,6 +477,7 @@ public class CreateController {
 
 			// Add all text fields
 			for(JTextField textFields: nodeValues) {
+				textFields.setEditable(false);
 				treeDiagram.add(textFields);
 			}
 			for(JTextField pathFields: pathValues) {

@@ -15,9 +15,11 @@ import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import dac28.model.Node;
@@ -56,6 +58,53 @@ public class DualCreateController extends CreateController {
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
+		// Node name buttons
+		// final button since it is used within the tree changer ActionListener
+		final JRadioButton NUMBER = new JRadioButton("Numeric");
+		NUMBER.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int name = 0;
+				for(JTextField field: nodeValues) {
+					field.setText(String.valueOf(name++));
+					field.setEditable(false);
+				}
+			}
+		});
+		JRadioButton alpha = new JRadioButton("Alphabetic");
+		alpha.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+				int index = 0;
+				for(JTextField field: nodeValues) {
+					field.setText(String.valueOf(alphabet[index++]).toUpperCase());
+					// avoid null pointer by reseting the index
+					if(index==alphabet.length-1) index = 0;
+					field.setEditable(false);
+				}			
+			}
+		});
+		JRadioButton custom = new JRadioButton("Custom");
+		custom.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for(JTextField field: nodeValues) {
+					field.setEditable(true);
+				}	
+			}
+		});
+		ButtonGroup nodeNames = new ButtonGroup();
+		nodeNames.add(NUMBER);
+		nodeNames.add(alpha);
+		nodeNames.add(custom);
+		NUMBER.setSelected(true);
+		JPanel nodeNamesPanel = new JPanel();
+		nodeNamesPanel.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
+		nodeNamesPanel.add(NUMBER);
+		nodeNamesPanel.add(alpha);
+		nodeNamesPanel.add(custom);
+
 		// Adds the goal input box and label
 		JPanel goalChoice = new JPanel();
 		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/15));
@@ -73,6 +122,7 @@ public class DualCreateController extends CreateController {
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				NUMBER.setSelected(true);
 				treeDiagram.repaint();
 			}
 		});
@@ -136,6 +186,7 @@ public class DualCreateController extends CreateController {
 		panel.add(searchChoices1);
 		panel.add(searchChoices2);
 		panel.add(treeDiagram);
+		panel.add(nodeNamesPanel);
 
 		return panel;
 
@@ -302,7 +353,7 @@ public class DualCreateController extends CreateController {
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
-							
+
 							// If we are using uniform cost search then add text field allowing path cost
 							if(algorithmOptions.getSelectedItem().equals("UniformCostSearch")
 									|| dualAlgorithmOptions.getSelectedItem().equals("UniformCostSearch")) {
@@ -311,7 +362,7 @@ public class DualCreateController extends CreateController {
 								lineValue.setBounds(((childCoord.x+parentCoord.x)/2), (childCoord.y+parentCoord.y)/2, 15, 15);
 								pathValues.add(lineValue);
 							}
-							
+
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {
@@ -341,6 +392,7 @@ public class DualCreateController extends CreateController {
 
 			// Add all text fields
 			for(JTextField textFields: nodeValues) {
+				textFields.setEditable(false);
 				treeDiagram.add(textFields);
 			}
 			for(JTextField pathFields: pathValues) {

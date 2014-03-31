@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import javax.swing.BorderFactory;
@@ -87,7 +88,7 @@ public class TopLevelContainer {
 		// Create the base frame
 		base = new JFrame("Search Algorithm Visualiser");
 		base.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		// Create the menu items
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setOpaque(true);
@@ -104,27 +105,59 @@ public class TopLevelContainer {
 
 				CreateController controller = new CreateController();
 
-				String goal = "";
+				// boolean used to loop the controller on invalid input
+				boolean validInput = false;
 
-				while(true) {
+				JPanel dialog = controller.getCreateDialog();
 
-					int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
+				while(!validInput) {
+
+					int result = JOptionPane.showOptionDialog(null, dialog, 
 							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+					List<String> warnings = new LinkedList<String>();
+					if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
+					if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
+					if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
+
+					for(String value: controller.getPathValues()) {
+
+						try {
+							Integer.parseInt(value); 
+						}
+						catch(NumberFormatException numberError) {
+							warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
+							break;
+						}
+					}
 
 					if(result == JOptionPane.OK_OPTION) {
 
-						try {
-							goal = controller.getGoal();
-							break;
+						// If warnings exist display them and let user decide whether to continue or not
+						if(!warnings.isEmpty()) {
+
+							String warningString = "";
+							for(String s: warnings) {
+								warningString+=(s+"\n");
+
+							}
+							
+							Object[] warningOptions = {"Yes","Back"};
+
+							int blankNodeResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
+									"Application Warning",JOptionPane.YES_OPTION,
+									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
+
+
+							if(blankNodeResult == JOptionPane.OK_OPTION) {
+								validInput = true;
+							}
+
 						}
-						catch(NumberFormatException error) {
-							Object[] ok = {"Ok"};
-							JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
-									"Please enter a valid integer.", 
-									"Goal Value Error",JOptionPane.YES_OPTION,
-									JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-						}
+						else validInput = true;
 					}
+
 					else {
 						return;
 					}
@@ -132,7 +165,7 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and algorithm with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal, controller.getNodeValues());
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
 				//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
 				if(tree==null) {
 					Object[] ok = {"Ok"};
@@ -142,14 +175,19 @@ public class TopLevelContainer {
 							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
 					return;
 				}
-				
+
 				// Get the path costs from the user input, then set the tree with it
 				Queue<Integer> costs = new LinkedList<Integer>();
 				for(String s: controller.getPathValues()) {
-					costs.add(Integer.parseInt(s));
+					try {
+						costs.add(Integer.parseInt(s));
+					}
+					catch(NumberFormatException numberError) {
+						costs.add(1);
+					}
 				}
 				tree.setPathCosts(costs);
-				
+
 				// Get the algorithm from the user input
 				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
 				if(algorithm==null) {
@@ -202,27 +240,59 @@ public class TopLevelContainer {
 
 				DualCreateController controller = new DualCreateController();
 
-				String goal = "";
+				// boolean used to loop the controller on invalid input
+				boolean validInput = false;
 
-				while(true) {
+				JPanel dialog = controller.getCreateDialog();
 
-					int result = JOptionPane.showOptionDialog(null, controller.getCreateDialog(), 
+				while(!validInput) {
+
+					int result = JOptionPane.showOptionDialog(null, dialog, 
 							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+					List<String> warnings = new LinkedList<String>();
+					if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
+					if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
+					if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
+
+					for(String value: controller.getPathValues()) {
+
+						try {
+							Integer.parseInt(value); 
+						}
+						catch(NumberFormatException numberError) {
+							warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
+							break;
+						}
+					}
 
 					if(result == JOptionPane.OK_OPTION) {
 
-						try {
-							goal = controller.getGoal();
-							break;
+						// If warnings exist display them and let user decide whether to continue or not
+						if(!warnings.isEmpty()) {
+
+							String warningString = "";
+							for(String s: warnings) {
+								warningString+=(s+"\n");
+
+							}
+							
+							Object[] warningOptions = {"Yes","Back"};
+
+							int blankNodeResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
+									"Application Warning",JOptionPane.YES_OPTION,
+									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
+
+
+							if(blankNodeResult == JOptionPane.OK_OPTION) {
+								validInput = true;
+							}
+
 						}
-						catch(NumberFormatException error) {
-							Object[] ok = {"Ok"};
-							JOptionPane.showOptionDialog(null,"The value entered for the goal was not an integer.\n" +
-									"Please enter a valid integer.", 
-									"Goal Value Error",JOptionPane.YES_OPTION,
-									JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-						}
+						else validInput = true;
 					}
+
 					else {
 						return;
 					}
@@ -230,7 +300,7 @@ public class TopLevelContainer {
 				}
 
 				// Create a tree and 2 algorithms with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal, controller.getNodeValues());
+				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
 				if(tree==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
@@ -239,14 +309,14 @@ public class TopLevelContainer {
 							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
 					return;
 				}
-				
+
 				// Get the path costs from the user input, then set the tree with it
 				Queue<Integer> costs = new LinkedList<Integer>();
 				for(String s: controller.getPathValues()) {
 					costs.add(Integer.parseInt(s));
 				}
 				tree.setPathCosts(costs);
-				
+
 				// Get the first algorithm from the user input		
 				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
 				if(algorithm1==null) {
@@ -511,7 +581,7 @@ public class TopLevelContainer {
 			undo.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Abstract class for the button listeners.
 	 * 
@@ -555,7 +625,7 @@ public class TopLevelContainer {
 
 
 	}
-	
+
 	/**
 	 * Listens to the pause button on the master button panel.
 	 * 
