@@ -160,13 +160,13 @@ public class CreateController {
 		nodeNames.add(NUMBER);
 		nodeNames.add(alpha);
 		nodeNames.add(custom);
-		NUMBER.setSelected(true);
+		NUMBER.setSelected(true); 
 		JPanel nodeNamesPanel = new JPanel();
 		nodeNamesPanel.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
 		nodeNamesPanel.add(NUMBER);
 		nodeNamesPanel.add(alpha);
 		nodeNamesPanel.add(custom);
-		
+
 		// Adds the goal input box and label
 		JPanel goalChoice = new JPanel();
 		goalChoice.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
@@ -184,7 +184,12 @@ public class CreateController {
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NUMBER.setSelected(true);
+				NUMBER.doClick();
+				// Clear the text fields list
+				nodeValues.clear();
+				pathValues.clear();
+				// Remove text fields from tree diagram
+				treeDiagram.removeAll();
 				treeDiagram.repaint();
 			}
 		});
@@ -336,21 +341,20 @@ public class CreateController {
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
 			LinkedList<Point> parentCoords = new LinkedList<Point>();
-			// Clear the text fields list
-			nodeValues.clear();
-			pathValues.clear();
-			// Remove text fields from tree diagram
-			treeDiagram.removeAll();
-
 			// The maximum depth of the tree.
 			final int TREE_DEPTH = tree.getTreeDepth();
 			// Size of the boxes to be drawn
 			int boxsize = 30;
 			// The font size
 			int fontSize = 10;
-
+			// a default value used when naming new nodes
+			int defaultValue = 0;
 			// The shrink ratio for the font size
 			final double shrinkRatio = 5.0/6;
+			// whether they're are some node values to use, if false then they will be created
+			boolean isNodeValuesEmpty = nodeValues.isEmpty();
+			// whether they're are some path values to use, if false then they will be created
+			boolean isPathValuesEmpty = pathValues.isEmpty();
 
 			// While the boxes are too big either horizontally or vertically, shrink the box size
 			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
@@ -370,14 +374,18 @@ public class CreateController {
 			final int ROOT_Y_POS = (this.getHeight()/TREE_DEPTH)/4;
 
 			// Draws the root node box
-			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);		
-			// Create the text field box for the root node
-			int defaultValue = 0;
-			JTextField rootValue = new JTextField(String.valueOf(defaultValue++));
-			rootValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-			rootValue.setBounds(ROOT_X_POS+10, ROOT_Y_POS+5, 20, 20);
-			rootValue.setBorder(null);
-			nodeValues.add(rootValue);
+			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
+
+			// if no node values exist create them
+			if(isNodeValuesEmpty) {
+				// Create the text field box for the root node
+				JTextField rootValue = new JTextField(String.valueOf(defaultValue++));
+				rootValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+				rootValue.setBounds(ROOT_X_POS+10, ROOT_Y_POS+5, 20, 20);
+				rootValue.setBorder(null);
+				rootValue.setBackground(Color.white);
+				nodeValues.add(rootValue);
+			}
 
 			// The line connection point of the root node. This will be the bottom centre of the box.
 			Point rootPoint = new Point(ROOT_X_POS+(boxsize/2),ROOT_Y_POS+boxsize);
@@ -421,12 +429,17 @@ public class CreateController {
 						int yPos = nodeLevel*(this.getHeight()/TREE_DEPTH);
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);	
-						// Create the text field box for the child node
-						JTextField childValue = new JTextField(String.valueOf(defaultValue++));
-						childValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-						childValue.setBounds(xPos+10, yPos+5, 20, 20);
-						childValue.setBorder(null);
-						nodeValues.add(childValue);
+
+						// if no node values exist create them
+						if(isNodeValuesEmpty) {
+							// Create the text field box for the child node
+							JTextField childValue = new JTextField(String.valueOf(defaultValue++));
+							childValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+							childValue.setBounds(xPos+10, yPos+5, 20, 20);
+							childValue.setBackground(Color.white);
+							childValue.setBorder(null);
+							nodeValues.add(childValue);
+						}
 
 						// The child line connection point. This will be the top middle of the box.
 						Point childCoord = new Point(xPos+(boxsize/2),yPos);
@@ -442,10 +455,12 @@ public class CreateController {
 
 							// If we are using uniform cost search then add text field allowing path cost
 							if(algorithmOptions.getSelectedItem().equals("UniformCostSearch")) {
-								JTextField lineValue = new JTextField("1");
-								lineValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-								lineValue.setBounds(((childCoord.x+parentCoord.x)/2), (childCoord.y+parentCoord.y)/2, 15, 15);
-								pathValues.add(lineValue);
+								if(isPathValuesEmpty) {
+									JTextField lineValue = new JTextField("1");
+									lineValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+									lineValue.setBounds(((childCoord.x+parentCoord.x)/2), (childCoord.y+parentCoord.y)/2, 15, 15);
+									pathValues.add(lineValue);
+								}
 							}	
 
 							// For the size of this child's children list, add its parent coordinate to the 

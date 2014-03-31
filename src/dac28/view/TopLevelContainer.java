@@ -144,13 +144,13 @@ public class TopLevelContainer {
 							
 							Object[] warningOptions = {"Yes","Back"};
 
-							int blankNodeResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+							int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
 									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
 									"Application Warning",JOptionPane.YES_OPTION,
 									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
 
 
-							if(blankNodeResult == JOptionPane.OK_OPTION) {
+							if(warningResult == JOptionPane.OK_OPTION) {
 								validInput = true;
 							}
 
@@ -279,13 +279,13 @@ public class TopLevelContainer {
 							
 							Object[] warningOptions = {"Yes","Back"};
 
-							int blankNodeResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+							int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
 									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
 									"Application Warning",JOptionPane.YES_OPTION,
 									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
 
 
-							if(blankNodeResult == JOptionPane.OK_OPTION) {
+							if(warningResult == JOptionPane.OK_OPTION) {
 								validInput = true;
 							}
 
