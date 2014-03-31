@@ -60,6 +60,14 @@ public class CreateController {
 	 * List of the path input text fields.
 	 */
 	protected List<JTextField> pathValues;
+	/**
+	 * The width of the controller.
+	 */
+	protected final int WIDTH = 400;
+	/**
+	 * The height of the controller.
+	 */
+	protected final int HEIGHT = 500;
 
 	/**
 	 * Initialises the radio buttons and goal field.
@@ -111,11 +119,6 @@ public class CreateController {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-
-		// width of the window
-		final int WIDTH = 400;
-		// height of the window
-		final int HEIGHT = 500;
 
 		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
@@ -205,22 +208,6 @@ public class CreateController {
 			}
 		});
 
-		// Adds the search choices and label
-		JPanel searchChoices = new JPanel();
-		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
-		searchChoices.add(new JLabel("Select Search Algorithm: ",JLabel.RIGHT));
-		searchChoices.add(algorithmOptions);
-		algorithmOptions.setSelectedIndex(0);
-		// Call repaint on the tree if uniform cost search is chosen (to add path cost inputs)
-		algorithmOptions.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(algorithmOptions.getSelectedIndex() == Arrays.asList(ALGORITHMS).indexOf("UniformCostSearch")) {
-					treeDiagram.repaint();
-				}
-			}
-		});
-
 		// Tree drawing panel
 		treeDiagram = new TreeDiagram();
 		treeDiagram.setLayout(null);
@@ -231,12 +218,44 @@ public class CreateController {
 		// Add panels onto main panel and returns it
 		panel.add(goalChoice);
 		panel.add(treeChoices);
-		panel.add(searchChoices);
+		panel.add(addSearchChoices());
 		panel.add(treeDiagram);
 		panel.add(nodeNamesPanel);
 
 		return panel;
 
+	}
+
+	/**
+	 * Returns a panel with a combo box of all the search algorithms.
+	 * Controllers that use multiple searches should override this method
+	 * and return a panel with all the search options.
+	 * 
+	 * @return a panel with the search combo boxes
+	 */
+	protected JPanel addSearchChoices() {
+
+		// Adds the search choices and label
+		JPanel searchChoices = new JPanel();
+		searchChoices.setPreferredSize(new Dimension(WIDTH/4,HEIGHT/12));
+		searchChoices.add(new JLabel("Select Search Algorithm: ",JLabel.RIGHT));
+		searchChoices.add(algorithmOptions);
+		algorithmOptions.setSelectedIndex(0);
+		// Call repaint on the tree if uniform cost search is chosen (to add path cost inputs)
+		algorithmOptions.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(algorithmOptions.getSelectedIndex() != Arrays.asList(ALGORITHMS).indexOf("UniformCostSearch")) {
+					// Clear any path values
+					pathValues.clear();
+					// Remove text fields from tree diagram
+					treeDiagram.removeAll();
+				}
+				treeDiagram.repaint();
+			}
+		});
+
+		return searchChoices;
 	}
 
 	/**
@@ -312,13 +331,17 @@ public class CreateController {
 		return values;
 	}
 
+	protected boolean usingUniformCostSearch() {
+		return algorithmOptions.getSelectedItem().equals("UniformCostSearch");
+	}
+
 	/**
 	 * Panel that draws a visualisation for the trees.
 	 * 
 	 * @author Dan Cornwell
 	 * 
 	 */
-	private class TreeDiagram extends JPanel {
+	class TreeDiagram extends JPanel {
 
 
 		/**
@@ -465,7 +488,7 @@ public class CreateController {
 							lineCoords.put(childCoord, parentCoord);
 
 							// If we are using uniform cost search then add text field allowing path cost
-							if(algorithmOptions.getSelectedItem().equals("UniformCostSearch")) {
+							if(usingUniformCostSearch()) {
 								if(isPathValuesEmpty) {
 									JTextField lineValue = new JTextField("1");
 									lineValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
