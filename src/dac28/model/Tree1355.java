@@ -67,7 +67,9 @@ class Tree1355 extends Tree {
 	@Override
 	void construct(Queue<String> values) {
 	
-		if(values.size() < 13) return;
+		while(values.size() < 13) {
+			values.add("Node");
+		}
 		
 		// Create nodes
 		Node one = new Node(values.poll());

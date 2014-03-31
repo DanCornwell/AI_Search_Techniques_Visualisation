@@ -50,6 +50,10 @@ class Tree112111 extends Tree {
 	@Override
 	void construct(Queue<String> values) {
 
+		while(values.size() < 6) {
+			values.add("Node");
+		}
+		
 		Node one = new Node(values.poll());
 		Node two = new Node(values.poll());
 		Node three = new Node(values.poll());

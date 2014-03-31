@@ -24,7 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-
 import dac28.model.Node;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
@@ -137,12 +136,24 @@ public class CreateController {
 		alpha.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-				int index = 0;
+
+				int index = 1;
 				for(JTextField field: nodeValues) {
-					field.setText(String.valueOf(alphabet[index++]).toUpperCase());
-					// avoid null pointer by reseting the index
-					if(index==alphabet.length-1) index = 0;
+
+					// Iterates through the alphabet, such that the values are
+					// A,B,...,Z,AA,AB,...AZ,BA etc...
+					String value = "";					
+					if (index<27){
+						value += Character.toString((char)(index+96));
+					} else {
+						if (index%26==0) {
+							value += (Character.toString((char) ((index/26)-1+96))+Character.toString((char)((index%26)+1+96)));
+						} else {
+							value += (Character.toString((char) ((index/26)+96))+Character.toString((char)((index%26)+96)));
+						}
+					}
+					field.setText(String.valueOf(value).toUpperCase());
+					index++;
 					field.setEditable(false);
 				}			
 			}
@@ -502,4 +513,5 @@ public class CreateController {
 		}
 
 	}
+
 }
