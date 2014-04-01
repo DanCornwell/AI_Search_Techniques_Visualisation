@@ -95,98 +95,23 @@ public class TopLevelContainer {
 		menuBar.setBackground(new Color(154, 165, 127));
 		menuBar.setPreferredSize(new Dimension(width, 30));
 		JMenu file = new JMenu("File");
+
 		newSearch = new JMenuItem("New Search...");
+		// Add an action listener to the single search menu item
+		// Calls the method to display the input dialog and get the chosen tree, then does
+		// single specific methods
 		newSearch.addActionListener(new ActionListener(){
 			// New search, creates a controller and takes a user input for the goal node and their choices
 			// for the tree and algorithm. Loops if input is invalid.
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Object[] options = {"Confirm", "Cancel"};
 
 				CreateController controller = new CreateController();
 
-				// boolean used to loop the controller on invalid input
-				boolean validInput = false;
+				displayUserInputDialog(controller);
 
-				JPanel dialog = controller.getCreateDialog();
-
-				while(!validInput) {
-
-					int result = JOptionPane.showOptionDialog(null, dialog, 
-							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-					List<String> warnings = new LinkedList<String>();
-					if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
-					if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
-					if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
-
-					for(String value: controller.getPathValues()) {
-
-						try {
-							Integer.parseInt(value); 
-						}
-						catch(NumberFormatException numberError) {
-							warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
-							break;
-						}
-					}
-
-					if(result == JOptionPane.OK_OPTION) {
-
-						// If warnings exist display them and let user decide whether to continue or not
-						if(!warnings.isEmpty()) {
-
-							String warningString = "";
-							for(String s: warnings) {
-								warningString+=(s+"\n");
-
-							}
-							
-							Object[] warningOptions = {"Yes","Back"};
-
-							int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
-									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
-									"Application Warning",JOptionPane.YES_OPTION,
-									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
-
-
-							if(warningResult == JOptionPane.OK_OPTION) {
-								validInput = true;
-							}
-
-						}
-						else validInput = true;
-					}
-
-					else {
-						return;
-					}
-
-				}
-
-				// Create a tree and algorithm with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
-				//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
-				if(tree==null) {
-					Object[] ok = {"Ok"};
-					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
-							" or did not extend the tree class.", 
-							"Goal Value Error",JOptionPane.YES_OPTION,
-							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-					return;
-				}
-
-				// Get the path costs from the user input, then set the tree with it
-				Queue<Integer> costs = new LinkedList<Integer>();
-				for(String s: controller.getPathValues()) {
-					try {
-						costs.add(Integer.parseInt(s));
-					}
-					catch(NumberFormatException numberError) {
-						costs.add(1);
-					}
-				}
-				tree.setPathCosts(costs);
+				Tree tree = getUserInputTreeChoice(controller);
+				if(tree==null) return;
 
 				// Get the algorithm from the user input
 				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
@@ -231,91 +156,21 @@ public class TopLevelContainer {
 			}
 		});
 		newDualSearch = new JMenuItem("New Dual Search...");
+		// Add an action listener to the dual search menu item
+		// Calls the method to display the input dialog and get the chosen tree, then does
+		// dual specific methods
 		newDualSearch.addActionListener(new ActionListener(){
 			// Dual search. Works similar to the single search except creates an algorithm display either side of
 			// the tree and provides a tree display that allows 2 algorithm to work on it.
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Object[] options = {"Confirm", "Cancel"};
 
 				DualCreateController controller = new DualCreateController();
 
-				// boolean used to loop the controller on invalid input
-				boolean validInput = false;
+				displayUserInputDialog(controller);
 
-				JPanel dialog = controller.getCreateDialog();
-
-				while(!validInput) {
-
-					int result = JOptionPane.showOptionDialog(null, dialog, 
-							"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-					List<String> warnings = new LinkedList<String>();
-					if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
-					if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
-					if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
-
-					for(String value: controller.getPathValues()) {
-
-						try {
-							Integer.parseInt(value); 
-						}
-						catch(NumberFormatException numberError) {
-							warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
-							break;
-						}
-					}
-
-					if(result == JOptionPane.OK_OPTION) {
-
-						// If warnings exist display them and let user decide whether to continue or not
-						if(!warnings.isEmpty()) {
-
-							String warningString = "";
-							for(String s: warnings) {
-								warningString+=(s+"\n");
-
-							}
-							
-							Object[] warningOptions = {"Yes","Back"};
-
-							int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
-									"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
-									"Application Warning",JOptionPane.YES_OPTION,
-									JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
-
-
-							if(warningResult == JOptionPane.OK_OPTION) {
-								validInput = true;
-							}
-
-						}
-						else validInput = true;
-					}
-
-					else {
-						return;
-					}
-
-				}
-
-				// Create a tree and 2 algorithms with the user supplied information. Return if null.
-				Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
-				if(tree==null) {
-					Object[] ok = {"Ok"};
-					JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
-							" or did not extend the tree class.", 
-							"Goal Value Error",JOptionPane.YES_OPTION,
-							JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
-					return;
-				}
-
-				// Get the path costs from the user input, then set the tree with it
-				Queue<Integer> costs = new LinkedList<Integer>();
-				for(String s: controller.getPathValues()) {
-					costs.add(Integer.parseInt(s));
-				}
-				tree.setPathCosts(costs);
+				Tree tree = getUserInputTreeChoice(controller);
+				if(tree==null) return;
 
 				// Get the first algorithm from the user input		
 				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
@@ -426,6 +281,110 @@ public class TopLevelContainer {
 		initialiseSingleDisplay();
 	}
 
+	/**
+	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
+	 * 
+	 * @param controller - the create controller that will specify which dialog to show
+	 */
+	private void displayUserInputDialog(CreateController controller) {
+
+		Object[] options = {"Confirm", "Cancel"};
+
+		// boolean used to loop the controller on invalid input
+		boolean validInput = false;
+
+		JPanel dialog = controller.getCreateDialog();
+
+		while(!validInput) {
+
+			int result = JOptionPane.showOptionDialog(null, dialog, 
+					"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+			List<String> warnings = new LinkedList<String>();
+			if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
+			if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
+			if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
+
+			for(String value: controller.getPathValues()) {
+
+				try {
+					Integer.parseInt(value); 
+				}
+				catch(NumberFormatException numberError) {
+					warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
+					break;
+				}
+			}
+
+			if(result == JOptionPane.OK_OPTION) {
+
+				// If warnings exist display them and let user decide whether to continue or not
+				if(!warnings.isEmpty()) {
+
+					String warningString = "";
+					for(String s: warnings) {
+						warningString+=(s+"\n");
+
+					}
+
+					Object[] warningOptions = {"Yes","Back"};
+
+					int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+							"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
+							"Application Warning",JOptionPane.YES_OPTION,
+							JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
+
+
+					if(warningResult == JOptionPane.OK_OPTION) {
+						validInput = true;
+					}
+
+				}
+				else validInput = true;
+			}
+
+			else {
+				return;
+			}
+
+		}
+
+	}
+
+	/**
+	 * Returns the user's choice of tree. If the tree could not be found null is returned.
+	 * 
+	 * @param controller - the create controller with the user's tree choice
+	 * @return a search tree if it exists, null if it doesn't
+	 */
+	private Tree getUserInputTreeChoice(CreateController controller) {
+
+		// Create a tree and algorithm with the user supplied information. Return if null.
+		Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
+		//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
+		if(tree==null) {
+			Object[] ok = {"Ok"};
+			JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +
+					" or did not extend the tree class.", 
+					"Goal Value Error",JOptionPane.YES_OPTION,
+					JOptionPane.ERROR_MESSAGE, null, ok, ok[0]);
+			return null;
+		}
+
+		// Get the path costs from the user input, then set the tree with it
+		Queue<Integer> costs = new LinkedList<Integer>();
+		for(String s: controller.getPathValues()) {
+			try {
+				costs.add(Integer.parseInt(s));
+			}
+			catch(NumberFormatException numberError) {
+				costs.add(1);
+			}
+		}
+		tree.setPathCosts(costs);
+
+		return tree;
+	}
 
 	/**
 	 * Initialises the graphical user interface for a single search.

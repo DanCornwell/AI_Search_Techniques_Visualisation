@@ -55,7 +55,9 @@ public class TreeDisplay {
 	 * Colour of the current node in the tree display.
 	 */
 	protected Color currentNode;
-	
+	/**
+	 * Counter to draw one off tree on startup.
+	 */
 	protected int count = 0;
 	
 	/**
@@ -94,13 +96,22 @@ public class TreeDisplay {
 		treePanel.repaint();
 	}
 
-	
+	/**
+	 * Sets the algorithms the tree is using. 
+	 * Subclasses should check the supplied list for the right number of algorithms.
+	 * 
+	 * @param searchAlgorithms - array of search algorithms
+	 */
 	public void setAlgorithm(SearchAlgorithm[] searchAlgorithms) {
 		if(searchAlgorithms.length < 1) return;
 		this.searchAlgorithm = searchAlgorithms[0];
 	}
 
-	
+	/**
+	 * Sets the colours the tree uses.
+	 * 
+	 * @param colors - array of colours
+	 */
 	public void setCurrentNodeColor(Color[] colors) {
 		if(colors.length < 1) return;
 		this.currentNode = colors[0];
