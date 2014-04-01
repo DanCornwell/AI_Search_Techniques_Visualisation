@@ -2,12 +2,14 @@ package dac28.view;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * A class used for displaying the algorithm display when a stack is used. Extends algorithmDisplay.
@@ -28,6 +30,8 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		// the width and height are chosen so that the holding JPanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-50;
 		final int panelHeight = (HEIGHT-40)/6;
+		// The max number of nodes the tree has
+		final int MAX_NUMBER_NODES = 30;
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth+50,panelHeight-20);
 		titlePanel.add(title);
@@ -39,9 +43,9 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		p1.add(visitedLabel);
 
 		// Panel 2 - holds the expanded list
-		JPanel p2 = getHoldingPanel(50,HEIGHT-100);
+		JPanel p2 = getHoldingPanel(BOX_SIZE.width+5,BOX_SIZE.height*MAX_NUMBER_NODES);
 		p2.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
-		for(int i=0;i<10;i++) {
+		for(int i=0;i<MAX_NUMBER_NODES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -53,9 +57,9 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		// Reverse list to give the 'stack' effect
 		Collections.reverse(expandedList);
 		// Panel 3 - holds the visited list
-		JPanel p3 = getHoldingPanel(panelWidth-10,panelHeight+BOX_SIZE.height);
-		p3.setLayout(new FlowLayout(FlowLayout.LEFT,0,10));
-		for(int i=0;i<18;i++) {
+		JPanel p3 = getHoldingPanel(BOX_SIZE.width*MAX_NUMBER_NODES,BOX_SIZE.height+5);
+		p3.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
+		for(int i=0;i<MAX_NUMBER_NODES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -90,13 +94,24 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 
 		// Create a left and right panel allow stack to appear horizontally
 		JPanel left = new JPanel();
-		left.setPreferredSize(new Dimension(60,HEIGHT));
+		left.setPreferredSize(new Dimension(80,HEIGHT));
 		JPanel right = new JPanel();
-		right.setPreferredSize(new Dimension(WIDTH-60,HEIGHT));
+		right.setPreferredSize(new Dimension(WIDTH-80,HEIGHT));
 
+		// Add the visited list to a scroll pane and add that scroll pane
+		JScrollPane p2Scroller = new JScrollPane(p2);
+		p2Scroller.setBorder(null);
+		p2Scroller.setHorizontalScrollBarPolicy((JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		p2Scroller.setPreferredSize(new Dimension(BOX_SIZE.width+30,HEIGHT-200));
+		p2.scrollRectToVisible(new Rectangle(0,BOX_SIZE.height*MAX_NUMBER_NODES,10,10));
 		// Add holding panels to the left and right
-		left.add(p2);
-		right.add(p3);		
+		left.add(p2Scroller);
+		// Add the visited list to a scroll pane and add that scroll pane
+		JScrollPane p3Scroller = new JScrollPane(p3);
+		p3Scroller.setBorder(null);
+		p3Scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		p3Scroller.setPreferredSize(new Dimension(panelWidth-50,panelHeight-10));
+		right.add(p3Scroller);
 		right.add(p4);
 		right.add(p5);
 		right.add(p6);

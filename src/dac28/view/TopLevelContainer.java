@@ -108,8 +108,8 @@ public class TopLevelContainer {
 
 				CreateController controller = new CreateController();
 
-				displayUserInputDialog(controller);
-
+				if(!displayUserInputDialog(controller)) return;
+				
 				Tree tree = getUserInputTreeChoice(controller);
 				if(tree==null) return;
 
@@ -167,7 +167,7 @@ public class TopLevelContainer {
 
 				DualCreateController controller = new DualCreateController();
 
-				displayUserInputDialog(controller);
+				if(!displayUserInputDialog(controller)) return;
 
 				Tree tree = getUserInputTreeChoice(controller);
 				if(tree==null) return;
@@ -285,8 +285,9 @@ public class TopLevelContainer {
 	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
 	 * 
 	 * @param controller - the create controller that will specify which dialog to show
+	 * @return true if user clicks ok with valid input, false if they hit cancel
 	 */
-	private void displayUserInputDialog(CreateController controller) {
+	private boolean displayUserInputDialog(CreateController controller) {
 
 		Object[] options = {"Confirm", "Cancel"};
 
@@ -344,11 +345,11 @@ public class TopLevelContainer {
 			}
 
 			else {
-				return;
+				return false;
 			}
 
 		}
-
+		return true;
 	}
 
 	/**
@@ -361,7 +362,7 @@ public class TopLevelContainer {
 
 		// Create a tree and algorithm with the user supplied information. Return if null.
 		Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
-		//Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), goal);
+
 		if(tree==null) {
 			Object[] ok = {"Ok"};
 			JOptionPane.showOptionDialog(null,"The selected tree was not found in the dac28.model package" +

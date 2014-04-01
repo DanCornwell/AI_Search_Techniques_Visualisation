@@ -13,6 +13,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * Class used to display the algorithm details.
@@ -135,6 +136,8 @@ public class AlgorithmDisplay {
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-20;
 		final int panelHeight = (HEIGHT-20)/8;
+		// The max number of nodes the tree has
+		final int MAX_NUMBER_NODES = 30;
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
@@ -144,9 +147,9 @@ public class AlgorithmDisplay {
 		p1.add(expandedLabel);
 
 		// Panel 2 - holds the expanded list
-		JPanel p2 = getHoldingPanel(panelWidth,panelHeight+(BOX_SIZE.height)/2);
-		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-		for(int i=0;i<10;i++) {
+		JPanel p2 = getHoldingPanel(BOX_SIZE.width*MAX_NUMBER_NODES,BOX_SIZE.height+5);
+		p2.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
+		for(int i=0;i<MAX_NUMBER_NODES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -160,9 +163,9 @@ public class AlgorithmDisplay {
 		p3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p3.add(visitedLabel);
 		// Panel 4 - holds the visited list
-		JPanel p4 = getHoldingPanel(panelWidth,panelHeight+(BOX_SIZE.height)/2);
-		p4.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-		for(int i=0;i<10;i++) {
+		JPanel p4 = getHoldingPanel(BOX_SIZE.width*MAX_NUMBER_NODES,BOX_SIZE.height+5);
+		p4.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
+		for(int i=0;i<MAX_NUMBER_NODES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -199,9 +202,20 @@ public class AlgorithmDisplay {
 		// Add the holding panels to the algorithm panel
 		algorithmPanel.add(titlePanel);
 		algorithmPanel.add(p1);
-		algorithmPanel.add(p2);
+		// Add the expanded list to a scroll pane and add that scroll pane
+		JScrollPane p2Scroller = new JScrollPane(p2);
+		p2Scroller.setBorder(null);
+		p2Scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		p2Scroller.setPreferredSize(new Dimension(panelWidth,panelHeight));
+		algorithmPanel.add(p2Scroller);
 		algorithmPanel.add(p3);
 		algorithmPanel.add(p4);
+		// Add the visited list to a scroll pane and add that scroll pane
+		JScrollPane p4Scroller = new JScrollPane(p4);
+		p4Scroller.setBorder(null);
+		p4Scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		p4Scroller.setPreferredSize(new Dimension(panelWidth,panelHeight));
+		algorithmPanel.add(p4Scroller);
 		algorithmPanel.add(p5);
 		algorithmPanel.add(p6);
 		algorithmPanel.add(p7);
@@ -492,7 +506,7 @@ public class AlgorithmDisplay {
 			label.setBackground(DEFAULT);
 		}
 	}
-	
+
 	/**
 	 * Sets the title label
 	 * 
@@ -501,7 +515,7 @@ public class AlgorithmDisplay {
 	void setTitleLabel(String title) {
 		this.title.setText(title);
 	}
-	
+
 	/**
 	 * Sets the iteration label
 	 * 
@@ -510,7 +524,7 @@ public class AlgorithmDisplay {
 	public void setIterationLabel(int number) {
 		this.iterationNumber.setText(String.valueOf(number));
 	}
-	
+
 	/**
 	 * Sets the expanded list size label
 	 * 
@@ -519,7 +533,7 @@ public class AlgorithmDisplay {
 	public void setMaxExpandedSizeLabel(int number) {
 		this.expandedListSize.setText(String.valueOf(number));
 	}
-	
+
 	/**
 	 * Sets the current node colour for this display.
 	 * 
