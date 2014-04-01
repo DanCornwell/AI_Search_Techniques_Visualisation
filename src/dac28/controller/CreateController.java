@@ -331,6 +331,13 @@ public class CreateController {
 		return values;
 	}
 
+	/**
+	 * Returns whether uniform cost search is selected.
+	 * Controllers with multiple algorithms should check each algorithm
+	 * with or operators.
+	 * 
+	 * @return true if an algorithm has selected uniform cost search, false otherwise
+	 */
 	protected boolean usingUniformCostSearch() {
 		return algorithmOptions.getSelectedItem().equals("UniformCostSearch");
 	}
@@ -341,7 +348,7 @@ public class CreateController {
 	 * @author Dan Cornwell
 	 * 
 	 */
-	class TreeDiagram extends JPanel {
+	private class TreeDiagram extends JPanel {
 
 
 		/**

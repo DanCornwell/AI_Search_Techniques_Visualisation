@@ -467,7 +467,7 @@ public class TopLevelContainer {
 	private void addDisplays() {
 
 		base.getContentPane().removeAll();
-		treeDisplay = new TreeDisplaySingleAlgorithm();
+		treeDisplay = new TreeDisplay();
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,height-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 
