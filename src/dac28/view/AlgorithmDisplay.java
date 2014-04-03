@@ -74,7 +74,7 @@ public class AlgorithmDisplay {
 	protected final Dimension BOX_SIZE = new Dimension(30,30);
 
 	protected JPanel expandedPanel, visitedPanel;
-	
+
 	protected JScrollPane expandedScroller, visitedScroller;
 
 	public AlgorithmDisplay() {
@@ -167,7 +167,7 @@ public class AlgorithmDisplay {
 		JPanel p3 = getHoldingPanel(panelWidth,panelHeight-30);
 		p3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		p3.add(visitedLabel);
-		
+
 		// Visited panel (Panel 4) - holds the visited list
 		visitedPanel = getHoldingPanel(BOX_SIZE.width*11,BOX_SIZE.height+5);
 		visitedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
@@ -180,7 +180,7 @@ public class AlgorithmDisplay {
 			visitedList.add(label);
 			visitedPanel.add(label);
 		}
-		
+
 		// Panel 5 - holds the current node labels and at goal labels
 		JPanel p5 = getHoldingPanel(panelWidth,panelHeight-20);
 		p5.add(currentNodeLabel);
@@ -423,15 +423,45 @@ public class AlgorithmDisplay {
 		if(!expandedMementos.isEmpty() && !visitedMementos.isEmpty()) {
 			// Restore expanded list to its most recent memento
 			LinkedList<ListElementMemento> eMemento = expandedMementos.pop();
-			for(int i=0;i<expandedList.size();i++) {
-				expandedList.get(i).setBackground(eMemento.get(i).COLOR);
-				expandedList.get(i).setText(eMemento.get(i).VALUE);
+			// If the memento size is bigger or equal to the list set list elements to memento elements
+			if(expandedList.size() <= eMemento.size()) {
+				for(int i=0;i<expandedList.size();i++) {
+					expandedList.get(i).setBackground(eMemento.get(i).COLOR);
+					expandedList.get(i).setText(eMemento.get(i).VALUE);
+				}
+			}
+			// Memento size is smaller than the list, so set the list elements to memento elements and make remaining 
+			// list elements blank
+			else {
+				for(int i=0;i<eMemento.size();i++) {
+					expandedList.get(i).setBackground(eMemento.get(i).COLOR);
+					expandedList.get(i).setText(eMemento.get(i).VALUE);
+				}
+				for(int j=eMemento.size();j<expandedList.size();j++) {
+					expandedList.get(j).setBackground(DEFAULT);
+					expandedList.get(j).setText("");
+				}
 			}
 			// Restore visited list to its most recent memento
 			LinkedList<ListElementMemento> vMemento = visitedMementos.pop();
-			for(int i=0;i<visitedList.size();i++) {
-				visitedList.get(i).setBackground(vMemento.get(i).COLOR);
-				visitedList.get(i).setText(vMemento.get(i).VALUE);
+			// If the memento size is bigger or equal to the list set list elements to memento elements
+			if(visitedList.size() <= vMemento.size()) {
+				for(int i=0;i<visitedList.size();i++) {
+					visitedList.get(i).setBackground(vMemento.get(i).COLOR);
+					visitedList.get(i).setText(vMemento.get(i).VALUE);
+				}
+			}
+			// Memento size is smaller than the list, so set the list elements to memento elements and make remaining 
+			// list elements blank
+			else {
+				for(int i=0;i<vMemento.size();i++) {
+					visitedList.get(i).setBackground(vMemento.get(i).COLOR);
+					visitedList.get(i).setText(vMemento.get(i).VALUE);
+				}
+				for(int j=vMemento.size();j<visitedList.size();j++) {
+					visitedList.get(j).setBackground(DEFAULT);
+					visitedList.get(j).setText("");
+				}
 			}
 		}
 	}
@@ -443,7 +473,7 @@ public class AlgorithmDisplay {
 	 * @param visitedValues - new values for the visited list
 	 */
 	public void setLabelValues(List<String> expandedValues, LinkedList<String> visitedValues) {
-		
+
 		// If there are more expanded values than labels, create more expanded labels
 		while(expandedValues.size() > expandedList.size()) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -456,7 +486,7 @@ public class AlgorithmDisplay {
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
 			expandedScroller.setViewportView(expandedPanel);
 		}
-		
+
 		// If there are more visited values than labels, create more visited labels
 		while(visitedValues.size() > visitedList.size()) {
 			JLabel label = new JLabel("",JLabel.CENTER);
@@ -470,7 +500,7 @@ public class AlgorithmDisplay {
 			visitedScroller.setViewportView(visitedPanel);
 			visitedPanel.scrollRectToVisible(new Rectangle(visitedList.size()*BOX_SIZE.width,0,1,1));
 		}
-		
+
 		// Reset the list labels
 		resetLabels();
 

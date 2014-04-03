@@ -46,10 +46,12 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		setup();
 
 	}
-	
+		
 	@Override
 	protected void algorithmLogic() {
 
+		if(expanded.contains(ROOT) && expanded.size()==1) visited.clear();
+		
 		currentNode = ((Stack<Node>) expanded).pop();
 		if(atGoal()) {
 			// Goal reached so stop
@@ -73,7 +75,6 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 			iteration++;
 			((Stack<Node>) expanded).push(ROOT);
 		}
-		
 
 	}
 
