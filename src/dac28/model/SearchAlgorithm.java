@@ -109,7 +109,7 @@ public abstract class SearchAlgorithm {
 		visited.clear();
 		expanded.clear();
 		currentNode = ROOT;
-		expanded.add(currentNode);
+		expanded.add(ROOT);
 		mementos.clear();
 	}
 
