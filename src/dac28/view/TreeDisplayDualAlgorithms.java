@@ -3,6 +3,7 @@ package dac28.view;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 
 /**
@@ -39,13 +40,22 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 	}
 
 	@Override
-	protected void drawTreeBox(String value,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
+	protected void drawTreeBox(Node node,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
+	
+		String value = node.getValue();
+		
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
 		if(count==0) {
 			g.setColor(boxColour);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}
+		// If the node is the last node in the visited list i.e the current node 
+		else if(!searchAlgorithm.getVisited().isEmpty() && searchAlgorithm.getVisited().getLast() == node) {
+			boxColour = currentNode;
+		}
+		
+		
 		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
 
 			g.setColor(currentNode);

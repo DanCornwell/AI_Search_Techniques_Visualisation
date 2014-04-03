@@ -60,6 +60,8 @@ public class TreeDisplay {
 	 */
 	protected int count = 0;
 	
+	protected boolean drawnCurrentNode = false;
+
 	/**
 	 * Initialises a tree panel instance.
 	 * 
@@ -79,7 +81,7 @@ public class TreeDisplay {
 
 		return treePanel;
 	}
-	
+
 	/**
 	 * Sets the tree.
 	 * 
@@ -93,6 +95,7 @@ public class TreeDisplay {
 	 * Repaints the tree panel.
 	 */
 	public void drawTree() {
+		drawnCurrentNode = false;
 		treePanel.repaint();
 	}
 
@@ -116,31 +119,43 @@ public class TreeDisplay {
 		if(colors.length < 1) return;
 		this.currentNode = colors[0];
 	}
-	
+
 	/**
 	 * Draws the boxes in the trees. Calls the tree panel's fillBox method to set the background
 	 * for the box.
 	 * 
-	 * @param value - the string value of the box
+	 * @param Node - the node to draw
 	 * @param g - the tree's graphics
 	 * @param xPos - the x coordinate of the box (top left)
 	 * @param yPos - the y coordinate of the box (top left)
 	 * @param boxWidth - the width to draw the box
 	 * @param boxHeight - the height to draw the box
 	 */
-	protected void drawTreeBox(String value,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
-	
+	protected void drawTreeBox(Node node,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
+
+		String value = node.getValue();
+		
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && count!=0) boxColour = currentNode;
-		
+		// If the node is the last node in the visited list i.e the current node 
+		if(!searchAlgorithm.getVisited().isEmpty() && searchAlgorithm.getVisited().getLast().equals(node) 
+				&& value.equals(searchAlgorithm.getCurrentNode().getValue())) {
+			boxColour = currentNode;
+			drawnCurrentNode = true;
+
+		}
+		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(tree.getGoal()) && !drawnCurrentNode) {
+			boxColour = currentNode;
+			drawnCurrentNode = true;
+		}
+
 		g.setColor(boxColour);
 		treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
-		
+
 		g.drawRect(xPos, yPos, boxWidth, boxHeight);
 		g.drawString(value, xPos+(boxWidth/2), yPos+(boxHeight/2));
 	}
-	
+
 	/**
 	 * Single tree panel class, a subclass of tree panel.
 	 * Defines the drawTree method for a tree with a single algorithm.
@@ -162,15 +177,15 @@ public class TreeDisplay {
 			super.paintComponent(g);
 			drawTree(g);
 		}
-		
+
 		void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
-			
+
 			g.fillRect(xPos+1, yPos+1, boxWidth-1, boxHeight-1);
-			
+
 			g.setColor(DEFAULT);
 
 		}
-		
+
 		public void drawTree(Graphics g) {
 
 			// If we have no tree or algorithm return.
@@ -187,7 +202,7 @@ public class TreeDisplay {
 			final int TREE_DEPTH = tree.getTreeDepth();
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
-
+			
 			// The font size
 			int fontSize = 12;
 
@@ -210,9 +225,10 @@ public class TreeDisplay {
 			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
+			//	final int ROOT_Y_POS = 40;
 
-			drawTreeBox(tree.getRoot().getValue(),g,ROOT_X_POS,ROOT_Y_POS,boxsize,boxsize);
-			
+			drawTreeBox(tree.getRoot(),g,ROOT_X_POS,ROOT_Y_POS,boxsize,boxsize);
+
 			// The line connection point of the root node. This will be the bottom centre of the box.
 			Point rootPoint = new Point(ROOT_X_POS+(boxsize/2),ROOT_Y_POS+boxsize);
 
@@ -230,10 +246,10 @@ public class TreeDisplay {
 
 			// Integer representing the node level we are on. Root is considered to be level 0.
 			int nodeLevel = 1;
-		
+
 			// Queue containing the path costs for the tree. If this is empty no path costs will be drawn.
 			Queue<Integer> costs = tree.getPathCosts();
-			
+
 			// While elements exist within parents list.
 			while(!parents.isEmpty()) {
 
@@ -255,10 +271,11 @@ public class TreeDisplay {
 						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
+						//	int yPos = ROOT_Y_POS+(nodeLevel*boxsize*2);
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
-						
-						drawTreeBox(children.get(i).getValue(),g,xPos,yPos,boxsize,boxsize);
-						
+
+						drawTreeBox(children.get(i),g,xPos,yPos,boxsize,boxsize);
+
 						// The child line connection point. This will be the top middle of the box.
 						Point childCoord = new Point(xPos+(boxsize/2),yPos);
 
@@ -266,19 +283,19 @@ public class TreeDisplay {
 						if(!parentCoords.isEmpty()) {
 							// Get the first parent coordinate.
 							Point parentCoord = parentCoords.remove();
-							
+
 							// Add this coordinate with the child's coordinate to the line coordinates HashMap.
 							// Note that childCoord is the key, since a parent can have many children but
 							// a child can only have one parent.
 							lineCoords.put(childCoord, parentCoord);
-							
+
 							// If path costs exist then display them on the lines
 							if(!costs.isEmpty()) {
 								int value = 1;
 								if(costs.peek()!=null) value = costs.poll();
 								g.drawString(String.valueOf(value),10+(childCoord.x+parentCoord.x)/2, 5+(childCoord.y+parentCoord.y)/2);
 							}	
-							
+
 							// For the size of this child's children list, add its parent coordinate to the 
 							// parent coordinates list.
 							for(int j=0;j<children.get(i).getChildren().size();j++) {
@@ -310,5 +327,5 @@ public class TreeDisplay {
 		}
 
 	}
-	
+
 }

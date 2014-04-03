@@ -1,7 +1,5 @@
 package dac28.model;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -60,27 +58,21 @@ class UniformCostSearch extends SearchAlgorithm {
 				}
 			}
 		}
-		Collections.sort(expanded, new Comparator<Node>() {
-
-			@Override
-			public int compare(Node x, Node y) {
-				if( pathCosts.get(x) == null || pathCosts.get(y) == null ) return 0;
-				
-				if( pathCosts.get(x) < pathCosts.get(y)) return -1;
-				else return 1;
-			}
-		});
-		/*
 		Node nextNodeToExpanded = null;
 		int cost = Integer.valueOf(Integer.MAX_VALUE);
-		for(Entry<Node, Integer> pathCost: pathCosts.entrySet()) {
-			if(pathCost.getValue() < cost) nextNodeToExpanded = pathCost.getKey();
+		for(Node node: expanded) {
+			
+			if(pathCosts.get(node) < cost) {
+				nextNodeToExpanded = node;
+				cost = pathCosts.get(node);
+			}
+			
 		}
 		if(nextNodeToExpanded!=null) {
 			expanded.remove(nextNodeToExpanded);
 			expanded.add(0, nextNodeToExpanded);
 		}
-		*/
+		
 	}
 
 	@Override

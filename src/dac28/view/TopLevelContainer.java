@@ -20,6 +20,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import dac28.controller.AlgorithmController;
@@ -274,6 +276,9 @@ public class TopLevelContainer {
 		// Assign stuff onto the base frame
 		base.setJMenuBar(menuBar);
 
+		// Make UI use the custom scroll bar in JScrollPanes
+		UIManager.put("ScrollBarUI", "dac28.view.CustomScrollBar");
+		
 		// Set algorithmDisplay here so we can draw a blank algorithmDisplay
 		algorithmDisplay = new AlgorithmDisplay();
 
@@ -428,7 +433,12 @@ public class TopLevelContainer {
 
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplay();
-		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2,height-30),BorderLayout.WEST);
+		/*
+		JScrollPane treeScroller = new JScrollPane(treeDisplay.initialiseTreePanel(width/2,height*2));
+		treeScroller.setPreferredSize(new Dimension(width/2,height-30));
+		base.getContentPane().add(treeScroller,BorderLayout.WEST);
+		*/
+		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2, height-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 
 	}
