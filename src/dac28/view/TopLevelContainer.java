@@ -407,8 +407,8 @@ public class TopLevelContainer {
 	 */
 	private void initialiseDualDisplay() {
 
-		width = 1000;
-		height = 600;
+		width = 1050;
+		height = 650;
 		addDualDisplays(); 
 		showBase();
 	}

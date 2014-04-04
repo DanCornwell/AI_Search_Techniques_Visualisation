@@ -146,6 +146,11 @@ public class AlgorithmDisplay {
 		final int panelWidth = (WIDTH)-20;
 		final int panelHeight = (HEIGHT-20)/8;
 
+		// the maximum expanded boxes that can be on screen at one time
+		final int ONSCREEN_EXPANDED_BOXES = 11;
+		// the maximum visited boxes that can be on screen at one time
+		final int ONSCREEN_VISITED_BOXES = 11;
+
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
@@ -155,9 +160,9 @@ public class AlgorithmDisplay {
 		p1.add(expandedLabel);
 
 		// Expanded panel (Panel 2) - holds the expanded list
-		expandedPanel = getHoldingPanel(BOX_SIZE.width*11,BOX_SIZE.height+5);
+		expandedPanel = getHoldingPanel(BOX_SIZE.width*ONSCREEN_EXPANDED_BOXES,BOX_SIZE.height+5);
 		expandedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-		for(int i=0;i<11;i++) {
+		for(int i=0;i<ONSCREEN_EXPANDED_BOXES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -173,9 +178,9 @@ public class AlgorithmDisplay {
 		p3.add(visitedLabel);
 
 		// Visited panel (Panel 4) - holds the visited list
-		visitedPanel = getHoldingPanel(BOX_SIZE.width*11,BOX_SIZE.height+5);
+		visitedPanel = getHoldingPanel(BOX_SIZE.width*ONSCREEN_VISITED_BOXES,BOX_SIZE.height+5);
 		visitedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-		for(int i=0;i<11;i++) {
+		for(int i=0;i<ONSCREEN_VISITED_BOXES;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
