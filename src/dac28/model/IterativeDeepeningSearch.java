@@ -28,6 +28,10 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 	 * The depth of the tree the algorithm is searching.
 	 */
 	private final int TREE_DEPTH;
+	/**
+	 * The size of the previous visited lists.
+	 */
+	private int prevVisitedSize;
 
 	protected IterativeDeepeningSearch(Tree TREE) {
 
@@ -42,13 +46,14 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		TREE_DEPTH = TREE.getTreeDepth()-1;
 		// Set the iteration number to 0 (will iterate over level 0 first)
 		iteration = 0;
+		prevVisitedSize = visited.size();
 		// Adds the nodes to the hash map with their values
 		setup();
 
 	}
 		
 	@Override
-	protected void algorithmLogic() {
+	protected void algorithmStepLogic() {
 
 		if(expanded.contains(ROOT) && expanded.size()==1) visited.clear();
 		
@@ -70,6 +75,8 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 			}
 		}
 
+		prevVisitedSize = visited.size();
+		
 		// if the expanded list is empty and iteration number is smaller than the tree depth (i.e more level to iterate over)
 		if(expanded.isEmpty() && iteration < TREE_DEPTH) {
 			iteration++;
@@ -78,6 +85,19 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 
 	}
 
+	@Override
+	protected void algorithmUndoLogic() {
+		// if visited size is bigger than previous it has moved down an iteration
+		if(visited.size() > prevVisitedSize) iteration--;
+		// else if visited is 0 we are at special case of iteration 1, so set iteration to 0
+		else if(visited.size() == 0) iteration = 0;
+	}
+	
+	@Override
+	protected void algorithmResetLogic() {
+		iteration = 0;
+	}
+	
 	@Override
 	SearchAlgorithm getAlgorithm(Tree tree) {
 		return new IterativeDeepeningSearch(tree);

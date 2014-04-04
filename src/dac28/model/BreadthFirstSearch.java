@@ -31,7 +31,7 @@ class BreadthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected void algorithmLogic() {
+	protected void algorithmStepLogic() {
 		
 		currentNode = ((LinkedList<Node>)expanded).remove();
 		if(atGoal()) {

@@ -43,7 +43,7 @@ class UniformCostSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected void algorithmLogic() {
+	protected void algorithmStepLogic() {
 		
 		currentNode = ((LinkedList<Node>)expanded).remove();
 		if(atGoal()) {
@@ -74,7 +74,7 @@ class UniformCostSearch extends SearchAlgorithm {
 		}
 		
 	}
-
+	
 	@Override
 	SearchAlgorithm getAlgorithm(Tree tree) {
 		return new UniformCostSearch(tree);

@@ -31,7 +31,7 @@ class DepthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected void algorithmLogic() {
+	protected void algorithmStepLogic() {
 
 		currentNode = ((Stack<Node>) expanded).pop();
 		if(atGoal()) {

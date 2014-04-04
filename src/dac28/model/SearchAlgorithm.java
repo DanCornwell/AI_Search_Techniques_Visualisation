@@ -111,6 +111,14 @@ public abstract class SearchAlgorithm {
 		currentNode = ROOT;
 		expanded.add(ROOT);
 		mementos.clear();
+		algorithmResetLogic();
+	}
+	
+	/**
+	 * Method to allow subclasses to define specific actions during the reset method.
+	 * Subclasses that do not need specific actions should not override this method.
+	 */
+	protected void algorithmResetLogic() {
 	}
 
 	/**
@@ -136,7 +144,15 @@ public abstract class SearchAlgorithm {
 				expanded.add(memento.STATE_EXPANDED.get(i));
 			}
 			visited = memento.STATE_VISITED;
+			algorithmUndoLogic();
 		}
+	}
+	
+	/**
+	 * Method to allow subclasses to define specific actions during the undo method.
+	 * Subclasses that do not need specific actions should not override this method.
+	 */
+	protected void algorithmUndoLogic() {
 	}
 	
 	/**
@@ -147,7 +163,7 @@ public abstract class SearchAlgorithm {
 
 		if(!atGoal() && !expanded.isEmpty()) {
 			mementos.push(new Memento());
-			algorithmLogic();
+			algorithmStepLogic();
 		}
 	}
 	
@@ -157,7 +173,7 @@ public abstract class SearchAlgorithm {
 	 * method should call a method that removes an element from expanded.
 	 * E.g expanded.pop() is the case of expanded being a stack
 	 */
-	protected abstract void algorithmLogic();
+	protected abstract void algorithmStepLogic();
 	
 	/**
 	 * Inner class for a search algorithm memento.
