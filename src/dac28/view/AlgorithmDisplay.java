@@ -72,9 +72,13 @@ public class AlgorithmDisplay {
 	 * Dimension for the list boxes.
 	 */
 	protected final Dimension BOX_SIZE = new Dimension(30,30);
-
+	/**
+	 * JPanels holding the expanded list and visited list.
+	 */
 	protected JPanel expandedPanel, visitedPanel;
-
+	/**
+	 * JScrollPanes for the expanded list and visited list.
+	 */
 	protected JScrollPane expandedScroller, visitedScroller;
 
 	public AlgorithmDisplay() {
@@ -420,6 +424,7 @@ public class AlgorithmDisplay {
 	 * Restores the most recent memento, assuming one exists
 	 */
 	public void restoreMemento() {
+
 		if(!expandedMementos.isEmpty() && !visitedMementos.isEmpty()) {
 			// Restore expanded list to its most recent memento
 			LinkedList<ListElementMemento> eMemento = expandedMementos.pop();
@@ -444,6 +449,7 @@ public class AlgorithmDisplay {
 			}
 			// Restore visited list to its most recent memento
 			LinkedList<ListElementMemento> vMemento = visitedMementos.pop();
+
 			// If the memento size is bigger or equal to the list set list elements to memento elements
 			if(visitedList.size() <= vMemento.size()) {
 				for(int i=0;i<visitedList.size();i++) {
@@ -516,7 +522,7 @@ public class AlgorithmDisplay {
 
 	/**
 	 * Sets the label backgrounds of the lists. If an element is new to the list,
-	 * (by comparing with a memento) then set background to yellow.
+	 * (by comparing with a memento) then set background to new element colour.
 	 */
 	public void setLabelBackgrounds() {
 
@@ -537,7 +543,7 @@ public class AlgorithmDisplay {
 
 		// Check the the label values against the memento values
 		// If the label values is contained within the memento values
-		// Set background to yellow
+		// Set background to new element colour
 		for(JLabel label: expandedList) {
 			if(!previousExpandedValues.contains(label.getText())) {
 				label.setBackground(NEW_ELEMENT);

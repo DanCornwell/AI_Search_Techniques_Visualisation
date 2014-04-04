@@ -293,18 +293,19 @@ public class AlgorithmController {
 				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
 					maxExpandedSize = searchAlgorithm.getExpanded().size();
 				} 
-			}
-			LinkedList<String> expandedValues = new LinkedList<String>();
-			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
-				expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
-			}
-			LinkedList<String> visitedValues = new LinkedList<String>();
-			for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
-				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
-			}
-			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
-			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
-
+				LinkedList<String> expandedValues = new LinkedList<String>();
+				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
+					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
+				}
+				LinkedList<String> visitedValues = new LinkedList<String>();
+				for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
+					visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
+				}
+				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
+				algorithmDisplay.setLabelBackgrounds();
+				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
+			} 
+		
 		}
 
 	}

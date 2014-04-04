@@ -149,7 +149,6 @@ public abstract class SearchAlgorithm {
 			mementos.push(new Memento());
 			algorithmLogic();
 		}
-
 	}
 	
 	/**
