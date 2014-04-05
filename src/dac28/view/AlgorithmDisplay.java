@@ -550,15 +550,20 @@ public class AlgorithmDisplay {
 		// If the label values is contained within the memento values
 		// Set background to new element colour
 		for(JLabel label: expandedList) {
+
 			if(!previousExpandedValues.contains(label.getText())) {
 				label.setBackground(NEW_ELEMENT);
 			}
-		}
+			
+		} 
 		for(JLabel label: visitedList) {
+
 			if(!previousVisitedValues.contains(label.getText())) {
 				label.setBackground(NEW_ELEMENT);
 			}
-		}
+			
+		} 
+		
 	}
 
 	/**

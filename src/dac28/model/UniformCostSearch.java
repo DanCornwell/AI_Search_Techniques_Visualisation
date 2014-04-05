@@ -61,7 +61,7 @@ class UniformCostSearch extends SearchAlgorithm {
 		Node nextNodeToExpanded = null;
 		int cost = Integer.valueOf(Integer.MAX_VALUE);
 		for(Node node: expanded) {
-			
+
 			if(pathCosts.get(node) < cost) {
 				nextNodeToExpanded = node;
 				cost = pathCosts.get(node);

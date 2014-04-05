@@ -55,7 +55,7 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 	@Override
 	protected void algorithmStepLogic() {
 
-		if(expanded.contains(ROOT) && expanded.size()==1) visited.clear();
+	//	if(expanded.contains(ROOT) && expanded.size()==1) visited.clear();
 		
 		currentNode = ((Stack<Node>) expanded).pop();
 		if(atGoal()) {
@@ -120,7 +120,6 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 
 			for(Node child: parent.getChildren()) {
 
-				nodes.add(child);
 				nodeLevels.put(child, nodeLevels.get(parent)+1);
 				nodes.add(child);
 

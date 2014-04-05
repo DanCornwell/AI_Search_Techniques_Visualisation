@@ -1,13 +1,13 @@
 package dac28.model.test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -37,32 +37,38 @@ public class SearchAlgorithmCreatorTest {
 	}
 
 	@Test
-	public void testGetAlgorithmCallHashMethods() {
+	public void testGetAlgorithmWithValidInput() {
 
 		final int ID = 5;
 		
 		@SuppressWarnings("unchecked")
-		HashMap<Integer,SearchAlgorithm> hash = Mockito.mock(HashMap.class);
-		Mockito.when(hash.containsKey(ID)).thenReturn(true);
-		Mockito.when(hash.get(ID)).thenReturn(Mockito.mock(SearchAlgorithm.class));
+		HashMap<Integer,SearchAlgorithm> hash = mock(HashMap.class);
+		when(hash.containsKey(ID)).thenReturn(true);
+		when(hash.get(ID)).thenReturn(mock(SearchAlgorithm.class));
 		Whitebox.setInternalState(creator, "algorithms", hash);
 
-		creator.getAlgorithm(ID, Mockito.mock(Tree.class));
-		Mockito.verify(hash).containsKey(ID);
-		Mockito.verify(hash).get(ID);
+		creator.getAlgorithm(ID, mock(Tree.class));
+		verify(hash).containsKey(ID);
+		verify(hash).get(ID);
 	}
 	
 	@Test
-	public void testGetTreeReturnsNullWithInvalidID() {
+	public void testGetTreeWithInvalidInPut() {
 		
-		int id = 5;
-		HashMap<Integer,SearchAlgorithm> hash = Whitebox.getInternalState(creator, "algorithms");
-		while(hash.containsKey(id)) {
-			id++;
-		}
+		final int ID = 5;
+
+		@SuppressWarnings("unchecked")
+		HashMap<Integer,SearchAlgorithm> hash = mock(HashMap.class);
+		when(hash.containsKey(ID)).thenReturn(false);
+		when(hash.get(ID)).thenReturn(mock(SearchAlgorithm.class));
+		Whitebox.setInternalState(creator, "algorithms", hash);
 		
-		assertTrue(creator.getAlgorithm(id, Mockito.mock(Tree.class)) == null);
+		assertTrue(creator.getAlgorithm(ID, mock(Tree.class)) == null);
 		
+		// verify contains key is called but get is not
+		verify(hash).containsKey(ID);
+		verify(hash,never()).get(any(int.class));
+
 	}
 	
 }

@@ -3,7 +3,6 @@ package dac28.model.test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -22,7 +21,7 @@ import dac28.model.Tree;
 
 
 /**
- * Tests the tree methods via mocking.
+ * Tests the public interface of the tree class.
  * 
  * @author Dan Cornwell
  *
@@ -41,81 +40,73 @@ public class TreeTest {
 
 	@Test
 	public void testGetGoal() {
-		Whitebox.setInternalState(tree, "GOAL","4");
-		// Checks GOAL matches assigned GOAL (as it would be in a constructor)
-		assertEquals("Goal node was not set to 4","4",tree.getGoal());
-		// Checks that getGoal returns the tree's GOAL variable
+		Whitebox.setInternalState(tree, "GOAL", "goal");
 		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "GOAL"),tree.getGoal());
-		// Checks calls getGoal
-		verify(tree,times(2)).getGoal();
 	}
 
 	@Test
-	public void testGetRoot() {
-		Node root = mock(Node.class);
-		Whitebox.setInternalState(tree, "ROOT", root);
-		// Checks ROOT matches assigned ROOT (as it would be in a constructor)
-		assertEquals("Root did not equal assigned value",root,tree.getRoot());
-		// Check that getRoot returns the tree's ROOT variable
-		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree, "ROOT"),tree.getRoot());
-		// Checks calls getRoot
-		verify(tree,times(2)).getRoot();
+	public void testGetRoot() {	
+		Whitebox.setInternalState(tree, "ROOT", mock(Node.class));
+		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree,"ROOT"),tree.getRoot());
 	}
 
 	@Test
 	public void testGetTreeDepth() {
-		// Mock nodes resembling a tree of depth 3
-		Node root = PowerMockito.mock(Node.class);
-		Whitebox.setInternalState(tree, "ROOT", root);
+		
 		Node one = PowerMockito.mock(Node.class);
 		Node two = PowerMockito.mock(Node.class);
-		LinkedList<Node> childrenRoot = new LinkedList<Node>(Arrays.asList(one));
-		PowerMockito.when(root.getChildren()).thenReturn(childrenRoot);
-		LinkedList<Node> childrenOne = new LinkedList<Node>(Arrays.asList(two));
-		PowerMockito.when(one.getChildren()).thenReturn(childrenOne);
-		PowerMockito.when(two.getChildren()).thenReturn(new LinkedList<Node>());
-		// Test method returns expected depth
-		assertTrue("Incorrect depth was returned",3==tree.getTreeDepth());
-		// Verify method call
+		LinkedList<Node> oneChildren = new LinkedList<Node>();
+		oneChildren.add(two);
+		Node three = PowerMockito.mock(Node.class);
+		LinkedList<Node> twoChildren = new LinkedList<Node>();
+		twoChildren.add(three);
+		
+		doReturn(oneChildren).when(one).getChildren();
+		doReturn(twoChildren).when(two).getChildren();
+		doReturn(new LinkedList<Node>()).when(three).getChildren();
+		
+		Whitebox.setInternalState(tree, "ROOT", one);
+		
+		assertTrue("Incorrect tree depth was returned",tree.getTreeDepth()==3);
 		verify(tree).getTreeDepth();
 	}
 	
+	
 	@Test 
 	public void testGetTreeWidth() {
-		// Mock nodes resembling a tree of width 2
-		Node root = PowerMockito.mock(Node.class);
-		Whitebox.setInternalState(tree, "ROOT", root);
+		
 		Node one = PowerMockito.mock(Node.class);
 		Node two = PowerMockito.mock(Node.class);
-		LinkedList<Node> children = new LinkedList<Node>(Arrays.asList(one,two));
-		PowerMockito.when(root.getChildren()).thenReturn(children);
-		PowerMockito.when(one.getChildren()).thenReturn(new LinkedList<Node>());
-		PowerMockito.when(two.getChildren()).thenReturn(new LinkedList<Node>());
-		// Test method returns expected width
-		assertTrue("Incorrect width was returned",2==tree.getTreeWidth());
-		// Verify method call
+		Node three = PowerMockito.mock(Node.class);
+		Node four = PowerMockito.mock(Node.class);
+		LinkedList<Node> oneChildren = new LinkedList<Node>();
+		oneChildren.add(two);
+		oneChildren.add(three);
+		oneChildren.add(four);
+		
+		doReturn(oneChildren).when(one).getChildren();
+		doReturn(new LinkedList<Node>()).when(two).getChildren();
+		doReturn(new LinkedList<Node>()).when(three).getChildren();
+		doReturn(new LinkedList<Node>()).when(four).getChildren();
+		
+		Whitebox.setInternalState(tree, "ROOT", one);
+		
+		assertTrue("Incorrect tree width was returned",tree.getTreeWidth()==3);
 		verify(tree).getTreeWidth();
-	}
-	
-	@Test
-	public void testGetPathCosts() {
-		Queue<Integer> queue = new LinkedList<Integer>();
-		Whitebox.setInternalState(tree, "pathCosts", queue);
-		assertTrue("path cost queue was not returned",tree.getPathCosts().equals(queue));
-		verify(tree,atLeast(1)).getPathCosts();
-	}
-	
-	@Test
-	public void testSetPathCosts() {
 		
-		Queue<Integer> queue = new LinkedList<Integer>();
-		Whitebox.setInternalState(tree, "pathCosts", queue);
+	}
+	
+	@Test
+	public void testSetAndGetPathCosts() {
+		Whitebox.setInternalState(tree, "pathCosts", new LinkedList<Node>());
 
-		Queue<Integer> newQueue = new LinkedList<Integer>();
-		tree.setPathCosts(newQueue);
-		
-		assertTrue("new path cost queue was not returned",tree.getPathCosts().equals(newQueue));
-		verify(tree,atLeast(1)).setPathCosts(newQueue);
+		Queue<Integer> list = new LinkedList<Integer>();
+		for(int i=0;i<5;i++) {
+			list.add(i);
+		}
+		tree.setPathCosts(list);
+		assertEquals("Path costs list size was incorrect",list.size(),tree.getPathCosts().size());
+		assertTrue("Path costs list was not equal to the set list",list.equals(Whitebox.getInternalState(tree, "pathCosts")));
 		
 	}
 	

@@ -3,9 +3,8 @@ package dac28.model.test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.Stack;
 
 import org.junit.Before;
@@ -40,27 +39,23 @@ public class ConcreteSearchAlgorithmTest {
 	public void setup() {
 		tree = PowerMockito.mock(Tree.class);
 		Node root = PowerMockito.mock(Node.class);
-		Node left = PowerMockito.mock(Node.class);
-		Node right = PowerMockito.mock(Node.class);
-		Node left_left = PowerMockito.mock(Node.class);
-
+		Node child = PowerMockito.mock(Node.class);
+		
 		doReturn("0").when(root).getValue();
-		doReturn(new LinkedList<Node>(Arrays.asList(left,right))).when(root).getChildren();
-		doReturn("1").when(left).getValue();
-		doReturn(new LinkedList<Node>(Arrays.asList(left_left))).when(left).getChildren();
-		doReturn("2").when(right).getValue();
-		doReturn(new LinkedList<Node>()).when(right).getChildren();
-		doReturn("3").when(left_left).getValue();
-		doReturn(new LinkedList<Node>()).when(left_left).getChildren();
+		LinkedList<Node> list = new LinkedList<Node>();
+		list.add(child);
+		doReturn(list).when(root).getChildren();
+		
+		doReturn("1").when(child).getValue();
 
 		try {
 			PowerMockito.doReturn(true).when(root, "hasChild");
-			PowerMockito.doReturn(true).when(left, "hasChild");
+			PowerMockito.doReturn(false).when(child, "hasChild");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		doReturn("3").when(tree).getGoal();
+		doReturn("GOAL").when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
 
 	}
@@ -68,41 +63,38 @@ public class ConcreteSearchAlgorithmTest {
 	@Test
 	public void testBFSAlgorithmLogic() {
 
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids
 		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
 		assertTrue("Algorithm was not found in list",bfsID!=-1);
 		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
-
-		LinkedList<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
-		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
+		
+		List<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
+		List<Node> expandedSpy = PowerMockito.spy(expanded);
 		Whitebox.setInternalState(bfs, "expanded", expandedSpy);
 		LinkedList<Node> visited = Whitebox.getInternalState(bfs, "visited");
 		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
 		Whitebox.setInternalState(bfs, "visited", visitedSpy);
 		Node currentNode = Whitebox.getInternalState(bfs, "currentNode");
 
-		Node nextToExpanded = expanded.peek();
+		Node nextToExpanded = expanded.get(0);
 		try {
-			Whitebox.invokeMethod(bfs, "algorithmLogic");
+			Whitebox.invokeMethod(bfs, "algorithmStepLogic");
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 		}
 		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
-		verify(visitedSpy).add(any(Node.class));
+		verify(visitedSpy).add(currentNode);
 		try {
 			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		verify(expandedSpy,atLeast(1)).add(any(Node.class));
+		verify(expandedSpy).add(currentNode.getChildren().getFirst());
 	}
-
+	
 	@Test
 	public void testDFSAlgorithmLogic() {
-
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids		
+	
 		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
 		assertTrue("Algorithm was not found in list",dfsID!=-1);
 		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
@@ -117,26 +109,25 @@ public class ConcreteSearchAlgorithmTest {
 
 		Node nextToExpanded = expanded.peek();
 		try {
-			Whitebox.invokeMethod(dfs, "algorithmLogic");
+			Whitebox.invokeMethod(dfs, "algorithmStepLogic");
 		}
 		catch (Exception e) {
 		}
 		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
-		verify(visitedSpy).add(any(Node.class));
+		verify(visitedSpy).add(currentNode);
 		try {
 			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		verify(expandedSpy,atLeast(1)).push(any(Node.class));
+		verify(expandedSpy).push(currentNode.getChildren().getFirst());
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterativeDeepeningAlgorithmLogic() {
-
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids		
+	
 		int deepID = TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch");
 		assertTrue("Algorithm was not found in list",deepID!=-1);
 		SearchAlgorithm deep = SearchAlgorithmCreator.getInstance().getAlgorithm(deepID, tree);
@@ -147,135 +138,65 @@ public class ConcreteSearchAlgorithmTest {
 		LinkedList<Node> visited = Whitebox.getInternalState(deep, "visited");
 		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
 		Whitebox.setInternalState(deep, "visited", visitedSpy);
-		Node currentNode = Whitebox.getInternalState(deep, "currentNode");		
-
+		Node currentNode = Whitebox.getInternalState(deep, "currentNode");
+		Whitebox.setInternalState(deep, "iteration", 2);
+		
 		Node nextToExpanded = expanded.peek();
 		try {
-			Whitebox.invokeMethod(deep, "algorithmLogic");
+			Whitebox.invokeMethod(deep, "algorithmStepLogic");
 		}
 		catch (Exception e) {
 		}
 		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
-		verify(visitedSpy).add(any(Node.class));
+		verify(visitedSpy).add(currentNode);
 		try {
 			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		verify(expandedSpy,atLeast(1)).push(any(Node.class));		
+		verify(expandedSpy).push(currentNode.getChildren().getFirst());
+		
+		assertTrue("previous visited size was incorrect",((int)Whitebox.getInternalState(deep, "prevVisitedSize"))==((LinkedList<Node>) Whitebox.getInternalState(deep, "visited")).size());
+		verify(expandedSpy).isEmpty();
+		verify(expandedSpy).push(any(Node.class));
 	}
 
 	@Test
 	public void testUniformCostSearchAlgorithmLogic() {
-
-		// algorithm uses a default value of 1 when queue is empty
-		Queue<Integer> pathCosts = new LinkedList<Integer>();
-		pathCosts.add(8);
-		when(tree.getPathCosts()).thenReturn(pathCosts);
-
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids		
+	
+		doReturn(new LinkedList<Integer>()).when(tree).getPathCosts();
+		
 		int costID = TextFileReader.getAlgorithms().indexOf("UniformCostSearch");
 		assertTrue("Algorithm was not found in list",costID!=-1);
 		SearchAlgorithm cost = SearchAlgorithmCreator.getInstance().getAlgorithm(costID, tree);
-
+		
 		LinkedList<Node> expanded = Whitebox.getInternalState(cost, "expanded");
+		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);
+		Whitebox.setInternalState(cost, "expanded", expandedSpy);
+		LinkedList<Node> visited = Whitebox.getInternalState(cost, "visited");
+		LinkedList<Node> visitedSpy = PowerMockito.spy(visited);
+		Whitebox.setInternalState(cost, "visited", visitedSpy);
+		Node currentNode = Whitebox.getInternalState(cost, "currentNode");
 
+		Node nextToExpanded = expanded.get(0);
 		try {
-			Whitebox.invokeMethod(cost, "algorithmLogic");
+			Whitebox.invokeMethod(cost, "algorithmStepLogic");
 		}
 		catch (Exception e) {
 		}
-		Node nextToExpand = expanded.peek();		
-
-		// Test that the right node was chosen over the left node
-		assertTrue("Did not choose to expanded right node first",nextToExpand.getValue()=="2");
-	}
-
-	@Test
-	public void testBFSFinalExpandedAndVisitedLists() {
-
-		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
-		assertTrue("Algorithm was not found in list",bfsID!=-1);
-		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
-
-		while(!bfs.atGoal() && !bfs.getExpanded().isEmpty()) bfs.step();
-		String[] expandedFinal = {};
-		String[] visitedFinal = {"0","1","2","3"};
-		for(int i=0;i<bfs.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",bfs.getExpanded().get(i).getValue().equals(expandedFinal[i]));
+		assertEquals("Current node was not set to the next node",nextToExpanded,currentNode);
+		verify(visitedSpy).add(currentNode);
+		try {
+			PowerMockito.verifyPrivate(currentNode).invoke("hasChild");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		for(int j=0;j<bfs.getVisited().size();j++) {
-			assertTrue("A visited value did not match",bfs.getVisited().get(j).getValue().equals(visitedFinal[j]));
-		}
-
-	}
-
-	@Test
-	public void testDFSFinalExpandedAndVisitedLists() {
-
-		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
-		assertTrue("Algorithm was not found in list",dfsID!=-1);
-		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
-
-		while(!dfs.atGoal() && !dfs.getExpanded().isEmpty()) dfs.step();
-		String[] expandedFinal = {"2"};
-		String[] visitedFinal = {"0","1","3"};
-		for(int i=0;i<dfs.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",dfs.getExpanded().get(i).getValue().equals(expandedFinal[i]));
-		}
-		for(int j=0;j<dfs.getVisited().size();j++) {
-			assertTrue("A visited value did not match",dfs.getVisited().get(j).getValue().equals(visitedFinal[j]));
-		}
-
-	}
-
-	@Test
-	public void testIterativeDeepeningFinalExpandedAndVisitedLists() {
+		verify(expandedSpy).add(currentNode.getChildren().getFirst());
 		
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids		
-		int deepID = TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch");
-		assertTrue("Algorithm was not found in list",deepID!=-1);
-		SearchAlgorithm deep = SearchAlgorithmCreator.getInstance().getAlgorithm(deepID, tree);
-
-		// in this tree iterative deepening will play out like bfs
+		verify(expandedSpy).remove(any(Node.class));
+		verify(expandedSpy).add(eq(0), any(Node.class));
 		
-		while(!deep.atGoal() && !deep.getExpanded().isEmpty()) deep.step();
-		String[] expandedFinal = {};
-		String[] visitedFinal = {"0","1","2","3"};
-		for(int i=0;i<deep.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",deep.getExpanded().get(i).getValue().equals(expandedFinal[i]));
-		}
-		for(int j=0;j<deep.getVisited().size();j++) {
-			assertTrue("A visited value did not match",deep.getVisited().get(j).getValue().equals(visitedFinal[j]));
-		}
-	}
-	
-	@Test
-	public void testUniformCostFinalExpandedAndVisitedLists() {
-
-		// algorithm uses a default value of 1 when queue is empty
-		Queue<Integer> pathCosts = new LinkedList<Integer>();
-		pathCosts.add(8);
-		when(tree.getPathCosts()).thenReturn(pathCosts);
-
-		// have to use the search algorithm creator here as concrete implementations are hidden
-		// also needs use of the text file reader to avoid static ids		
-		int costID = TextFileReader.getAlgorithms().indexOf("UniformCostSearch");
-		assertTrue("Algorithm was not found in list",costID!=-1);
-		SearchAlgorithm cost = SearchAlgorithmCreator.getInstance().getAlgorithm(costID, tree);
-
-
-		while(!cost.atGoal() && !cost.getExpanded().isEmpty()) cost.step();
-		String[] expandedFinal = {};
-		String[] visitedFinal = {"0","2","1","3"};
-		for(int i=0;i<cost.getExpanded().size();i++) {
-			assertTrue("An expanded value did not match",cost.getExpanded().get(i).getValue().equals(expandedFinal[i]));
-		}
-		for(int j=0;j<cost.getVisited().size();j++) {
-			assertTrue("A visited value did not match",cost.getVisited().get(j).getValue().equals(visitedFinal[j]));
-		}
+		
 	}
 
 }

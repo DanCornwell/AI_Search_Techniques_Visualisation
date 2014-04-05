@@ -1,6 +1,7 @@
 package dac28.model.test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,7 +9,6 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -45,32 +45,35 @@ public class TreeCreatorTest {
 	}
 
 	@Test
-	public void testGetTreeCallHashMethods() {
+	public void testGetTreeWithValidInput() {
 
 		final int ID = 5;
 		
 		@SuppressWarnings("unchecked")
-		HashMap<Integer,Tree> hash = Mockito.mock(HashMap.class);
-		Mockito.when(hash.containsKey(ID)).thenReturn(true);
-		Mockito.when(hash.get(ID)).thenReturn(Mockito.mock(Tree.class));
+		HashMap<Integer,Tree> hash = mock(HashMap.class);
+		when(hash.containsKey(ID)).thenReturn(true);
+		when(hash.get(ID)).thenReturn(mock(Tree.class));
 		Whitebox.setInternalState(creator, "trees", hash);
 
 		creator.getTree(ID, "0",new LinkedList<String>());
-		Mockito.verify(hash).containsKey(ID);
-		Mockito.verify(hash).get(ID);
+		verify(hash).containsKey(ID);
+		verify(hash).get(ID);
 	}
 	
 	@Test
-	public void testGetTreeReturnsNullWithInvalidID() {
+	public void testGetTreeWithInvalidInput() {
 		
-		int id = 5;
-		HashMap<Integer,Tree> hash = Whitebox.getInternalState(creator, "trees");
-		while(hash.containsKey(id)) {
-			id++;
-		}
+		int ID = 5;
+		@SuppressWarnings("unchecked")
+		HashMap<Integer,Tree> hash = mock(HashMap.class);
+		when(hash.containsKey(ID)).thenReturn(false);
+		Whitebox.setInternalState(creator, "trees", hash);
+
+		assertTrue(creator.getTree(ID, "0",new LinkedList<String>()) == null);
 		
-		assertTrue(creator.getTree(id, "0",new LinkedList<String>()) == null);
-		
+		// verify contains key is called but get is not
+		verify(hash).containsKey(ID);
+		verify(hash,never()).get(any(int.class));
 	}
 	
 }
