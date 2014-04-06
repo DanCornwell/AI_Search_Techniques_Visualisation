@@ -554,16 +554,15 @@ public class AlgorithmDisplay {
 			if(!previousExpandedValues.contains(label.getText())) {
 				label.setBackground(NEW_ELEMENT);
 			}
-			
-		} 
-		for(JLabel label: visitedList) {
 
-			if(!previousVisitedValues.contains(label.getText())) {
-				label.setBackground(NEW_ELEMENT);
-			}
-			
 		} 
+
+		int firstBlankElement = 0;
+		while(firstBlankElement < visitedList.size() &&
+				!visitedList.get(firstBlankElement).getText().trim().equals("")) firstBlankElement++;
 		
+		visitedList.get(firstBlankElement-1).setBackground(NEW_ELEMENT);
+
 	}
 
 	/**
