@@ -6,9 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -305,24 +307,27 @@ public class TopLevelContainer {
 			int result = JOptionPane.showOptionDialog(null, dialog, 
 					"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-			List<String> warnings = new LinkedList<String>();
-			if(controller.getNodeValues().contains("")) warnings.add("A node name was blank.");
-			if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
-			if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
-
-			for(String value: controller.getPathValues()) {
-
-				try {
-					Integer.parseInt(value); 
-				}
-				catch(NumberFormatException numberError) {
-					warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
-					break;
-				}
-			}
-
 			if(result == JOptionPane.OK_OPTION) {
 
+				List<String> warnings = new LinkedList<String>();
+				if(controller.getNodeValues().contains("")) warnings.add("A node name was blank. A default value will be used instead.");
+				if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
+				if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
+				List<String> list = (LinkedList<String>) controller.getNodeValues();
+				Set<String> set = new HashSet<String>(list);
+				if(set.size() < list.size()) warnings.add("There were duplicated nodes values. A duplication will be replaced with a default value.");
+				
+				for(String value: controller.getPathValues()) {
+
+					try {
+						Integer.parseInt(value); 
+					}
+					catch(NumberFormatException numberError) {
+						warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
+						break;
+					}
+				}
+				
 				// If warnings exist display them and let user decide whether to continue or not
 				if(!warnings.isEmpty()) {
 

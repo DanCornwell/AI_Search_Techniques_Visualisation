@@ -29,6 +29,7 @@ public abstract class Tree {
 	/**
 	 * Constructor.
 	 * Sets the goal variable and creates the root node.
+	 * If the values supplied have blank strings or duplicates, these are replaced by default values
 	 * If the values parameter is empty, then it will be used to set the node values.
 	 * 
 	 * @param GOAL - String to the set the goal node
@@ -40,8 +41,25 @@ public abstract class Tree {
 		
 		if(!values.isEmpty()) {
 			
-			ROOT = new Node(values.poll());
-			construct(values);
+			Queue<String> validatedValues = new LinkedList<String>();
+			
+			int defaultValue = 1;
+			
+			while(!values.isEmpty()) {
+				
+				String value = values.poll();
+				
+				if(values.contains("N"+String.valueOf(defaultValue))) defaultValue++;
+				
+				if(value.trim().equals("")) validatedValues.add("N"+String.valueOf(defaultValue++));
+				else if(validatedValues.contains(value)) validatedValues.add("N"+String.valueOf(defaultValue++));
+				else validatedValues.add(value);
+				
+			}
+			
+			ROOT = new Node(validatedValues.poll());
+						
+			construct(validatedValues);
 		}
 		
 		// Use default number values for node values

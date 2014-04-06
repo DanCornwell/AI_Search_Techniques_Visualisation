@@ -312,9 +312,13 @@ public class CreateController {
 	 */
 	public final Queue<String> getNodeValues() {
 		Queue<String> values = new LinkedList<String>();
+		
 		for(JTextField field: nodeValues) {
-			values.add(field.getText());
+			
+			values.add(field.getText().trim());
+		
 		}
+		
 		return values;
 	}
 
