@@ -325,18 +325,18 @@ public class AlgorithmDisplay {
 	 */
 	public void setNodeAndGoalLabel(String value,boolean bool) {
 
-		if(expandedMementos.isEmpty() && visitedMementos.isEmpty()) {
-			node.setText("");
-			node.setBackground(DEFAULT);
-			atGoal.setText("");
-			atGoal.setBackground(DEFAULT);
+		node.setText(value);
+		if(bool) {
+			atGoal.setText("Yes");
+			atGoal.setBackground(GOAL_NODE);
+			node.setBackground(GOAL_NODE);
 		}
 		else {
-			node.setText(value);
-			if(bool) {
-				atGoal.setText("Yes");
-				atGoal.setBackground(GOAL_NODE);
-				node.setBackground(GOAL_NODE);
+			if(expandedMementos.isEmpty() && visitedMementos.isEmpty()) {
+				node.setText("");
+				node.setBackground(DEFAULT);
+				atGoal.setText("");
+				atGoal.setBackground(DEFAULT);
 			}
 			else {
 				atGoal.setText("No");
@@ -369,6 +369,10 @@ public class AlgorithmDisplay {
 		atGoal.setText("");
 		atGoal.setBackground(DEFAULT);
 
+		// Reset the memento stacks
+		expandedMementos.clear();
+		visitedMementos.clear();
+		
 		// Removes any added boxes and the scroll bar until the boxes match the maximum allowed on screen
 		while(ONSCREEN_EXPANDED_BOXES < expandedList.size()) {
 			expandedPanel.remove(expandedList.size()-1);
@@ -625,19 +629,19 @@ public class AlgorithmDisplay {
 	/**
 	 * Sets the iteration label
 	 * 
-	 * @param number - new value for the iteration label
+	 * @param value - new value for the iteration label
 	 */
-	public void setIterationLabel(int number) {
-		this.iterationNumber.setText(String.valueOf(number));
+	public void setIterationLabel(String value) {
+		this.iterationNumber.setText(value);
 	}
 
 	/**
 	 * Sets the expanded list size label
 	 * 
-	 * @param number - new value for the expanded list size label
+	 * @param value - new value for the expanded list size label
 	 */
-	public void setMaxExpandedSizeLabel(int number) {
-		this.expandedListSize.setText(String.valueOf(number));
+	public void setMaxExpandedSizeLabel(String value) {
+		this.expandedListSize.setText(value);
 	}
 
 	/**

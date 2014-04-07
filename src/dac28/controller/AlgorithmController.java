@@ -3,6 +3,7 @@ package dac28.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import dac28.model.SearchAlgorithm;
 import dac28.view.AlgorithmDisplay;
@@ -28,8 +29,14 @@ public class AlgorithmController {
 	 * The tree controller thats controls the tree display.
 	 */
 	private TreeController treeController;
-
-	private int iterationNumber, maxExpandedSize;
+	/**
+	 * The iteration number of the search algorithm and the maximum size of the search algorithm.
+	 */
+	private int iterationNumber,maxExpandedSize;
+	/**
+	 * Stores the expanded list sizes at each iteration.
+	 */
+	private Stack<Integer> expandedSizes;
 
 	public AlgorithmController(TreeController treeController,SearchAlgorithm searchAlgorithm,AlgorithmDisplay algorithmDisplay) {
 
@@ -54,6 +61,7 @@ public class AlgorithmController {
 
 		iterationNumber = 0;
 		maxExpandedSize = 0;
+		expandedSizes = new Stack<Integer>();
 
 	} 
 
@@ -111,8 +119,14 @@ public class AlgorithmController {
 				algorithmDisplay.toggleUndo(false);
 			}
 
-			algorithmDisplay.setIterationLabel(iterationNumber);
-			algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
+			if(expandedSizes.isEmpty()) {
+				algorithmDisplay.setIterationLabel("");
+				algorithmDisplay.setMaxExpandedSizeLabel("");
+			}
+			else {
+				algorithmDisplay.setIterationLabel(String.valueOf(iterationNumber));
+				algorithmDisplay.setMaxExpandedSizeLabel(String.valueOf(expandedSizes.peek()));
+			}
 
 			// Update the tree.
 			treeController.drawTree();
@@ -141,9 +155,8 @@ public class AlgorithmController {
 			// Perform a step of the algorithm.
 			searchAlgorithm.step();
 			iterationNumber++;
-			if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
-				maxExpandedSize = searchAlgorithm.getExpanded().size();
-			}
+			if(searchAlgorithm.getExpanded().size() > maxExpandedSize) maxExpandedSize = searchAlgorithm.getExpanded().size();
+			expandedSizes.push(maxExpandedSize);
 			// Get the new values of the expanded and visited lists.
 			LinkedList<String> expandedValues = new LinkedList<String>();
 			for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
@@ -239,9 +252,7 @@ public class AlgorithmController {
 			// Undoes a step in the algorithm.
 			searchAlgorithm.undo();
 			iterationNumber--;
-			if(searchAlgorithm.getExpanded().size() < maxExpandedSize) {
-				maxExpandedSize = searchAlgorithm.getExpanded().size();
-			}
+			expandedSizes.pop();
 			// Sets the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
@@ -264,7 +275,7 @@ public class AlgorithmController {
 			initialiseExpandedList();
 
 			iterationNumber = 0;
-			maxExpandedSize = 0;
+			expandedSizes.clear();
 		}
 
 	}
@@ -288,9 +299,7 @@ public class AlgorithmController {
 				// Perform a step of the algorithm.
 				searchAlgorithm.step();
 				iterationNumber++;
-				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
-					maxExpandedSize = searchAlgorithm.getExpanded().size();
-				} 
+				expandedSizes.push(searchAlgorithm.getExpanded().size());
 				LinkedList<String> expandedValues = new LinkedList<String>();
 				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -302,7 +311,7 @@ public class AlgorithmController {
 				algorithmDisplay.setListLabels(expandedValues, visitedValues);
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 			} 
-		
+
 		}
 
 	}
@@ -350,9 +359,8 @@ public class AlgorithmController {
 				algorithmDisplay.addMemento();
 				searchAlgorithm.step();
 				iterationNumber++;
-				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) {
-					maxExpandedSize = searchAlgorithm.getExpanded().size();
-				}
+				if(searchAlgorithm.getExpanded().size() > maxExpandedSize) maxExpandedSize = searchAlgorithm.getExpanded().size();
+				expandedSizes.push(maxExpandedSize);
 				LinkedList<String> expandedValues = new LinkedList<String>();
 				for(int i=0;i<searchAlgorithm.getExpanded().size();i++) {
 					expandedValues.add(searchAlgorithm.getExpanded().get(i).getValue());
@@ -364,8 +372,8 @@ public class AlgorithmController {
 				algorithmDisplay.setListLabels(expandedValues, visitedValues);
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
 
-				algorithmDisplay.setIterationLabel(iterationNumber);
-				algorithmDisplay.setMaxExpandedSizeLabel(maxExpandedSize);
+				algorithmDisplay.setIterationLabel(String.valueOf(iterationNumber));
+				algorithmDisplay.setMaxExpandedSizeLabel(String.valueOf(expandedSizes.peek()));
 
 				// Update display tree.
 				treeController.drawTree();
