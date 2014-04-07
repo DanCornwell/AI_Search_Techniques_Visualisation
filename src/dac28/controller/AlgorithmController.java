@@ -154,9 +154,7 @@ public class AlgorithmController {
 				visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 			}
 			// Update the algorithm display to the new values of expanded and visited lists.
-			algorithmDisplay.setLabelValues(expandedValues, visitedValues);
-			// Set the label backgrounds.
-			algorithmDisplay.setLabelBackgrounds();
+			algorithmDisplay.setListLabels(expandedValues, visitedValues);
 			// Set the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 
@@ -301,8 +299,7 @@ public class AlgorithmController {
 				for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 					visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 				}
-				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
-				algorithmDisplay.setLabelBackgrounds();
+				algorithmDisplay.setListLabels(expandedValues, visitedValues);
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 			} 
 		
@@ -364,8 +361,7 @@ public class AlgorithmController {
 				for(int j=0;j<searchAlgorithm.getVisited().size();j++) {
 					visitedValues.add(searchAlgorithm.getVisited().get(j).getValue());
 				}
-				algorithmDisplay.setLabelValues(expandedValues, visitedValues);
-				algorithmDisplay.setLabelBackgrounds();
+				algorithmDisplay.setListLabels(expandedValues, visitedValues);
 				algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());		
 
 				algorithmDisplay.setIterationLabel(iterationNumber);

@@ -483,7 +483,7 @@ public class AlgorithmDisplay {
 	 * @param expandedValues - new values for the expanded list
 	 * @param visitedValues - new values for the visited list
 	 */
-	public void setLabelValues(List<String> expandedValues, LinkedList<String> visitedValues) {
+	public void setListLabels(List<String> expandedValues, LinkedList<String> visitedValues) {
 
 		// If there are more expanded values than labels, create more expanded labels
 		while(expandedValues.size() > expandedList.size()) {
@@ -523,14 +523,6 @@ public class AlgorithmDisplay {
 			visitedList.get(i).setText(String.valueOf(visitedValues.get(i)));
 		}
 
-	}
-
-	/**
-	 * Sets the label backgrounds of the lists. If an element is new to the list,
-	 * (by comparing with a memento) then set background to new element colour.
-	 */
-	public void setLabelBackgrounds() {
-
 		// Memento not empty check
 		if(expandedMementos.isEmpty() || visitedMementos.isEmpty()) {
 			return;
@@ -540,10 +532,6 @@ public class AlgorithmDisplay {
 		LinkedList<String> previousExpandedValues = new LinkedList<String>();
 		for(ListElementMemento element: expandedMementos.peek()) {
 			previousExpandedValues.add(element.VALUE);
-		}
-		LinkedList<String> previousVisitedValues = new LinkedList<String>();
-		for(ListElementMemento element: visitedMementos.peek()) {
-			previousVisitedValues.add(element.VALUE);
 		}
 
 		// Check the the label values against the memento values
@@ -560,8 +548,9 @@ public class AlgorithmDisplay {
 		int firstBlankElement = 0;
 		while(firstBlankElement < visitedList.size() &&
 				!visitedList.get(firstBlankElement).getText().trim().equals("")) firstBlankElement++;
-		
+
 		visitedList.get(firstBlankElement-1).setBackground(NEW_ELEMENT);
+
 
 	}
 
