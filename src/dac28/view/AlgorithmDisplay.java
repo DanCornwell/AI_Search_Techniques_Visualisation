@@ -79,7 +79,15 @@ public class AlgorithmDisplay {
 	/**
 	 * JScrollPanes for the expanded list and visited list.
 	 */
-	protected JScrollPane expandedScroller, visitedScroller;
+	protected JScrollPane expandedScroller, visitedScroller;	
+	/**
+	 * The maximum number of boxes the expanded list can show at one time.
+	 */
+	protected final int ONSCREEN_EXPANDED_BOXES = 11;
+	/**
+	 * The maximum number of boxes the visited list can show at one time.
+	 */
+	protected final int ONSCREEN_VISITED_BOXES = 11;
 
 	public AlgorithmDisplay() {
 
@@ -145,11 +153,6 @@ public class AlgorithmDisplay {
 		// the width and height are chosen so that the holding jpanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-20;
 		final int panelHeight = (HEIGHT-20)/8;
-
-		// the maximum expanded boxes that can be on screen at one time
-		final int ONSCREEN_EXPANDED_BOXES = 11;
-		// the maximum visited boxes that can be on screen at one time
-		final int ONSCREEN_VISITED_BOXES = 11;
 
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
@@ -314,22 +317,32 @@ public class AlgorithmDisplay {
 	/**
 	 * Sets the current node and at goal labels.
 	 * Changes the background colour if we are at the goal.
+	 * Reset the labels if we are the beginning of the search, i.e only the root is in the expanded list
 	 * 
 	 * @param value - new value of the current node label
 	 * @param bool - true or false, depending on whether we are at the goal node
 
 	 */
 	public void setNodeAndGoalLabel(String value,boolean bool) {
-		node.setText(value);
-		if(bool) {
-			atGoal.setText("Yes");
-			atGoal.setBackground(GOAL_NODE);
-			node.setBackground(GOAL_NODE);
+
+		if(expandedMementos.isEmpty() && visitedMementos.isEmpty()) {
+			node.setText("");
+			node.setBackground(DEFAULT);
+			atGoal.setText("");
+			atGoal.setBackground(DEFAULT);
 		}
 		else {
-			atGoal.setText("No");
-			atGoal.setBackground(DEFAULT);
-			node.setBackground(currentNode);
+			node.setText(value);
+			if(bool) {
+				atGoal.setText("Yes");
+				atGoal.setBackground(GOAL_NODE);
+				node.setBackground(GOAL_NODE);
+			}
+			else {
+				atGoal.setText("No");
+				atGoal.setBackground(DEFAULT);
+				node.setBackground(currentNode);
+			}
 		}
 	}
 
@@ -355,6 +368,21 @@ public class AlgorithmDisplay {
 		node.setBackground(DEFAULT);
 		atGoal.setText("");
 		atGoal.setBackground(DEFAULT);
+
+		// Removes any added boxes and the scroll bar until the boxes match the maximum allowed on screen
+		while(ONSCREEN_EXPANDED_BOXES < expandedList.size()) {
+			expandedPanel.remove(expandedList.size()-1);
+			expandedList.removeLast();
+			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
+			expandedScroller.setViewportView(expandedPanel);
+		}	
+		while(ONSCREEN_VISITED_BOXES < visitedList.size()) {
+			visitedPanel.remove(visitedList.size()-1);
+			visitedList.removeLast();
+			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
+			visitedScroller.setViewportView(visitedPanel);
+		}
+
 	}
 
 	/**
@@ -475,6 +503,22 @@ public class AlgorithmDisplay {
 				}
 			}
 		}
+
+		// Remove the added labels if the undo causes the labels to equal the maximum allowed on screen
+		if(ONSCREEN_EXPANDED_BOXES <= expandedPanel.getComponentCount()-1) {
+			expandedPanel.remove(expandedList.size()-1);
+			expandedList.removeLast();
+			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
+			expandedScroller.setViewportView(expandedPanel);
+		}
+
+		if(ONSCREEN_VISITED_BOXES <= visitedPanel.getComponentCount()-1) {
+			visitedPanel.remove(visitedList.size()-1);
+			visitedList.removeLast();
+			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
+			visitedScroller.setViewportView(visitedPanel);
+		}
+
 	}
 
 	/**
