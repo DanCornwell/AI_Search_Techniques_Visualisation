@@ -31,7 +31,7 @@ public class TreeCreator {
 	 * Constructor for the tree creator. 
 	 * Adds all known trees to the HashMap. 0 is a trivial constructor value for the trees.
 	 */
-	protected TreeCreator() {
+	TreeCreator() {
 
 		List<String> treeNames = null;
 
@@ -60,7 +60,7 @@ public class TreeCreator {
 	 * 
 	 * @return the tree creator
 	 */
-	public static TreeCreator getInstance() {
+	public final static TreeCreator getInstance() {
 		if(instance==null) instance = new TreeCreator();
 		return instance;
 	}
@@ -73,7 +73,7 @@ public class TreeCreator {
 	 * @param values - a queue of strings for the node values
 	 * @return a concrete tree with a defined goal value
 	 */
-	public Tree getTree(int uID,String goalValue,Queue<String> values) {
+	public final Tree getTree(int uID,String goalValue,Queue<String> values) {
 
 		if(!trees.containsKey(uID)) return null;
 

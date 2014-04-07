@@ -99,7 +99,7 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 	}
 	
 	@Override
-	SearchAlgorithm getAlgorithm(Tree tree) {
+	protected SearchAlgorithm getAlgorithm(Tree tree) {
 		return new IterativeDeepeningSearch(tree);
 	}
 

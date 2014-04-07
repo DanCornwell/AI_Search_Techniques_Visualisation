@@ -9,7 +9,7 @@ public class TreeController {
 	/**
 	 * The tree display being used.
 	 */
-	TreeDisplay treeDisplay;	
+	private TreeDisplay treeDisplay;	
 	
 	public TreeController(SearchAlgorithm[] searchAlgorithms, Tree tree, TreeDisplay treeDisplay) {
 		

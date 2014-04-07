@@ -49,7 +49,7 @@ class DepthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	SearchAlgorithm getAlgorithm(Tree tree) {
+	protected SearchAlgorithm getAlgorithm(Tree tree) {
 		return new DepthFirstSearch(tree);
 	}
 

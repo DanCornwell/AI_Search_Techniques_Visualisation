@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
  * Class used to display the algorithm details.
  * Creates the panel to display algorithm information and provides methods to
  * colour and change this information when asked.
+ * 
+ * This class should be sub-classed if a different layout for displaying search algorithm information is needed.
  * This implementation assumes the a QUEUE structure is used, and as such should only be used for 
  * QUEUE based algorithms. If a stack is needed use AlgorithmDisplayStack, which extends this class.
  * 
@@ -82,12 +84,14 @@ public class AlgorithmDisplay {
 	protected JScrollPane expandedScroller, visitedScroller;	
 	/**
 	 * The maximum number of boxes the expanded list can show at one time.
+	 * Subclasses should define this number when they override the initialise method.
 	 */
-	protected final int ONSCREEN_EXPANDED_BOXES = 11;
+	protected int onscreenExpandedBoxes;
 	/**
 	 * The maximum number of boxes the visited list can show at one time.
+	 * Subclasses should define this number when they override the initialise method.
 	 */
-	protected final int ONSCREEN_VISITED_BOXES = 11;
+	protected int onscreenVisitedBoxes;
 
 	public AlgorithmDisplay() {
 
@@ -135,17 +139,20 @@ public class AlgorithmDisplay {
 		pause.setEnabled(false);
 		skip = new JButton("Skip to End");
 		skip.setEnabled(false);
+		
 	}
 
 	/**
 	 * Initialises the JPanel displaying algorithm data and returns it.
+	 * Subclasses should overwrite this method and put the code for their
+	 * specific layout in here. 
 	 * 
 	 * @param WIDTH - width of the whole application
 	 * @param HEIGHT - height of the whole application
 	 * @return JPanel containing fields to display a search algorithm's data
 	 */
-	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
-
+	protected JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
+		
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
@@ -154,6 +161,9 @@ public class AlgorithmDisplay {
 		final int panelWidth = (WIDTH)-20;
 		final int panelHeight = (HEIGHT-20)/8;
 
+		onscreenExpandedBoxes = 11;
+		onscreenVisitedBoxes = 11;
+		
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
@@ -163,9 +173,9 @@ public class AlgorithmDisplay {
 		p1.add(expandedLabel);
 
 		// Expanded panel (Panel 2) - holds the expanded list
-		expandedPanel = getHoldingPanel(BOX_SIZE.width*ONSCREEN_EXPANDED_BOXES,BOX_SIZE.height+5);
+		expandedPanel = getHoldingPanel(BOX_SIZE.width*onscreenExpandedBoxes,BOX_SIZE.height+5);
 		expandedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-		for(int i=0;i<ONSCREEN_EXPANDED_BOXES;i++) {
+		for(int i=0;i<onscreenExpandedBoxes;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -181,9 +191,9 @@ public class AlgorithmDisplay {
 		p3.add(visitedLabel);
 
 		// Visited panel (Panel 4) - holds the visited list
-		visitedPanel = getHoldingPanel(BOX_SIZE.width*ONSCREEN_VISITED_BOXES,BOX_SIZE.height+5);
+		visitedPanel = getHoldingPanel(BOX_SIZE.width*onscreenVisitedBoxes,BOX_SIZE.height+5);
 		visitedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-		for(int i=0;i<ONSCREEN_VISITED_BOXES;i++) {
+		for(int i=0;i<onscreenVisitedBoxes;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -247,7 +257,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void toggleStep(boolean bool) {
+	public final void toggleStep(boolean bool) {
 		step.setEnabled(bool);
 	}
 
@@ -256,7 +266,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void toggleAuto(boolean bool) {
+	public final void toggleAuto(boolean bool) {
 		auto.setEnabled(bool);
 	}
 
@@ -265,7 +275,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void toggleUndo(boolean bool) {
+	public final void toggleUndo(boolean bool) {
 		undo.setEnabled(bool);
 	}
 
@@ -274,7 +284,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void toggleReset(boolean bool) {
+	public final void toggleReset(boolean bool) {
 		reset.setEnabled(bool);
 	}
 
@@ -283,7 +293,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void toggleSkip(boolean bool) {
+	public final void toggleSkip(boolean bool) {
 		skip.setEnabled(bool);
 	}
 
@@ -292,7 +302,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param bool - true or false
 	 */
-	public void togglePause(boolean bool) {
+	public final void togglePause(boolean bool) {
 		pause.setEnabled(bool);
 	}
 
@@ -301,7 +311,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @return a list of JLabels
 	 */
-	public LinkedList<JLabel> getExpandedList() {
+	public final LinkedList<JLabel> getExpandedList() {
 		return new LinkedList<JLabel>(expandedList);
 	}
 
@@ -310,7 +320,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @return a list of JLabels
 	 */
-	public LinkedList<JLabel> getVisitedList() {
+	public final LinkedList<JLabel> getVisitedList() {
 		return new LinkedList<JLabel>(visitedList);
 	}
 
@@ -323,7 +333,7 @@ public class AlgorithmDisplay {
 	 * @param bool - true or false, depending on whether we are at the goal node
 
 	 */
-	public void setNodeAndGoalLabel(String value,boolean bool) {
+	public final void setNodeAndGoalLabel(String value,boolean bool) {
 
 		node.setText(value);
 		if(bool) {
@@ -353,7 +363,7 @@ public class AlgorithmDisplay {
 	 * @param height - height of the holding panel
 	 * @return a specified sized JPanel
 	 */
-	protected JPanel getHoldingPanel(int width,int height) {
+	protected final JPanel getHoldingPanel(int width,int height) {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(width,height));
 		return panel;
@@ -362,7 +372,7 @@ public class AlgorithmDisplay {
 	/**
 	 * Resets the display
 	 */
-	public void reset() {
+	public final void reset() {
 		resetLabels();
 		node.setText("");
 		node.setBackground(DEFAULT);
@@ -374,13 +384,13 @@ public class AlgorithmDisplay {
 		visitedMementos.clear();
 		
 		// Removes any added boxes and the scroll bar until the boxes match the maximum allowed on screen
-		while(ONSCREEN_EXPANDED_BOXES < expandedList.size()) {
+		while(onscreenExpandedBoxes < expandedList.size()) {
 			expandedPanel.remove(expandedList.size()-1);
 			expandedList.removeLast();
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
 			expandedScroller.setViewportView(expandedPanel);
 		}	
-		while(ONSCREEN_VISITED_BOXES < visitedList.size()) {
+		while(onscreenVisitedBoxes < visitedList.size()) {
 			visitedPanel.remove(visitedList.size()-1);
 			visitedList.removeLast();
 			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
@@ -394,7 +404,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerStepListener(ActionListener act) {
+	public final void registerStepListener(ActionListener act) {
 		step.addActionListener(act);
 	}
 	/**
@@ -402,7 +412,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerAutoListener(ActionListener act) {
+	public final void registerAutoListener(ActionListener act) {
 		auto.addActionListener(act);
 	}
 	/**
@@ -410,7 +420,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerUndoListener(ActionListener act) {
+	public final void registerUndoListener(ActionListener act) {
 		undo.addActionListener(act);
 	}
 	/**
@@ -418,7 +428,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerResetListener(ActionListener act) {
+	public final void registerResetListener(ActionListener act) {
 		reset.addActionListener(act);
 	}
 	/**
@@ -426,7 +436,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerSkipListener(ActionListener act) {
+	public final void registerSkipListener(ActionListener act) {
 		skip.addActionListener(act);
 	}
 	/**
@@ -434,7 +444,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param act - ActionListener subclass
 	 */
-	public void registerPauseListener(ActionListener act) {
+	public final void registerPauseListener(ActionListener act) {
 		pause.addActionListener(act);
 	}
 
@@ -442,7 +452,7 @@ public class AlgorithmDisplay {
 	 * Creates mementos for both lists, and adds them to the appropriate
 	 * memento list.
 	 */
-	public void addMemento() {
+	public final void addMemento() {
 		// Expanded list memento
 		LinkedList<ListElementMemento> eMemento = new LinkedList<ListElementMemento>();
 		for(JLabel label: expandedList) {
@@ -460,7 +470,7 @@ public class AlgorithmDisplay {
 	/**
 	 * Restores the most recent memento, assuming one exists
 	 */
-	public void restoreMemento() {
+	public final void restoreMemento() {
 
 		if(!expandedMementos.isEmpty() && !visitedMementos.isEmpty()) {
 			// Restore expanded list to its most recent memento
@@ -509,14 +519,14 @@ public class AlgorithmDisplay {
 		}
 
 		// Remove the added labels if the undo causes the labels to equal the maximum allowed on screen
-		if(ONSCREEN_EXPANDED_BOXES <= expandedPanel.getComponentCount()-1) {
+		if(onscreenExpandedBoxes <= expandedPanel.getComponentCount()-1) {
 			expandedPanel.remove(expandedList.size()-1);
 			expandedList.removeLast();
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
 			expandedScroller.setViewportView(expandedPanel);
 		}
 
-		if(ONSCREEN_VISITED_BOXES <= visitedPanel.getComponentCount()-1) {
+		if(onscreenVisitedBoxes <= visitedPanel.getComponentCount()-1) {
 			visitedPanel.remove(visitedList.size()-1);
 			visitedList.removeLast();
 			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
@@ -531,7 +541,7 @@ public class AlgorithmDisplay {
 	 * @param expandedValues - new values for the expanded list
 	 * @param visitedValues - new values for the visited list
 	 */
-	public void setListLabels(List<String> expandedValues, LinkedList<String> visitedValues) {
+	public final void setListLabels(List<String> expandedValues, LinkedList<String> visitedValues) {
 
 		// If there are more expanded values than labels, create more expanded labels
 		while(expandedValues.size() > expandedList.size()) {
@@ -605,7 +615,7 @@ public class AlgorithmDisplay {
 	/**
 	 * Resets the list labels
 	 */
-	void resetLabels() {
+	protected final void resetLabels() {
 
 		for(JLabel label:expandedList) {
 			label.setText("");
@@ -622,7 +632,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param title - new title for the title panel
 	 */
-	void setTitleLabel(String title) {
+	protected final void setTitleLabel(String title) {
 		this.title.setText(title);
 	}
 
@@ -631,7 +641,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param value - new value for the iteration label
 	 */
-	public void setIterationLabel(String value) {
+	public final void setIterationLabel(String value) {
 		this.iterationNumber.setText(value);
 	}
 
@@ -640,7 +650,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param value - new value for the expanded list size label
 	 */
-	public void setMaxExpandedSizeLabel(String value) {
+	public final void setMaxExpandedSizeLabel(String value) {
 		this.expandedListSize.setText(value);
 	}
 
@@ -649,7 +659,7 @@ public class AlgorithmDisplay {
 	 * 
 	 * @param color - new colour of the current node 
 	 */
-	public void setCurrentNodeColor(Color color) {
+	public final void setCurrentNodeColor(Color color) {
 		this.currentNode = color;
 	}
 

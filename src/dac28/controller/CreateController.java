@@ -115,7 +115,7 @@ public class CreateController {
 	 * 
 	 * @return dialog window
 	 */
-	public JPanel getCreateDialog() {
+	public final JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));

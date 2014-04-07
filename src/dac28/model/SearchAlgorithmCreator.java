@@ -31,7 +31,7 @@ public class SearchAlgorithmCreator {
 	 * Creates instances of all the search algorithms defined in algorithm.txt and adds them to the hash map.
 	 * To add a new algorithm, add its class name to algorithm.txt.
 	 */
-	protected SearchAlgorithmCreator() {
+	SearchAlgorithmCreator() {
 
 		List<String> algorithmNames = null;
 
@@ -61,12 +61,12 @@ public class SearchAlgorithmCreator {
 	 * 
 	 * @return the search algorithm creator
 	 */
-	public static SearchAlgorithmCreator getInstance() {
+	public final static SearchAlgorithmCreator getInstance() {
 		if(instance==null) instance = new SearchAlgorithmCreator();
 		return instance;
 	}
 
-	public void putAlgorithm(int uID,SearchAlgorithm algorithm) {
+	public final void putAlgorithm(int uID,SearchAlgorithm algorithm) {
 		algorithms.put(uID, algorithm);
 	}
 	
@@ -77,7 +77,7 @@ public class SearchAlgorithmCreator {
 	 * @param tree - the tree the search algorithm will search on
 	 * @return a concrete search algorithm with a defined tree
 	 */
-	public SearchAlgorithm getAlgorithm(int uID,Tree tree) {
+	public final SearchAlgorithm getAlgorithm(int uID,Tree tree) {
 
 		if(!algorithms.containsKey(uID)) return null;
 

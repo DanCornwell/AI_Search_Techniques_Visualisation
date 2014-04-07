@@ -70,7 +70,7 @@ public class AlgorithmController {
 	 * Called within the constructor and reset method.
 	 * A visited list equivalent is not needed due to that list being empty on start. 
 	 */
-	protected void initialiseExpandedList() {
+	private void initialiseExpandedList() {
 
 		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
 			return;
@@ -252,7 +252,7 @@ public class AlgorithmController {
 			// Undoes a step in the algorithm.
 			searchAlgorithm.undo();
 			iterationNumber--;
-			expandedSizes.pop();
+			maxExpandedSize = expandedSizes.pop();
 			// Sets the current node and at goal labels.
 			algorithmDisplay.setNodeAndGoalLabel(String.valueOf(searchAlgorithm.getCurrentNode().getValue()),searchAlgorithm.atGoal());
 		}
@@ -276,6 +276,7 @@ public class AlgorithmController {
 
 			iterationNumber = 0;
 			expandedSizes.clear();
+			maxExpandedSize = 0;
 		}
 
 	}

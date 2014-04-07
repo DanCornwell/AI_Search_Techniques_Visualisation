@@ -29,7 +29,7 @@ class Tree112111 extends Tree {
 	}
 
 	@Override
-	void construct() {
+	protected void construct() {
 		
 		Node one = new Node("1");
 		Node two = new Node("2");
@@ -48,7 +48,7 @@ class Tree112111 extends Tree {
 	}
 
 	@Override
-	void construct(Queue<String> values) {
+	protected void construct(Queue<String> values) {
 
 		while(values.size() < 6) {
 			values.add("Node");
@@ -71,7 +71,7 @@ class Tree112111 extends Tree {
 	}
 
 	@Override
-	Tree getTree(String goalValue, Queue<String> values) {
+	protected Tree getTree(String goalValue, Queue<String> values) {
 		return new Tree112111(goalValue,values);
 	}
 	

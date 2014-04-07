@@ -59,8 +59,6 @@ public class TreeDisplay {
 	 * Counter to draw one off tree on startup.
 	 */
 	protected int count = 0;
-	
-	protected boolean drawnCurrentNode = false;
 
 	/**
 	 * Initialises a tree panel instance.
@@ -69,7 +67,7 @@ public class TreeDisplay {
 	 * @param HEIGHT - the maximum height of the tree panel.
 	 * @return a tree panel instance
 	 */
-	JPanel initialiseTreePanel(final int WIDTH,final int HEIGHT) {
+	protected final JPanel initialiseTreePanel(final int WIDTH,final int HEIGHT) {
 
 		maxWidth = WIDTH;
 		maxHeight = HEIGHT;
@@ -87,15 +85,14 @@ public class TreeDisplay {
 	 * 
 	 * @param tree - new tree for this display.
 	 */
-	public void setTree(Tree tree) {
+	public final void setTree(Tree tree) {
 		this.tree = tree;
 	}
 
 	/**
 	 * Repaints the tree panel.
 	 */
-	public void drawTree() {
-		drawnCurrentNode = false;
+	public final void drawTree() {
 		treePanel.repaint();
 	}
 
@@ -134,19 +131,16 @@ public class TreeDisplay {
 	protected void drawTreeBox(Node node,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
 
 		String value = node.getValue();
-		
+
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
 		// If the node is the last node in the visited list i.e the current node 
 		if(!searchAlgorithm.getVisited().isEmpty() && searchAlgorithm.getVisited().getLast().equals(node) 
 				&& value.equals(searchAlgorithm.getCurrentNode().getValue())) {
 			boxColour = currentNode;
-			drawnCurrentNode = true;
-
 		}
-		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(tree.getGoal()) && !drawnCurrentNode) {
+		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(tree.getGoal())) {
 			boxColour = currentNode;
-			drawnCurrentNode = true;
 		}
 
 		g.setColor(boxColour);
@@ -175,19 +169,7 @@ public class TreeDisplay {
 		 */
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			drawTree(g);
-		}
-
-		void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
-
-			g.fillRect(xPos+1, yPos+1, boxWidth-1, boxHeight-1);
-
-			g.setColor(DEFAULT);
-
-		}
-
-		public void drawTree(Graphics g) {
-
+			
 			// If we have no tree or algorithm return.
 			if(tree==null || searchAlgorithm==null) {
 				return;
@@ -202,7 +184,7 @@ public class TreeDisplay {
 			final int TREE_DEPTH = tree.getTreeDepth();
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
-			
+
 			// The font size
 			int fontSize = 12;
 
@@ -326,6 +308,14 @@ public class TreeDisplay {
 			count++;
 		}
 
+
+		void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
+
+			g.fillRect(xPos+1, yPos+1, boxWidth-1, boxHeight-1);
+
+			g.setColor(DEFAULT);
+
+		}
 	}
 
 }

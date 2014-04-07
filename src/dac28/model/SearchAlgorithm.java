@@ -222,6 +222,6 @@ public abstract class SearchAlgorithm {
 	 * @param tree - tree instance to initialise algorithm with
 	 * @return a concrete search algorithm
 	 */
-	abstract SearchAlgorithm getAlgorithm(Tree tree);
+	protected abstract SearchAlgorithm getAlgorithm(Tree tree);
 
 }

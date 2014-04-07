@@ -437,11 +437,6 @@ public class TopLevelContainer {
 
 		base.getContentPane().removeAll();
 		treeDisplay = new TreeDisplay();
-		/*
-		JScrollPane treeScroller = new JScrollPane(treeDisplay.initialiseTreePanel(width/2,height*2));
-		treeScroller.setPreferredSize(new Dimension(width/2,height-30));
-		base.getContentPane().add(treeScroller,BorderLayout.WEST);
-		*/
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/2, height-30),BorderLayout.WEST);
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/2,height-30),BorderLayout.EAST);
 

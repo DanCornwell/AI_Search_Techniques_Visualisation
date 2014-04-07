@@ -76,7 +76,7 @@ class UniformCostSearch extends SearchAlgorithm {
 	}
 	
 	@Override
-	SearchAlgorithm getAlgorithm(Tree tree) {
+	protected SearchAlgorithm getAlgorithm(Tree tree) {
 		return new UniformCostSearch(tree);
 	}
 

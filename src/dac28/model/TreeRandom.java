@@ -12,7 +12,7 @@ public class TreeRandom extends Tree {
 	}
 
 	@Override
-	void construct() {
+	protected void construct() {
 		
 		Random random = new Random();
 		final int HIGH = 5;
@@ -46,7 +46,7 @@ public class TreeRandom extends Tree {
 	}
 
 	@Override
-	void construct(Queue<String> values) {
+	protected void construct(Queue<String> values) {
 		
 		Random random = new Random();
 		final int HIGH = 6;
@@ -82,7 +82,7 @@ public class TreeRandom extends Tree {
 	}
 
 	@Override
-	Tree getTree(String goalValue, Queue<String> values) {
+	protected Tree getTree(String goalValue, Queue<String> values) {
 		return new TreeRandom(goalValue,values);
 	}
 

@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+
 /**
  * A class used for displaying the algorithm display when a stack is used. Extends algorithmDisplay.
  * Overrides the initialiseAlgorithmPanel method from algorithm display to do this.
@@ -18,11 +19,11 @@ import javax.swing.JScrollPane;
  * @author Dan Cornwell
  *
  */
-public class AlgorithmDisplayStack extends AlgorithmDisplay {
-
+public class AlgorithmDisplayStack extends AlgorithmDisplay {	
+	
 	@Override
-	JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
-
+	protected JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
+		
 		JPanel algorithmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
@@ -30,12 +31,10 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		// the width and height are chosen so that the holding JPanels will fit within the algorithm display panel
 		final int panelWidth = (WIDTH)-50;
 		final int panelHeight = (HEIGHT-40)/6;
-		
-		// the maximum expanded boxes that can be on screen at one time
-		final int ONSCREEN_EXPANDED_BOXES = 10;
-		// the maximum visited boxes that can be on screen at one time
-		final int ONSCREEN_VISITED_BOXES = 8;
 
+		onscreenExpandedBoxes = 10;
+		onscreenVisitedBoxes  = 8;
+		
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth+50,panelHeight-20);
 		titlePanel.add(title);
@@ -47,9 +46,9 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		p1.add(visitedLabel);
 
 		// Expanded panel (Panel 2) - holds the expanded list
-		expandedPanel = getHoldingPanel(BOX_SIZE.width+5,BOX_SIZE.height*ONSCREEN_EXPANDED_BOXES);
+		expandedPanel = getHoldingPanel(BOX_SIZE.width+5,BOX_SIZE.height*onscreenExpandedBoxes);
 		expandedPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
-		for(int i=0;i<ONSCREEN_EXPANDED_BOXES;i++) {
+		for(int i=0;i<onscreenExpandedBoxes;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -61,9 +60,9 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		// Reverse list to give the 'stack' effect
 		Collections.reverse(expandedList);
 		// Visited panel (Panel 3) - holds the visited list
-		visitedPanel = getHoldingPanel(BOX_SIZE.width*ONSCREEN_VISITED_BOXES,BOX_SIZE.height+5);
+		visitedPanel = getHoldingPanel(BOX_SIZE.width*onscreenVisitedBoxes,BOX_SIZE.height+5);
 		visitedPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-		for(int i=0;i<ONSCREEN_VISITED_BOXES;i++) {
+		for(int i=0;i<onscreenVisitedBoxes;i++) {
 			JLabel label = new JLabel("",JLabel.CENTER);
 			label.setOpaque(true);
 			label.setPreferredSize(BOX_SIZE);
@@ -106,8 +105,8 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		expandedScroller = new JScrollPane(expandedPanel);
 		expandedScroller.setBorder(null);
 		expandedScroller.setHorizontalScrollBarPolicy((JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-		expandedScroller.setPreferredSize(new Dimension(BOX_SIZE.width+10,BOX_SIZE.height*ONSCREEN_EXPANDED_BOXES));
-		expandedPanel.scrollRectToVisible(new Rectangle(0,BOX_SIZE.height*ONSCREEN_VISITED_BOXES,10,10));
+		expandedScroller.setPreferredSize(new Dimension(BOX_SIZE.width+10,BOX_SIZE.height*onscreenExpandedBoxes));
+		expandedPanel.scrollRectToVisible(new Rectangle(0,BOX_SIZE.height*onscreenVisitedBoxes,10,10));
 		// Add holding panels to the left and right
 		left.add(expandedScroller);
 		// Add the visited list to a scroll pane and add that scroll pane

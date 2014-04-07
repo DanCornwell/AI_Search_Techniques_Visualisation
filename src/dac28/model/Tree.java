@@ -155,7 +155,7 @@ public abstract class Tree {
 	 * 
 	 * @param costs - new path costs for the tree
 	 */
-	public void setPathCosts(Queue<Integer> costs) {
+	public final void setPathCosts(Queue<Integer> costs) {
 		this.pathCosts = costs;
 	}
 	
@@ -164,21 +164,21 @@ public abstract class Tree {
 	 * 
 	 * @return a queue of integers representing the path costs
 	 */
-	public Queue<Integer> getPathCosts() {
+	public final Queue<Integer> getPathCosts() {
 		return new LinkedList<Integer>(pathCosts);
 	}
 	
 	/**
 	 * Creates nodes and connects them to the root node using default number values.
 	 */
-	abstract void construct();
+	protected abstract void construct();
 
 	/**
 	 * Creates nodes with specified values and connected them to the root node.
 	 * 
 	 * @param values - queue of values that can be polled for the values of the nodes
 	 */
-	abstract void construct(Queue<String> values);
+	protected abstract void construct(Queue<String> values);
 
 	/**
 	 * Returns a concrete instance of the subclass tree.
@@ -188,6 +188,6 @@ public abstract class Tree {
 	 * @param values - values to set the nodes. If this is empty, default values are supplied
 	 * @return a concrete tree
 	 */
-	abstract Tree getTree(String goalValue,Queue<String> values);
+	protected abstract Tree getTree(String goalValue,Queue<String> values);
 
 } 
