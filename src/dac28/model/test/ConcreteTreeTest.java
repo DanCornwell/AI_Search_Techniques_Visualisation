@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import dac28.controller.TextFileReader;
+import dac28.support.TextFileReader;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
 

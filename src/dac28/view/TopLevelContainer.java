@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import dac28.controller.AlgorithmController;
-import dac28.controller.TextFileReader;
+import dac28.support.TextFileReader;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;

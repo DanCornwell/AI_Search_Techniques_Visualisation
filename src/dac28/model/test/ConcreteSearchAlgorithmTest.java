@@ -16,7 +16,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import dac28.controller.TextFileReader;
+import dac28.support.TextFileReader;
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 import dac28.model.SearchAlgorithmCreator;
