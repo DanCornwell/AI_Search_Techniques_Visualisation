@@ -26,7 +26,7 @@ public class DualCreateController extends CreateController {
 	private JComboBox<String> dualAlgorithmOptions = new JComboBox<String>(ALGORITHMS);
 
 	@Override
-	public JPanel addSearchChoices() {
+	protected JPanel addSearchChoices() {
 
 		// Adds the first search choices and label
 		JPanel searchChoices = new JPanel();

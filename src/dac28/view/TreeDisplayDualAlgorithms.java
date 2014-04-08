@@ -50,12 +50,6 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 			g.setColor(boxColour);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}
-		// If the node is the last node in the visited list i.e the current node 
-		else if(!searchAlgorithm.getVisited().isEmpty() && searchAlgorithm.getVisited().getLast() == node) {
-			boxColour = currentNode;
-		}
-		
-		
 		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
 
 			g.setColor(currentNode);

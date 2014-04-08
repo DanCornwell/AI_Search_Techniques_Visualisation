@@ -75,6 +75,8 @@ public class CreateController {
 	public CreateController() {
 
 		goal = new JTextField("");
+		
+		treeDiagram = new TreeDiagram();
 
 		ALGORITHMS = getAlgorithms();
 		algorithmOptions = new JComboBox<String>(ALGORITHMS);
@@ -194,6 +196,8 @@ public class CreateController {
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);	
+		
+		
 		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
@@ -209,7 +213,6 @@ public class CreateController {
 		});
 
 		// Tree drawing panel
-		treeDiagram = new TreeDiagram();
 		treeDiagram.setLayout(null);
 		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
 		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));

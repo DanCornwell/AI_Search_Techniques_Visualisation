@@ -134,14 +134,7 @@ public class TreeDisplay {
 
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		// If the node is the last node in the visited list i.e the current node 
-		if(!searchAlgorithm.getVisited().isEmpty() && searchAlgorithm.getVisited().getLast().equals(node) 
-				&& value.equals(searchAlgorithm.getCurrentNode().getValue())) {
-			boxColour = currentNode;
-		}
-		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(tree.getGoal())) {
-			boxColour = currentNode;
-		}
+		if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && count!=0) boxColour = currentNode;
 
 		g.setColor(boxColour);
 		treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);

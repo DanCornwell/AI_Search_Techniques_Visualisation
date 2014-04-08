@@ -44,7 +44,7 @@ public class TextFileReader {
 		File alg = new File(ALGORITHMS_TXT);
 		if(!alg.exists() || alg.isDirectory()) {
 			if(!alg.createNewFile()) return null;
-			final String ALGORITHMS = "BreadthFirstSearch\nDepthFirstSearch";
+			final String ALGORITHMS = "BreadthFirstSearch\nDepthFirstSearch\nIterativeDeepeningSearch\nUniformCostSearch";
 			FileWriter fw = new FileWriter(alg.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write(ALGORITHMS);
