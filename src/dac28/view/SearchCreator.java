@@ -1,4 +1,4 @@
-package dac28.controller;
+package dac28.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import dac28.controller.TextFileReader;
 import dac28.model.Node;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
@@ -34,7 +35,7 @@ import dac28.model.TreeCreator;
  * @author Dan Cornwell
  *
  */
-public class CreateController {
+public class SearchCreator {
 
 	/**
 	 * The goal field the user can enter their goal value in.
@@ -43,7 +44,7 @@ public class CreateController {
 	/**
 	 * The combo boxes for the different algorithms and trees.
 	 */
-	protected JComboBox<String> algorithmOptions,treeOptions;
+	protected JComboBox<String> algorithmOptions,treeOptions;	
 	/**
 	 * String arrays for the algorithms and trees.
 	 */
@@ -72,10 +73,10 @@ public class CreateController {
 	/**
 	 * Initialises the radio buttons and goal field.
 	 */
-	public CreateController() {
+	public SearchCreator() {
 
 		goal = new JTextField("");
-		
+
 		treeDiagram = new TreeDiagram();
 
 		ALGORITHMS = getAlgorithms();
@@ -117,7 +118,7 @@ public class CreateController {
 	 * 
 	 * @return dialog window
 	 */
-	public final JPanel getCreateDialog() {
+	final JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
@@ -196,8 +197,8 @@ public class CreateController {
 		treeChoices.add(new JLabel("Select Search Tree: ",JLabel.RIGHT));
 		treeChoices.add(treeOptions);
 		treeOptions.setSelectedIndex(0);	
-		
-		
+
+
 		// Call repaint on the tree whenever an item in the combo box is selected
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
@@ -262,42 +263,28 @@ public class CreateController {
 	}
 
 	/**
-	 * Returns the the unique ID of the selected tree.
+	 * Returns the the unique ID of the selected tree, which is its index within the button group.
 	 * 
 	 * @return Integer representing the tree's ID
 	 */
 	public final int getTreeUID() {
 
-		String selectedItem = (String)treeOptions.getSelectedItem();
-
-		int id = 0;
-
-		while(id <= TREES.length-1 && !TREES[id].equals(selectedItem)) {
-			id++;
-		}
-
-		return id;
+		return treeOptions.getSelectedIndex();
 
 	}
 
 	/**
-	 * Returns the unique id of the selected algorithm.
+	 * Returns the unique id of the selected algorithm, which is its index within the button group.
 	 * 
 	 * @return Integer representing the algorithm's ID
 	 */
 	public final int getAlgorithmUID() {
 
-		String selectedItem = (String)algorithmOptions.getSelectedItem();
-
-		int id = 0;
-
-		while(id <= ALGORITHMS.length-1 && !ALGORITHMS[id].equals(selectedItem)) {
-			id++;
-		}
-
-		return id;
+		return algorithmOptions.getSelectedIndex();
+		
 
 	}
+
 
 	/**
 	 * Returns the value that is in the goal text field.
@@ -315,13 +302,13 @@ public class CreateController {
 	 */
 	public final Queue<String> getNodeValues() {
 		Queue<String> values = new LinkedList<String>();
-		
+
 		for(JTextField field: nodeValues) {
-			
+
 			values.add(field.getText().trim());
-		
+
 		}
-		
+
 		return values;
 	}
 
@@ -346,7 +333,21 @@ public class CreateController {
 	 * @return true if an algorithm has selected uniform cost search, false otherwise
 	 */
 	protected boolean usingUniformCostSearch() {
-		return algorithmOptions.getSelectedItem().equals("UniformCostSearch");
+
+		return (algorithmOptions.getSelectedItem().equals("UniformCostSearch"));
+	}
+	
+	/**
+	 * Returns true if the algorithm selected should use a stack display. 
+	 * Add or statements in the same form of the ones below if new algorithms with stacks are implemented.
+	 * If there is more than one search being used create another method like this one for the another button group.
+	 * 
+	 * @return true if the selected search matches one that uses a stack, false otherwise
+	 */
+	final boolean algorithmUsingStack() {
+		
+		return algorithmOptions.getSelectedItem().equals("DepthFirstSearch") 
+				|| algorithmOptions.getSelectedItem().equals("IterativeDeepeningSearch");
 	}
 
 	/**

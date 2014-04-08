@@ -1,4 +1,4 @@
-package dac28.controller;
+package dac28.view;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  * @author Dan Cornwell
  *
  */
-public class DualCreateController extends CreateController {
+class SearchCreatorDual extends SearchCreator {
 
 	/**
 	 * Combo box relating to the 2nd algorithm.
@@ -93,21 +93,14 @@ public class DualCreateController extends CreateController {
 	}
 
 	/**
-	 * Returns the unique id of the 2nd selected algorithm.
+	 * Returns the unique id of the 2nd selected algorithm, which is its index within the button group.
 	 * 
 	 * @return Integer representing the algorithm's ID
 	 */
 	public int getAlgorithm2UID() {
 
-		String selectedItem = (String)dualAlgorithmOptions.getSelectedItem();
+		return dualAlgorithmOptions.getSelectedIndex();
 
-		int id = 0;
-
-		while(id <= ALGORITHMS.length-1 && !ALGORITHMS[id].equals(selectedItem)) {
-			id++;
-		}
-
-		return id;
 
 	}
 
@@ -115,6 +108,18 @@ public class DualCreateController extends CreateController {
 	protected boolean usingUniformCostSearch() {
 		return (algorithmOptions.getSelectedItem().equals("UniformCostSearch")
 				|| dualAlgorithmOptions.getSelectedItem().equals("UniformCostSearch"));
+	}
+	
+	/**
+	 * Returns whether the 2nd algorithm uses a stack.
+	 * See algorithmUsingStack in the SearchCreator class for the full JavaDoc.
+	 * 
+	 * @return true if the selected search matches one that uses a stack, false otherwise
+	 */
+	final boolean algorithm2UsingStack() {
+		
+		return dualAlgorithmOptions.getSelectedItem().equals("DepthFirstSearch") 
+				|| dualAlgorithmOptions.getSelectedItem().equals("IterativeDeepeningSearch");
 	}
 
 }

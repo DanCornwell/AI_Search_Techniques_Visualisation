@@ -26,8 +26,6 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import dac28.controller.AlgorithmController;
-import dac28.controller.CreateController;
-import dac28.controller.DualCreateController;
 import dac28.controller.TextFileReader;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
@@ -109,15 +107,15 @@ public class TopLevelContainer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				CreateController controller = new CreateController();
+				SearchCreator creator = new SearchCreator();
 
-				if(!displayUserInputDialog(controller)) return;
+				if(!displayUserInputDialog(creator)) return;
 				
-				Tree tree = getUserInputTreeChoice(controller);
+				Tree tree = getUserInputTreeChoice(creator);
 				if(tree==null) return;
 
 				// Get the algorithm from the user input
-				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
+				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree);
 				if(algorithm==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -128,8 +126,7 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
-						|| controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
+				if(creator.algorithmUsingStack()) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
@@ -137,7 +134,7 @@ public class TopLevelContainer {
 				}
 
 				// Set algorithm display title
-				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithmUID()));
+				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(creator.getAlgorithmUID()));
 
 				// initialise the single display
 				initialiseSingleDisplay();
@@ -168,15 +165,15 @@ public class TopLevelContainer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				DualCreateController controller = new DualCreateController();
+				SearchCreatorDual creator = new SearchCreatorDual();
 
-				if(!displayUserInputDialog(controller)) return;
+				if(!displayUserInputDialog(creator)) return;
 
-				Tree tree = getUserInputTreeChoice(controller);
+				Tree tree = getUserInputTreeChoice(creator);
 				if(tree==null) return;
 
 				// Get the first algorithm from the user input		
-				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithmUID(), tree);
+				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree);
 				if(algorithm1==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -186,7 +183,7 @@ public class TopLevelContainer {
 					return;
 				}
 				// Get the second algorithm from the user input		
-				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(controller.getAlgorithm2UID(), tree);
+				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithm2UID(), tree);
 				if(algorithm2==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -197,24 +194,24 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
-						|| controller.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
+				if(creator.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
+						|| creator.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
-						|| controller.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
+				if(creator.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
+						|| creator.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					dualAlgorithmDisplay = new AlgorithmDisplay();
 				}
 				// Set algorithm1 display title
-				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithmUID()));
+				algorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(creator.getAlgorithmUID()));
 				// Set algorithm2 display title
-				dualAlgorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(controller.getAlgorithm2UID()));
+				dualAlgorithmDisplay.setTitleLabel(TextFileReader.getAlgorithms().get(creator.getAlgorithm2UID()));
 
 				// initialise the dual display
 				initialiseDualDisplay();
@@ -290,17 +287,17 @@ public class TopLevelContainer {
 	/**
 	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
 	 * 
-	 * @param controller - the create controller that will specify which dialog to show
+	 * @param creator - the SearchCreator instance that will specify which dialog to show
 	 * @return true if user clicks ok with valid input, false if they hit cancel
 	 */
-	private boolean displayUserInputDialog(CreateController controller) {
+	private boolean displayUserInputDialog(SearchCreator creator) {
 
 		Object[] options = {"Confirm", "Cancel"};
 
 		// boolean used to loop the controller on invalid input
 		boolean validInput = false;
 
-		JPanel dialog = controller.getCreateDialog();
+		JPanel dialog = creator.getCreateDialog();
 
 		while(!validInput) {
 
@@ -310,14 +307,14 @@ public class TopLevelContainer {
 			if(result == JOptionPane.OK_OPTION) {
 
 				List<String> warnings = new LinkedList<String>();
-				if(controller.getNodeValues().contains("")) warnings.add("A node name was blank. A default value will be used instead.");
-				if(controller.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
-				if(!controller.getNodeValues().contains(controller.getGoal())) warnings.add("The goal value was not found in the tree.");
-				List<String> list = (LinkedList<String>) controller.getNodeValues();
+				if(creator.getNodeValues().contains("")) warnings.add("A node name was blank. A default value will be used instead.");
+				if(creator.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
+				if(!creator.getNodeValues().contains(creator.getGoal())) warnings.add("The goal value was not found in the tree.");
+				List<String> list = (LinkedList<String>) creator.getNodeValues();
 				Set<String> set = new HashSet<String>(list);
 				if(set.size() < list.size()) warnings.add("There were duplicated nodes values. A duplication will be replaced with a default value.");
 				
-				for(String value: controller.getPathValues()) {
+				for(String value: creator.getPathValues()) {
 
 					try {
 						Integer.parseInt(value); 
@@ -367,7 +364,7 @@ public class TopLevelContainer {
 	 * @param controller - the create controller with the user's tree choice
 	 * @return a search tree if it exists, null if it doesn't
 	 */
-	private Tree getUserInputTreeChoice(CreateController controller) {
+	private Tree getUserInputTreeChoice(SearchCreator controller) {
 
 		// Create a tree and algorithm with the user supplied information. Return if null.
 		Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
