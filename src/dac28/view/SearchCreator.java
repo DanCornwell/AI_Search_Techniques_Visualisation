@@ -118,7 +118,7 @@ public class SearchCreator {
 	 * 
 	 * @return dialog window
 	 */
-	final JPanel getCreateDialog() {
+	protected final JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
@@ -267,7 +267,7 @@ public class SearchCreator {
 	 * 
 	 * @return Integer representing the tree's ID
 	 */
-	public final int getTreeUID() {
+	protected final int getTreeUID() {
 
 		return treeOptions.getSelectedIndex();
 
@@ -278,20 +278,18 @@ public class SearchCreator {
 	 * 
 	 * @return Integer representing the algorithm's ID
 	 */
-	public final int getAlgorithmUID() {
+	protected final int getAlgorithmUID() {
 
 		return algorithmOptions.getSelectedIndex();
 		
-
 	}
-
 
 	/**
 	 * Returns the value that is in the goal text field.
 	 * 
 	 * @return string representing the value entered
 	 */
-	public final String getGoal() {
+	protected final String getGoal() {
 		return goal.getText();
 	}
 
@@ -300,7 +298,7 @@ public class SearchCreator {
 	 * 
 	 * @return queue of string values for the nodes
 	 */
-	public final Queue<String> getNodeValues() {
+	protected final Queue<String> getNodeValues() {
 		Queue<String> values = new LinkedList<String>();
 
 		for(JTextField field: nodeValues) {
@@ -317,7 +315,7 @@ public class SearchCreator {
 	 * 
 	 * @return queue of string values for the paths
 	 */
-	public final Queue<String> getPathValues() {
+	protected final Queue<String> getPathValues() {
 		Queue<String> values = new LinkedList<String>();
 		for(JTextField field: pathValues) {
 			values.add(field.getText());
@@ -344,7 +342,7 @@ public class SearchCreator {
 	 * 
 	 * @return true if the selected search matches one that uses a stack, false otherwise
 	 */
-	final boolean algorithmUsingStack() {
+	protected final boolean algorithmUsingStack() {
 		
 		return algorithmOptions.getSelectedItem().equals("DepthFirstSearch") 
 				|| algorithmOptions.getSelectedItem().equals("IterativeDeepeningSearch");

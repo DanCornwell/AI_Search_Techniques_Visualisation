@@ -194,15 +194,13 @@ public class TopLevelContainer {
 				}
 
 				// If we are using a stack use an AlgorithmDisplayStack instance. Else queue so AlgorithmDisplay.
-				if(creator.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
-						|| creator.getAlgorithmUID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
+				if(creator.algorithmUsingStack()) {
 					algorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
 					algorithmDisplay = new AlgorithmDisplay();
 				}
-				if(creator.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("DepthFirstSearch")
-						|| creator.getAlgorithm2UID() == TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch")) {
+				if(creator.algorithm2UsingStack()) {
 					dualAlgorithmDisplay = new AlgorithmDisplayStack();
 				}
 				else {
@@ -226,7 +224,7 @@ public class TopLevelContainer {
 				treeDisplay.setCurrentNodeColor(colors);
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE_1);
 				dualAlgorithmDisplay.setCurrentNodeColor(CURRENT_NODE_2);
-
+				
 				// Create new tree controller
 				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 				// Create new algorithm controller for algorithm 1
@@ -288,7 +286,7 @@ public class TopLevelContainer {
 	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
 	 * 
 	 * @param creator - the SearchCreator instance that will specify which dialog to show
-	 * @return true if user clicks ok with valid input, false if they hit cancel
+	 * @return true if user clicks OK with valid input, false if they hit cancel
 	 */
 	private boolean displayUserInputDialog(SearchCreator creator) {
 
@@ -519,6 +517,7 @@ public class TopLevelContainer {
 		pause.setEnabled(false);
 		p.add(skip);
 		p.add(reset);
+		reset.setEnabled(false);
 
 		// add dual button panel to the base
 		base.getContentPane().add(p,BorderLayout.SOUTH);
@@ -540,11 +539,14 @@ public class TopLevelContainer {
 			step.setEnabled(true);
 			skip.setEnabled(true);
 		}
+		
 		if(algorithmDisplay.undo.isEnabled() || dualAlgorithmDisplay.undo.isEnabled()) {
 			undo.setEnabled(true);
+			reset.setEnabled(true);
 		}
 		else {
 			undo.setEnabled(false);
+			reset.setEnabled(false);
 		}
 	}
 
@@ -683,7 +685,6 @@ public class TopLevelContainer {
 			}
 			toggleButtons();
 			pause.setEnabled(false);
-			reset.setEnabled(true);
 		}
 
 	}
@@ -707,7 +708,7 @@ public class TopLevelContainer {
 		/**
 		 * Size for the panel that all legend data is inside.
 		 */
-		private final Dimension PANEL_SIZE = new Dimension(270,30);
+		private final Dimension PANEL_SIZE = new Dimension(350,30);
 		/**
 		 * The default colour.
 		 */
@@ -719,59 +720,72 @@ public class TopLevelContainer {
 			legend.setLayout(new FlowLayout());
 
 			// Creates all the boxes in the legend.
-			JLabel currentNode = new JLabel();
-			currentNode.setBorder(BOX_BORDER);
-			currentNode.setPreferredSize(BOX_SIZE);
-			currentNode.setBackground(Color.yellow);
-			currentNode.setOpaque(true);
-			JLabel currentNodeInfo = new JLabel(" - Current node being examined in the algorithm");
+			JLabel singleCurrentNodeBox = new JLabel();
+			singleCurrentNodeBox.setBorder(BOX_BORDER);
+			singleCurrentNodeBox.setPreferredSize(BOX_SIZE);
+			singleCurrentNodeBox.setBackground(Color.yellow);
+			singleCurrentNodeBox.setOpaque(true);
+			JLabel singleCurrentNodeInfo = new JLabel(" - Current node being examined in a single algorithm search");
+			JLabel dual1CurrentNodeBox = new JLabel();
+			dual1CurrentNodeBox.setBorder(BOX_BORDER);
+			dual1CurrentNodeBox.setPreferredSize(BOX_SIZE);
+			dual1CurrentNodeBox.setBackground(Color.pink);
+			dual1CurrentNodeBox.setOpaque(true);
+			JLabel dual1CurrentNodeInfo = new JLabel(" - Current node being examined by algorithm 1 in a dual search");
+			JLabel dual2CurrentNodeBox = new JLabel();
+			dual2CurrentNodeBox.setBorder(BOX_BORDER);
+			dual2CurrentNodeBox.setPreferredSize(BOX_SIZE);
+			dual2CurrentNodeBox.setBackground(Color.orange);
+			dual2CurrentNodeBox.setOpaque(true);
+			JLabel dual2CurrentNodeInfo = new JLabel(" - Current node being examined by algorithm 2 in a dual search");		
 			JLabel goalNode = new JLabel();
 			goalNode.setBorder(BOX_BORDER);
 			goalNode.setPreferredSize(BOX_SIZE);
 			goalNode.setBackground(Color.green);
 			goalNode.setOpaque(true);
-			JLabel goalNodeInfo = new JLabel(" - Goal node the algorithm searches for");
-			JLabel head = new JLabel();
-			head.setBorder(BOX_BORDER);
-			head.setPreferredSize(BOX_SIZE);
-			head.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, new Color(139, 0, 255)));
-			JLabel headInfo = new JLabel(" - Head of queue / Top of stack");
+			JLabel goalNodeInfo = new JLabel(" - Goal node the algorithm(s) searches for");
 			JLabel newItem = new JLabel();
 			newItem.setBorder(BOX_BORDER);
 			newItem.setPreferredSize(BOX_SIZE);
 			newItem.setBackground(new Color(51,255,255));
 			newItem.setOpaque(true);
-			JLabel newItemInfo = new JLabel(" - New element to the list");
+			JLabel newItemInfo = new JLabel(" - New element to the expanded or visited list");
 
 			// Creates panels and adds the boxes to them.
 			JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			p1.setPreferredSize(PANEL_SIZE);
 			p1.setBackground(DEFAULT);
-			p1.add(currentNode);
-			p1.add(currentNodeInfo);
+			p1.add(singleCurrentNodeBox);
+			p1.add(singleCurrentNodeInfo);
 			JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			p2.setPreferredSize(PANEL_SIZE);
 			p2.setBackground(DEFAULT);
-			p2.add(goalNode);
-			p2.add(goalNodeInfo);
+			p2.add(dual1CurrentNodeBox);
+			p2.add(dual1CurrentNodeInfo);
 			JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			p3.setPreferredSize(PANEL_SIZE);
 			p3.setBackground(DEFAULT);
-			p3.add(head);
-			p3.add(headInfo);
+			p3.add(dual2CurrentNodeBox);
+			p3.add(dual2CurrentNodeInfo);
 			JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			p4.setPreferredSize(PANEL_SIZE);
 			p4.setBackground(DEFAULT);
-			p4.add(newItem);
-			p4.add(newItemInfo);
+			p4.add(goalNode);
+			p4.add(goalNodeInfo);
+			JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			p5.setPreferredSize(PANEL_SIZE);
+			p5.setBackground(DEFAULT);
+			p5.add(newItem);
+			p5.add(newItemInfo);
 
 			// Add the panels to the legend.
 			legend.getContentPane().setBackground(DEFAULT);
-			legend.setSize(300,200);
+			legend.setSize(400,220);
 			legend.add(p1);
 			legend.add(p2);
 			legend.add(p3);
 			legend.add(p4);
+			legend.add(p5);
 			legend.setVisible(true);
 			legend.setLocationRelativeTo(base);
 

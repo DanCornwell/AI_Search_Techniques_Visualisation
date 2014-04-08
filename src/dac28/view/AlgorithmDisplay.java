@@ -1,4 +1,4 @@
-package dac28.view;
+ package dac28.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -305,7 +305,7 @@ public class AlgorithmDisplay {
 	public final void togglePause(boolean bool) {
 		pause.setEnabled(bool);
 	}
-
+	
 	/**
 	 * Returns the expanded list
 	 * 

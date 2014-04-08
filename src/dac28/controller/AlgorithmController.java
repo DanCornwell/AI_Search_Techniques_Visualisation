@@ -47,7 +47,6 @@ public class AlgorithmController {
 		initialiseExpandedList();
 
 		this.algorithmDisplay.toggleAuto(true);
-		this.algorithmDisplay.toggleReset(true);
 		this.algorithmDisplay.toggleStep(true);
 		this.algorithmDisplay.toggleSkip(true);
 		this.algorithmDisplay.registerStepListener(new StepListener());
@@ -114,11 +113,13 @@ public class AlgorithmController {
 			}
 			if(searchAlgorithm.canUndo()) {
 				algorithmDisplay.toggleUndo(true);
+				algorithmDisplay.toggleReset(true);
 			}
 			else {
 				algorithmDisplay.toggleUndo(false);
+				algorithmDisplay.toggleReset(false);
 			}
-
+			
 			if(expandedSizes.isEmpty()) {
 				algorithmDisplay.setIterationLabel("");
 				algorithmDisplay.setMaxExpandedSizeLabel("");

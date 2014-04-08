@@ -46,7 +46,7 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 		
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		if(count==0) {
+		if(!searchAlgorithm.canUndo()) {
 			g.setColor(boxColour);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}

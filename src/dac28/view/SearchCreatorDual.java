@@ -101,7 +101,6 @@ class SearchCreatorDual extends SearchCreator {
 
 		return dualAlgorithmOptions.getSelectedIndex();
 
-
 	}
 
 	@Override
@@ -116,7 +115,7 @@ class SearchCreatorDual extends SearchCreator {
 	 * 
 	 * @return true if the selected search matches one that uses a stack, false otherwise
 	 */
-	final boolean algorithm2UsingStack() {
+	protected final boolean algorithm2UsingStack() {
 		
 		return dualAlgorithmOptions.getSelectedItem().equals("DepthFirstSearch") 
 				|| dualAlgorithmOptions.getSelectedItem().equals("IterativeDeepeningSearch");

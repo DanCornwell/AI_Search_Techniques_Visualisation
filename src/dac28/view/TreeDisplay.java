@@ -55,10 +55,6 @@ public class TreeDisplay {
 	 * Colour of the current node in the tree display.
 	 */
 	protected Color currentNode;
-	/**
-	 * Counter to draw one off tree on startup.
-	 */
-	protected int count = 0;
 
 	/**
 	 * Initialises a tree panel instance.
@@ -134,7 +130,7 @@ public class TreeDisplay {
 
 		Color boxColour = Color.white;
 		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && count!=0) boxColour = currentNode;
+		if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && searchAlgorithm.canUndo()) boxColour = currentNode;
 
 		g.setColor(boxColour);
 		treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
@@ -298,9 +294,7 @@ public class TreeDisplay {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
 
-			count++;
 		}
-
 
 		void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
 
