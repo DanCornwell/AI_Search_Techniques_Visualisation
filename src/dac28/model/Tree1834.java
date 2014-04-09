@@ -2,9 +2,20 @@ package dac28.model;
 
 import java.util.Queue;
 
-class Tree1734 extends Tree {
+/**
+ * The Tree1834 class. Extends the tree class.
+ * Has the following structure:
+ * 			     	0
+ * 		1	2	3	4	5	6	7 	8
+ * 			9		10		11
+ * 		12		13		14		15
+ * 
+ * @author Dan Cornwell
+ *
+ */
+class Tree1834 extends Tree {
 
-	Tree1734(String GOAL, Queue<String> values) {
+	Tree1834(String GOAL, Queue<String> values) {
 		super(GOAL, values);
 	}
 
@@ -97,7 +108,7 @@ class Tree1734 extends Tree {
 
 	@Override
 	protected Tree getTree(String goalValue, Queue<String> values) {
-		return new Tree1734(goalValue,values);
+		return new Tree1834(goalValue,values);
 	}
 
 

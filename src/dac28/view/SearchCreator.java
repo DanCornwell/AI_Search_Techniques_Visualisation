@@ -404,6 +404,7 @@ public class SearchCreator {
 			boolean isPathValuesEmpty = pathValues.isEmpty();
 
 			// While the boxes are too big either horizontally or vertically, shrink the box size
+			// This makes sure the entire tree is drawn within the panel
 			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
 				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
 					boxsize -= 5;
