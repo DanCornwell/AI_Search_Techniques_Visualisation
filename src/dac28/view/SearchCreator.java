@@ -22,7 +22,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import dac28.support.TextFileReader;
@@ -54,8 +53,6 @@ public class SearchCreator {
 	 * Draws the tree panel, with text fields to set the node values.
 	 */
 	protected JPanel treeDiagram;
-
-	protected JScrollPane scroller;
 	/**
 	 * List of the node input text fields.
 	 */
@@ -126,8 +123,8 @@ public class SearchCreator {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 
-		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT+40));
-
+		panel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		
 		// Node name buttons
 		// final button since it is used within the tree changer ActionListener
 		final JRadioButton NUMBER = new JRadioButton("Numeric");
@@ -218,19 +215,15 @@ public class SearchCreator {
 
 		// Tree drawing panel
 		treeDiagram.setLayout(null);
-		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-30));
+		treeDiagram.setPreferredSize(new Dimension(WIDTH-20,3*(HEIGHT/4)-10));
 		treeDiagram.setBorder(BorderFactory.createLineBorder(Color.black));
 		treeDiagram.setBackground(Color.white);
-
-		scroller = new JScrollPane(treeDiagram);
-		scroller.setPreferredSize(new Dimension(WIDTH,3*(HEIGHT/4)));
-		scroller.setBorder(null);
 
 		// Add panels onto main panel and returns it
 		panel.add(goalChoice);
 		panel.add(treeChoices);
 		panel.add(addSearchChoices());
-		panel.add(scroller);
+		panel.add(treeDiagram);
 		panel.add(nodeNamesPanel);
 
 		return panel;
@@ -362,16 +355,7 @@ public class SearchCreator {
 	 * 
 	 */
 	private class TreeDiagram extends JPanel {
-
-		/**
-		 * Default width of the tree diagram panel.
-		 */
-		private final int DEFAULT_WIDTH = 380; 
-		/**
-		 * Default height of the tree diagram panel.
-		 */
-		private final int DEFAULT_HEIGHT = 335;
-		
+	
 		/**
 		 * Random serial number.
 		 */
@@ -402,20 +386,34 @@ public class SearchCreator {
 			int fontSize = 10;
 			// a default value used when naming new nodes
 			int defaultValue = 0;
+			// The shrink ratio for the font size
+			final double shrinkRatio = 5.0/6;
 
-			int treeDiagramWidth = DEFAULT_WIDTH;
-			int treeDiagramHeight = DEFAULT_HEIGHT;
-			
 			// whether they're are some node values to use, if false then they will be created
 			boolean isNodeValuesEmpty = nodeValues.isEmpty();
 			// whether they're are some path values to use, if false then they will be created
 			boolean isPathValuesEmpty = pathValues.isEmpty();
 
-			// The x position of the root node.
-			final int ROOT_X_POS = (treeDiagramWidth/2)-(boxsize/2);
-			// The y position of the root node.
-			final int ROOT_Y_POS = (treeDiagramHeight/TREE_DEPTH)/4;
+			// While the boxes are too big either horizontally or vertically, shrink the box size
+			// This makes sure the entire tree is drawn within the panel
+			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
+				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
+					boxsize -= 5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
+					boxsize -=5;
+					fontSize = (int)Math.round(fontSize * (shrinkRatio));
+				}
+				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
+			}
 
+			
+			// The x position of the root node.
+			final int ROOT_X_POS = (this.getWidth()/2)-(boxsize/2);
+			// The y position of the root node.
+			final int ROOT_Y_POS = (this.getHeight()/TREE_DEPTH)/4;
+			
 			// Draws the root node box
 			g.drawRect(ROOT_X_POS, ROOT_Y_POS, boxsize, boxsize);
 
@@ -465,15 +463,13 @@ public class SearchCreator {
 					// For all the children on this level.
 					for(int i=0;i<NODES_ON_LEVEL;i++) {
 
-						if((boxsize+((2*boxsize)/3))*NODES_ON_LEVEL > treeDiagramWidth) treeDiagramWidth = (boxsize+((2*boxsize)/3))*NODES_ON_LEVEL;
-
 						// Gives the nodes x position, using math to give visually pleasing spacing.
-						int xPos = (treeDiagramWidth/(NODES_ON_LEVEL+1)) + (i*(treeDiagramWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
-
-						if(((2*boxsize)+(boxsize/3))*TREE_DEPTH > treeDiagramHeight) treeDiagramHeight = ((2*boxsize)+(boxsize/3))*TREE_DEPTH;
+						int xPos = (this.getWidth()/(NODES_ON_LEVEL+1)) + (i*(this.getWidth()/(NODES_ON_LEVEL+1))) - (boxsize/2);
+						
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
-						int yPos = nodeLevel*(treeDiagramHeight/TREE_DEPTH);
+						int yPos = nodeLevel*(this.getHeight()/TREE_DEPTH);
+						
 						// Draw the nodes with their values inside them.
 						g.drawRect(xPos, yPos, boxsize, boxsize);	
 
@@ -536,9 +532,6 @@ public class SearchCreator {
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
-
-			treeDiagram.setPreferredSize(new Dimension(treeDiagramWidth,treeDiagramHeight));
-			scroller.setViewportView(treeDiagram);
 
 			// Add all text fields
 			for(JTextField textFields: nodeValues) {

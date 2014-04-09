@@ -362,10 +362,10 @@ public class TopLevelContainer {
 	 * @param controller - the create controller with the user's tree choice
 	 * @return a search tree if it exists, null if it doesn't
 	 */
-	private Tree getUserInputTreeChoice(SearchCreator controller) {
+	private Tree getUserInputTreeChoice(SearchCreator creator) {
 
 		// Create a tree and algorithm with the user supplied information. Return if null.
-		Tree tree = TreeCreator.getInstance().getTree(controller.getTreeUID(), controller.getGoal(), controller.getNodeValues());
+		Tree tree = TreeCreator.getInstance().getTree(creator.getTreeUID(), creator.getGoal(), creator.getNodeValues());
 
 		if(tree==null) {
 			Object[] ok = {"Ok"};
@@ -378,7 +378,7 @@ public class TopLevelContainer {
 
 		// Get the path costs from the user input, then set the tree with it
 		Queue<Integer> costs = new LinkedList<Integer>();
-		for(String s: controller.getPathValues()) {
+		for(String s: creator.getPathValues()) {
 			try {
 				costs.add(Integer.parseInt(s));
 			}
