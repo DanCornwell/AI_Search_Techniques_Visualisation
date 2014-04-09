@@ -1,8 +1,7 @@
-package dac28.view;
+ package dac28.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashMap;
@@ -13,14 +12,17 @@ import java.util.Queue;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import dac28.model.Node;
 import dac28.model.SearchAlgorithm;
 import dac28.model.Tree;
 
 /**
- * Single tree display class, a subclass of tree display.
+ * The tree display class.
  * Defines how to draw a tree with a single algorithm searching on it.
+ * Displays with more than one algorithm should extend this class and add in the 
+ * new functionality by overriding the draw tree box method.
  * 
  * @author Dan Cornwell
  *
@@ -31,6 +33,8 @@ public class TreeDisplay {
 	 * The tree panel instance.
 	 */
 	protected TreePanel treePanel;
+	
+	protected JScrollPane scroller;
 	/**
 	 * The max width and height of the tree panel instance.
 	 */
@@ -63,17 +67,21 @@ public class TreeDisplay {
 	 * @param HEIGHT - the maximum height of the tree panel.
 	 * @return a tree panel instance
 	 */
-	protected final JPanel initialiseTreePanel(final int WIDTH,final int HEIGHT) {
+	protected final JScrollPane initialiseTreePanel(final int WIDTH,final int HEIGHT) {
 
-		maxWidth = WIDTH;
-		maxHeight = HEIGHT;
+		maxWidth = WIDTH-20;
+		maxHeight = HEIGHT-35;
 
 		treePanel = new TreePanel();
 		treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
 		treePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		treePanel.setBackground(Color.white);
 
-		return treePanel;
+		scroller = new JScrollPane(treePanel);
+		scroller.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		scroller.setBorder(null);
+		
+		return scroller;
 	}
 
 	/**
@@ -156,7 +164,7 @@ public class TreeDisplay {
 		/**
 		 * Paints the JPanel. Calls the draw tree method.
 		 */
-		protected void paintComponent(Graphics g) {
+		protected final void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
 			// If we have no tree or algorithm return.
@@ -174,29 +182,10 @@ public class TreeDisplay {
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
 
-			// The font size
-			int fontSize = 12;
-
-			// The shrink ratio for the font size
-			final double shrinkRatio = 7.0/8;	
-
-			// While the boxes are too big either horizontally or vertically, shrink the box size
-			if(TREE_DEPTH != 0 && tree.getTreeWidth() != 0) {
-				while((this.getHeight()/TREE_DEPTH)-10 < boxsize) {
-					boxsize -= 5;
-					fontSize = (int)Math.round(fontSize * (shrinkRatio));
-				}
-				while((this.getWidth()/tree.getTreeWidth())-10 < boxsize) {
-					boxsize -=5;
-					fontSize = (int)Math.round(fontSize * (shrinkRatio));
-				}
-				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
-			}
 			// The x position of the root node.
 			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
-			//	final int ROOT_Y_POS = 40;
 
 			drawTreeBox(tree.getRoot(),g,ROOT_X_POS,ROOT_Y_POS,boxsize,boxsize);
 
@@ -238,11 +227,13 @@ public class TreeDisplay {
 					// For all the children on this level.
 					for(int i=0;i<NODES_ON_LEVEL;i++) {
 
+						if(50*NODES_ON_LEVEL > maxWidth) maxWidth = 50*NODES_ON_LEVEL;
 						// Gives the nodes x position, using math to give visually pleasing spacing.
 						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
+						
+						if(70*TREE_DEPTH > maxHeight) maxHeight = 70*TREE_DEPTH;
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
-						//	int yPos = ROOT_Y_POS+(nodeLevel*boxsize*2);
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
 
 						drawTreeBox(children.get(i),g,xPos,yPos,boxsize,boxsize);
@@ -294,9 +285,11 @@ public class TreeDisplay {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
 
+			treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
+			scroller.setViewportView(treePanel);
 		}
 
-		void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
+		final void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
 
 			g.fillRect(xPos+1, yPos+1, boxWidth-1, boxHeight-1);
 
