@@ -33,7 +33,9 @@ public class TreeDisplay {
 	 * The tree panel instance.
 	 */
 	protected TreePanel treePanel;
-	
+	/**
+	 * The scroll pane that the tree panel will be placed in.
+	 */
 	protected JScrollPane scroller;
 	/**
 	 * The max width and height of the tree panel instance.
@@ -61,11 +63,11 @@ public class TreeDisplay {
 	protected Color currentNode;
 
 	/**
-	 * Initialises a tree panel instance.
+	 * Initialises a tree panel instance, and return it in a JScrollPane.
 	 * 
 	 * @param WIDTH - the maximum width of the tree panel.
 	 * @param HEIGHT - the maximum height of the tree panel.
-	 * @return a tree panel instance
+	 * @return a JScrollPane instance
 	 */
 	protected final JScrollPane initialiseTreePanel(final int WIDTH,final int HEIGHT) {
 
@@ -227,11 +229,11 @@ public class TreeDisplay {
 					// For all the children on this level.
 					for(int i=0;i<NODES_ON_LEVEL;i++) {
 
-						if(50*NODES_ON_LEVEL > maxWidth) maxWidth = 50*NODES_ON_LEVEL;
+						if((boxsize+((2*boxsize)/3))*NODES_ON_LEVEL > maxWidth) maxWidth = (boxsize+((2*boxsize)/3))*NODES_ON_LEVEL;
 						// Gives the nodes x position, using math to give visually pleasing spacing.
 						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
 						
-						if(70*TREE_DEPTH > maxHeight) maxHeight = 70*TREE_DEPTH;
+						if(((2*boxsize)+(boxsize/3))*TREE_DEPTH > maxHeight) maxHeight = (boxsize+((2*boxsize)+(boxsize/3)))*TREE_DEPTH;
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
