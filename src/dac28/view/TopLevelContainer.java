@@ -6,11 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -110,7 +108,7 @@ public class TopLevelContainer {
 				SearchCreator creator = new SearchCreator();
 
 				if(!displayUserInputDialog(creator)) return;
-				
+
 				Tree tree = getUserInputTreeChoice(creator);
 				if(tree==null) return;
 
@@ -224,7 +222,7 @@ public class TopLevelContainer {
 				treeDisplay.setCurrentNodeColor(colors);
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE_1);
 				dualAlgorithmDisplay.setCurrentNodeColor(CURRENT_NODE_2);
-				
+
 				// Create new tree controller
 				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 				// Create new algorithm controller for algorithm 1
@@ -274,7 +272,7 @@ public class TopLevelContainer {
 
 		// Make UI use the custom scroll bar in JScrollPanes
 		UIManager.put("ScrollBarUI", "dac28.view.CustomScrollBar");
-		
+
 		// Set algorithmDisplay here so we can draw a blank algorithmDisplay
 		algorithmDisplay = new AlgorithmDisplay();
 
@@ -305,12 +303,16 @@ public class TopLevelContainer {
 			if(result == JOptionPane.OK_OPTION) {
 
 				List<String> warnings = new LinkedList<String>();
-				if(creator.getNodeValues().contains("")) warnings.add("A node name was blank. A default value will be used instead.");
-				if(creator.getGoal().trim().equals("")) warnings.add("The goal value was blank.");
-				if(!creator.getNodeValues().contains(creator.getGoal())) warnings.add("The goal value was not found in the tree.");
-				List<String> list = (LinkedList<String>) creator.getNodeValues();
-				Set<String> set = new HashSet<String>(list);
-				if(set.size() < list.size()) warnings.add("There were duplicated nodes values. A duplication will be replaced with a default value.");
+				for(String value: creator.getNodeValues()) {
+					if(value.trim().equals("")) {
+						warnings.add("A node name was blank. A default value will be used instead.\n");
+						break;
+					}
+					
+				}
+				if(creator.getGoal().trim().equals("")) warnings.add("The goal value was blank.\n");
+				else if(!creator.getNodeValues().contains(creator.getGoal())) 
+					warnings.add("The goal value was not found in the tree.\n");
 				
 				for(String value: creator.getPathValues()) {
 
@@ -322,7 +324,7 @@ public class TopLevelContainer {
 						break;
 					}
 				}
-				
+
 				// If warnings exist display them and let user decide whether to continue or not
 				if(!warnings.isEmpty()) {
 
@@ -335,7 +337,7 @@ public class TopLevelContainer {
 					Object[] warningOptions = {"Yes","Back"};
 
 					int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
-							"\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
+							"\n\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
 							"Application Warning",JOptionPane.YES_OPTION,
 							JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
 
@@ -539,7 +541,7 @@ public class TopLevelContainer {
 			step.setEnabled(true);
 			skip.setEnabled(true);
 		}
-		
+
 		if(algorithmDisplay.undo.isEnabled() || dualAlgorithmDisplay.undo.isEnabled()) {
 			undo.setEnabled(true);
 			reset.setEnabled(true);

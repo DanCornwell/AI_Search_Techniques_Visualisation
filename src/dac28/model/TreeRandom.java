@@ -23,7 +23,7 @@ public class TreeRandom extends Tree {
 		final int LEVEL_1_MAX_WIDTH = random.nextInt(HIGH+1-LOW) + LOW;
 		
 		for(int i=0;i<LEVEL_1_MAX_WIDTH;i++) {
-			ROOT.addChild(new Node(String.valueOf(defaultValue++)));
+			ROOT.addChild(new Node(String.valueOf(defaultValue++),id++));
 		}
 		List<Node> parentList = ROOT.getChildren();
 		
@@ -33,7 +33,7 @@ public class TreeRandom extends Tree {
 			
 			for(int k=0;k<MAX_WIDTH;k++) {
 				int index = random.nextInt(parentList.size()-1);
-				parentList.get(index).addChild(new Node(String.valueOf(defaultValue++)));
+				parentList.get(index).addChild(new Node(String.valueOf(defaultValue++),id++));
 			}
 			
 			List<Node> temp = new LinkedList<Node>();
@@ -58,7 +58,7 @@ public class TreeRandom extends Tree {
 		for(int i=0;i<LEVEL_1_MAX_WIDTH;i++) {
 			String value = "Node";
 			if(values.peek()!=null) value = values.poll();
-			ROOT.addChild(new Node(String.valueOf(value)));
+			ROOT.addChild(new Node(String.valueOf(value),id++));
 		}
 		List<Node> parentList = ROOT.getChildren();
 		
@@ -70,7 +70,7 @@ public class TreeRandom extends Tree {
 				int index = random.nextInt(parentList.size()-1);
 				String value = "Node";
 				if(values.peek()!=null) value = values.poll();
-				parentList.get(index).addChild(new Node(String.valueOf(value)));
+				parentList.get(index).addChild(new Node(String.valueOf(value),id++));
 			}
 			
 			List<Node> temp = new LinkedList<Node>();

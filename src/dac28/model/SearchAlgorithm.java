@@ -66,11 +66,12 @@ public abstract class SearchAlgorithm {
 
 	/**
 	 * Returns a copy of the current node.
+	 * The value and unique id will be the same as the values in the current node.
 	 * 
 	 * @return node representing the current node
 	 */
 	public final Node getCurrentNode() {
-		return new Node(currentNode.getValue());
+		return new Node(currentNode.getValue(),currentNode.getUID());
 	}
 	
 	/**

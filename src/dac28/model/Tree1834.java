@@ -22,23 +22,23 @@ class Tree1834 extends Tree {
 	@Override
 	protected void construct() {
 
-		Node one = new Node("1");
-		Node two = new Node("2");
-		Node three = new Node("3");
-		Node four = new Node("4");
-		Node five = new Node("5");
-		Node six = new Node("6");
-		Node seven = new Node("7");
-		Node eight = new Node("8");
+		Node one = new Node("1",id++);
+		Node two = new Node("2",id++);
+		Node three = new Node("3",id++);
+		Node four = new Node("4",id++);
+		Node five = new Node("5",id++);
+		Node six = new Node("6",id++);
+		Node seven = new Node("7",id++);
+		Node eight = new Node("8",id++);
 		
-		Node nine = new Node("9");
-		Node ten = new Node("10");
-		Node eleven = new Node("11");
+		Node nine = new Node("9",id++);
+		Node ten = new Node("10",id++);
+		Node eleven = new Node("11",id++);
 
-		Node twelve = new Node("12");
-		Node thirteen = new Node("13");
-		Node fourteen = new Node("14");
-		Node fifthteen = new Node("15");
+		Node twelve = new Node("12",id++);
+		Node thirteen = new Node("13",id++);
+		Node fourteen = new Node("14",id++);
+		Node fifthteen = new Node("15",id++);
 		
 		ROOT.addChild(one);
 		ROOT.addChild(two);
@@ -57,9 +57,6 @@ class Tree1834 extends Tree {
 		nine.addChild(thirteen);
 		eleven.addChild(fourteen);
 		eleven.addChild(fifthteen);
-
-
-
 	}
 
 	@Override
@@ -69,23 +66,23 @@ class Tree1834 extends Tree {
 			values.add("Node");
 		}
 		
-		Node one = new Node(values.poll());
-		Node two = new Node(values.poll());
-		Node three = new Node(values.poll());
-		Node four = new Node(values.poll());
-		Node five = new Node(values.poll());
-		Node six = new Node(values.poll());
-		Node seven = new Node(values.poll());
-		Node eight = new Node(values.poll());
+		Node one = new Node(values.poll(),id++);
+		Node two = new Node(values.poll(),id++);
+		Node three = new Node(values.poll(),id++);
+		Node four = new Node(values.poll(),id++);
+		Node five = new Node(values.poll(),id++);
+		Node six = new Node(values.poll(),id++);
+		Node seven = new Node(values.poll(),id++);
+		Node eight = new Node(values.poll(),id++);
 		
-		Node nine = new Node(values.poll());
-		Node ten = new Node(values.poll());
-		Node eleven = new Node(values.poll());
+		Node nine = new Node(values.poll(),id++);
+		Node ten = new Node(values.poll(),id++);
+		Node eleven = new Node(values.poll(),id++);
 
-		Node twelve = new Node(values.poll());
-		Node thirteen = new Node(values.poll());
-		Node fourteen = new Node(values.poll());
-		Node fifthteen = new Node(values.poll());
+		Node twelve = new Node(values.poll(),id++);
+		Node thirteen = new Node(values.poll(),id++);
+		Node fourteen = new Node(values.poll(),id++);
+		Node fifthteen = new Node(values.poll(),id++);
 		
 		ROOT.addChild(one);
 		ROOT.addChild(two);
@@ -106,6 +103,7 @@ class Tree1834 extends Tree {
 		eleven.addChild(fifthteen);
 	}
 
+	
 	@Override
 	protected Tree getTree(String goalValue, Queue<String> values) {
 		return new Tree1834(goalValue,values);

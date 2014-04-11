@@ -12,6 +12,10 @@ import java.util.LinkedList;
 public class Node {
 
 	/**
+	 * Unique id of the node. Should be used to distinguish nodes, particularly in the case of same value nodes.
+	 */
+	private final int UID;
+	/**
 	 * The value of the node.
 	 */
 	private final String VALUE;
@@ -23,12 +27,15 @@ public class Node {
 	/**
 	 * Constructor.
 	 * Assigns the value of VALUE and initialises the children list.
+	 * Sets the unique id of the node.
 	 * 
 	 * @param VALUE - the string value of the VALUE variable
+	 * @param UID - the unique identifier of the node
 	 */
-	Node(final String VALUE) {
+	Node(final String VALUE,final int UID) {
 
 		this.VALUE = VALUE;
+		this.UID = UID;
 		children = new LinkedList<Node>();
 
 	}
@@ -42,6 +49,15 @@ public class Node {
 		return VALUE;
 	}
 
+	/**
+	 * Returns the unique id of this node.
+	 * 
+	 * @return integer representing the unique id of this node
+	 */
+	public final int getUID() {
+		return UID;
+	}
+	
 	/**
 	 * Returns the opposite of whether the children list is empty.
 	 * 

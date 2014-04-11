@@ -1,4 +1,4 @@
- package dac28.view;
+package dac28.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -61,7 +61,7 @@ public class TreeDisplay {
 	 * Colour of the current node in the tree display.
 	 */
 	protected Color currentNode;
-
+	
 	/**
 	 * Initialises a tree panel instance, and return it in a JScrollPane.
 	 * 
@@ -82,7 +82,7 @@ public class TreeDisplay {
 		scroller = new JScrollPane(treePanel);
 		scroller.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		scroller.setBorder(null);
-		
+
 		return scroller;
 	}
 
@@ -137,14 +137,15 @@ public class TreeDisplay {
 	protected void drawTreeBox(Node node,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
 
 		String value = node.getValue();
+				
+		g.setColor(Color.white);
+		
+		if(value.equals(tree.getGoal())) g.setColor(GOAL_NODE);
+		if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && searchAlgorithm.canUndo()) g.setColor(currentNode);
 
-		Color boxColour = Color.white;
-		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && searchAlgorithm.canUndo()) boxColour = currentNode;
-
-		g.setColor(boxColour);
 		treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
-
+		
+		g.setColor(Color.black);
 		g.drawRect(xPos, yPos, boxWidth, boxHeight);
 		g.drawString(value, xPos+(boxWidth/2), yPos+(boxHeight/2));
 	}
@@ -168,7 +169,7 @@ public class TreeDisplay {
 		 */
 		protected final void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			
+
 			// If we have no tree or algorithm return.
 			if(tree==null || searchAlgorithm==null) {
 				return;
@@ -188,7 +189,7 @@ public class TreeDisplay {
 			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
 			// The y position of the root node.
 			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
-
+									
 			drawTreeBox(tree.getRoot(),g,ROOT_X_POS,ROOT_Y_POS,boxsize,boxsize);
 
 			// The line connection point of the root node. This will be the bottom centre of the box.
@@ -232,13 +233,13 @@ public class TreeDisplay {
 						if((boxsize+((2*boxsize)/3))*NODES_ON_LEVEL > maxWidth) maxWidth = (boxsize+((2*boxsize)/3))*NODES_ON_LEVEL;
 						// Gives the nodes x position, using math to give visually pleasing spacing.
 						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
-						
+
 						if(((2*boxsize)+(boxsize/3))*TREE_DEPTH > maxHeight) maxHeight = (boxsize+((2*boxsize)+(boxsize/3)))*TREE_DEPTH;
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
 						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
-
-						drawTreeBox(children.get(i),g,xPos,yPos,boxsize,boxsize);
+						
+					    drawTreeBox(children.get(i),g,xPos,yPos,boxsize,boxsize);
 
 						// The child line connection point. This will be the top middle of the box.
 						Point childCoord = new Point(xPos+(boxsize/2),yPos);
@@ -286,16 +287,15 @@ public class TreeDisplay {
 			for(Entry<Point, Point> lines: lineCoords.entrySet()) {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
-
+			
 			treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
 			scroller.setViewportView(treePanel);
+
 		}
 
 		final void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
 
 			g.fillRect(xPos+1, yPos+1, boxWidth-1, boxHeight-1);
-
-			g.setColor(DEFAULT);
 
 		}
 	}

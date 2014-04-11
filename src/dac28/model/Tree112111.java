@@ -31,12 +31,12 @@ class Tree112111 extends Tree {
 	@Override
 	protected void construct() {
 		
-		Node one = new Node("1");
-		Node two = new Node("2");
-		Node three = new Node("3");
-		Node four = new Node("4");
-		Node five = new Node("5");
-		Node six = new Node("6");
+		Node one = new Node("1",id++);
+		Node two = new Node("2",id++);
+		Node three = new Node("3",id++);
+		Node four = new Node("4",id++);
+		Node five = new Node("5",id++);
+		Node six = new Node("6",id++);
 		
 		one.addChild(two);
 		one.addChild(three);
@@ -54,12 +54,12 @@ class Tree112111 extends Tree {
 			values.add("Node");
 		}
 		
-		Node one = new Node(values.poll());
-		Node two = new Node(values.poll());
-		Node three = new Node(values.poll());
-		Node four = new Node(values.poll());
-		Node five = new Node(values.poll());
-		Node six = new Node(values.poll());
+		Node one = new Node(values.poll(),id++);
+		Node two = new Node(values.poll(),id++);
+		Node three = new Node(values.poll(),id++);
+		Node four = new Node(values.poll(),id++);
+		Node five = new Node(values.poll(),id++);
+		Node six = new Node(values.poll(),id++);
 		
 		one.addChild(two);
 		one.addChild(three);

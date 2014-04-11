@@ -41,36 +41,42 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 	@Override
 	protected void drawTreeBox(Node node,Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
-	
+
 		String value = node.getValue();
+
+		g.setColor(Color.white);
 		
-		Color boxColour = Color.white;
-		if(value.equals(tree.getGoal())) boxColour = GOAL_NODE;
-		if(!searchAlgorithm.canUndo()) {
-			g.setColor(boxColour);
+		if(value.equals(tree.getGoal())) {
+			g.setColor(GOAL_NODE);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}
-		else if(value.equals(searchAlgorithm.getCurrentNode().getValue()) && value.equals(dualSearchAlgorithm.getCurrentNode().getValue())) {
 
-			g.setColor(currentNode);
-			treePanel.fillBox(g,xPos, yPos, (boxWidth/2)+1, boxHeight);
+		if(searchAlgorithm.canUndo() && dualSearchAlgorithm.canUndo()) {
+			if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
 
-			g.setColor(dualCurrentNode);
-			treePanel.fillBox(g,xPos+(boxWidth/2), yPos, boxWidth/2, boxHeight);
+				g.setColor(currentNode);
+				treePanel.fillBox(g,xPos, yPos, (boxWidth/2)+1, boxHeight);
 
+				g.setColor(dualCurrentNode);
+				treePanel.fillBox(g,xPos+(boxWidth/2), yPos, boxWidth/2, boxHeight);
 
-		}
-		else {
-			if(value.equals(searchAlgorithm.getCurrentNode().getValue())) boxColour = currentNode;
-			else if(value.equals(dualSearchAlgorithm.getCurrentNode().getValue())) boxColour = dualCurrentNode;
-
-			g.setColor(boxColour);
-			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
+			}
+			else {
+				if(node.getUID()==searchAlgorithm.getCurrentNode().getUID()) {
+					g.setColor(currentNode);
+					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
+				}
+				else if(node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
+					g.setColor(dualCurrentNode);
+					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
+				}
+			}
 		}
 		
+		g.setColor(Color.black);
 		g.drawRect(xPos, yPos, boxWidth, boxHeight);
 		g.drawString(value, xPos+(boxWidth/2), yPos+(boxHeight/2));
 	}
-	
+
 }
 

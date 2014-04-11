@@ -22,6 +22,10 @@ public abstract class Tree {
 	 */
 	protected final Node ROOT;
 	/**
+	 * The integer which nodes will have their unique id set to.
+	 */
+	protected int id;
+	/**
 	 * A queue of integers representing the path cost between nodes.
 	 */
 	private Queue<Integer> pathCosts;
@@ -39,6 +43,8 @@ public abstract class Tree {
 
 		this.GOAL = GOAL;
 		
+		id = 0;
+		
 		if(!values.isEmpty()) {
 			
 			Queue<String> validatedValues = new LinkedList<String>();
@@ -52,12 +58,12 @@ public abstract class Tree {
 				if(values.contains("N"+String.valueOf(defaultValue))) defaultValue++;
 				
 				if(value.trim().equals("")) validatedValues.add("N"+String.valueOf(defaultValue++));
-				else if(validatedValues.contains(value)) validatedValues.add("N"+String.valueOf(defaultValue++));
+
 				else validatedValues.add(value);
 				
 			}
 			
-			ROOT = new Node(validatedValues.poll());
+			ROOT = new Node(validatedValues.poll(),id++);
 						
 			construct(validatedValues);
 		}
@@ -65,7 +71,7 @@ public abstract class Tree {
 		// Use default number values for node values
 		else {
 			
-			ROOT = new Node("0");
+			ROOT = new Node("0",id++);
 			construct();
 		}
 		
@@ -170,11 +176,13 @@ public abstract class Tree {
 	
 	/**
 	 * Creates nodes and connects them to the root node using default number values.
+	 * Subclasses will decide what these default values are.
 	 */
 	protected abstract void construct();
 
 	/**
 	 * Creates nodes with specified values and connected them to the root node.
+	 * Subclasses should poll the supplied queue of the values for the nodes.
 	 * 
 	 * @param values - queue of values that can be polled for the values of the nodes
 	 */

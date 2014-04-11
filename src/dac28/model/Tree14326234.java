@@ -26,36 +26,36 @@ public class Tree14326234 extends Tree {
 	@Override
 	protected void construct() {
 
-		Node one = new Node("1");
-		Node two = new Node("2");
-		Node three = new Node("3");
-		Node four = new Node("4");
+		Node one = new Node("1",id++);
+		Node two = new Node("2",id++);
+		Node three = new Node("3",id++);
+		Node four = new Node("4",id++);
 		
-		Node five = new Node("5");
-		Node six = new Node("6");
-		Node seven = new Node("7");
+		Node five = new Node("5",id++);
+		Node six = new Node("6",id++);
+		Node seven = new Node("7",id++);
 		
-		Node eight = new Node("8");
-		Node nine = new Node("9");
+		Node eight = new Node("8",id++);
+		Node nine = new Node("9",id++);
 		
-		Node ten = new Node("10");
-		Node eleven = new Node("11");
-		Node twelve = new Node("12");
-		Node thirteen = new Node("13");
-		Node fourteen = new Node("14");
-		Node fifthteen = new Node("15");
+		Node ten = new Node("10",id++);
+		Node eleven = new Node("11",id++);
+		Node twelve = new Node("12",id++);
+		Node thirteen = new Node("13",id++);
+		Node fourteen = new Node("14",id++);
+		Node fifthteen = new Node("15",id++);
 		
-		Node sixteen = new Node("16");
-		Node seventeen = new Node("17");
+		Node sixteen = new Node("16",id++);
+		Node seventeen = new Node("17",id++);
 		
-		Node eighteen = new Node("18");
-		Node nineteen = new Node("19");
-		Node twenty = new Node("20");
+		Node eighteen = new Node("18",id++);
+		Node nineteen = new Node("19",id++);
+		Node twenty = new Node("20",id++);
 		
-		Node twentyOne = new Node("21");
-		Node twentyTwo = new Node("22");
-		Node twentyThree = new Node("23");
-		Node twentyFour = new Node("24");
+		Node twentyOne = new Node("21",id++);
+		Node twentyTwo = new Node("22",id++);
+		Node twentyThree = new Node("23",id++);
+		Node twentyFour = new Node("24",id++);
 		
 		ROOT.addChild(one);
 		ROOT.addChild(two);
@@ -98,36 +98,36 @@ public class Tree14326234 extends Tree {
 		}
 		
 
-		Node one = new Node(values.poll());
-		Node two = new Node(values.poll());
-		Node three = new Node(values.poll());
-		Node four = new Node(values.poll());
+		Node one = new Node(values.poll(),id++);
+		Node two = new Node(values.poll(),id++);
+		Node three = new Node(values.poll(),id++);
+		Node four = new Node(values.poll(),id++);
 		
-		Node five = new Node(values.poll());
-		Node six = new Node(values.poll());
-		Node seven = new Node(values.poll());
+		Node five = new Node(values.poll(),id++);
+		Node six = new Node(values.poll(),id++);
+		Node seven = new Node(values.poll(),id++);
 		
-		Node eight = new Node(values.poll());
-		Node nine = new Node(values.poll());
+		Node eight = new Node(values.poll(),id++);
+		Node nine = new Node(values.poll(),id++);
 		
-		Node ten = new Node(values.poll());
-		Node eleven = new Node(values.poll());
-		Node twelve = new Node(values.poll());
-		Node thirteen = new Node(values.poll());
-		Node fourteen = new Node(values.poll());
-		Node fifthteen = new Node(values.poll());
+		Node ten = new Node(values.poll(),id++);
+		Node eleven = new Node(values.poll(),id++);
+		Node twelve = new Node(values.poll(),id++);
+		Node thirteen = new Node(values.poll(),id++);
+		Node fourteen = new Node(values.poll(),id++);
+		Node fifthteen = new Node(values.poll(),id++);
 		
-		Node sixteen = new Node(values.poll());
-		Node seventeen = new Node(values.poll());
+		Node sixteen = new Node(values.poll(),id++);
+		Node seventeen = new Node(values.poll(),id++);
 		
-		Node eighteen = new Node(values.poll());
-		Node nineteen = new Node(values.poll());
-		Node twenty = new Node(values.poll());
+		Node eighteen = new Node(values.poll(),id++);
+		Node nineteen = new Node(values.poll(),id++);
+		Node twenty = new Node(values.poll(),id++);
 		
-		Node twentyOne = new Node(values.poll());
-		Node twentyTwo = new Node(values.poll());
-		Node twentyThree = new Node(values.poll());
-		Node twentyFour = new Node(values.poll());
+		Node twentyOne = new Node(values.poll(),id++);
+		Node twentyTwo = new Node(values.poll(),id++);
+		Node twentyThree = new Node(values.poll(),id++);
+		Node twentyFour = new Node(values.poll(),id++);
 		
 		ROOT.addChild(one);
 		ROOT.addChild(two);

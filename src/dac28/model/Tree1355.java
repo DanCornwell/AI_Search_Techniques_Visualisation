@@ -31,19 +31,19 @@ class Tree1355 extends Tree {
 	protected void construct() {
 		
 		// Create nodes
-		Node one = new Node("1");
-		Node two = new Node("2");
-		Node three = new Node("3");
-		Node four = new Node("4");
-		Node five = new Node("5");
-		Node six = new Node("6");
-		Node seven = new Node("7");
-		Node eight = new Node("8");
-		Node nine = new Node("9");
-		Node ten = new Node("10");
-		Node eleven = new Node("11");
-		Node twelve = new Node("12");
-		Node thirteen = new Node("13");
+		Node one = new Node("1",id++);
+		Node two = new Node("2",id++);
+		Node three = new Node("3",id++);
+		Node four = new Node("4",id++);
+		Node five = new Node("5",id++);
+		Node six = new Node("6",id++);
+		Node seven = new Node("7",id++);
+		Node eight = new Node("8",id++);
+		Node nine = new Node("9",id++);
+		Node ten = new Node("10",id++);
+		Node eleven = new Node("11",id++);
+		Node twelve = new Node("12",id++);
+		Node thirteen = new Node("13",id++);
 		
 		// Create child links
 		one.addChild(four);
@@ -72,19 +72,19 @@ class Tree1355 extends Tree {
 		}
 		
 		// Create nodes
-		Node one = new Node(values.poll());
-		Node two = new Node(values.poll());
-		Node three = new Node(values.poll());
-		Node four = new Node(values.poll());
-		Node five = new Node(values.poll());
-		Node six = new Node(values.poll());
-		Node seven = new Node(values.poll());
-		Node eight = new Node(values.poll());
-		Node nine = new Node(values.poll());
-		Node ten = new Node(values.poll());
-		Node eleven = new Node(values.poll());
-		Node twelve = new Node(values.poll());
-		Node thirteen = new Node(values.poll());
+		Node one = new Node(values.poll(),id++);
+		Node two = new Node(values.poll(),id++);
+		Node three = new Node(values.poll(),id++);
+		Node four = new Node(values.poll(),id++);
+		Node five = new Node(values.poll(),id++);
+		Node six = new Node(values.poll(),id++);
+		Node seven = new Node(values.poll(),id++);
+		Node eight = new Node(values.poll(),id++);
+		Node nine = new Node(values.poll(),id++);
+		Node ten = new Node(values.poll(),id++);
+		Node eleven = new Node(values.poll(),id++);
+		Node twelve = new Node(values.poll(),id++);
+		Node thirteen = new Node(values.poll(),id++);
 		
 		// Create child links
 		one.addChild(four);
