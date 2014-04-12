@@ -40,14 +40,14 @@ public class TreeTest {
 
 	@Test
 	public void testGetGoal() {
-		Whitebox.setInternalState(tree, "GOAL", "goal");
-		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "GOAL"),tree.getGoal());
+		Whitebox.setInternalState(tree, "goal", "value");
+		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "goal"),tree.getGoal());
 	}
 
 	@Test
 	public void testGetRoot() {	
-		Whitebox.setInternalState(tree, "ROOT", mock(Node.class));
-		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree,"ROOT"),tree.getRoot());
+		Whitebox.setInternalState(tree, "root", mock(Node.class));
+		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree,"root"),tree.getRoot());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class TreeTest {
 		doReturn(twoChildren).when(two).getChildren();
 		doReturn(new LinkedList<Node>()).when(three).getChildren();
 		
-		Whitebox.setInternalState(tree, "ROOT", one);
+		Whitebox.setInternalState(tree, "root", one);
 		
 		assertTrue("Incorrect tree depth was returned",tree.getTreeDepth()==3);
 		verify(tree).getTreeDepth();
@@ -89,7 +89,7 @@ public class TreeTest {
 		doReturn(new LinkedList<Node>()).when(three).getChildren();
 		doReturn(new LinkedList<Node>()).when(four).getChildren();
 		
-		Whitebox.setInternalState(tree, "ROOT", one);
+		Whitebox.setInternalState(tree, "root", one);
 		
 		assertTrue("Incorrect tree width was returned",tree.getTreeWidth()==3);
 		verify(tree).getTreeWidth();

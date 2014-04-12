@@ -13,6 +13,7 @@ import dac28.model.TreeCreator;
 public class ConcreteTreeTest {
 
 	private final String GOAL = "4";
+	private final String defaultRoot = "ROOT";
 
 	@Test
 	public void testTree124() {
@@ -23,10 +24,10 @@ public class ConcreteTreeTest {
 
 		assertTrue("Max Width was incorrect",4==tree.getTreeWidth());
 		assertTrue("Max Depth was incorrect",3==tree.getTreeDepth());
-		assertTrue("Goal value was not set",GOAL==tree.getGoal());
+		assertTrue("Goal value was not set",GOAL.equals(tree.getGoal()));
 
 		// Test default value is used 
-		assertTrue(tree.getRoot().getValue().equals("0"));
+		assertTrue(tree.getRoot().getValue().equals(defaultRoot));
 		LinkedList<String> list = new LinkedList<String>();
 		list.add("test");
 		tree = TreeCreator.getInstance().getTree(id, GOAL, list);
@@ -43,10 +44,10 @@ public class ConcreteTreeTest {
 
 		assertTrue("Max Width was incorrect",5==tree.getTreeWidth());
 		assertTrue("Max Depth was incorrect",4==tree.getTreeDepth());
-		assertTrue("Goal value was not set",GOAL==tree.getGoal());
+		assertTrue("Goal value was not set",GOAL.equals(tree.getGoal()));
 
 		// Test default value is used 
-		assertTrue(tree.getRoot().getValue().equals("0"));
+		assertTrue(tree.getRoot().getValue().equals(defaultRoot));
 		LinkedList<String> list = new LinkedList<String>();
 		list.add("test");
 		tree = TreeCreator.getInstance().getTree(id, GOAL, list);
@@ -63,10 +64,10 @@ public class ConcreteTreeTest {
 
 		assertTrue("Max Width was incorrect",2==tree.getTreeWidth());
 		assertTrue("Max Depth was incorrect",6==tree.getTreeDepth());
-		assertTrue("Goal value was not set",GOAL==tree.getGoal());
+		assertTrue("Goal value was not set",GOAL.equals(tree.getGoal()));
 
 		// Test default value is used 
-		assertTrue(tree.getRoot().getValue().equals("0"));
+		assertTrue(tree.getRoot().getValue().equals(defaultRoot));
 		LinkedList<String> list = new LinkedList<String>();
 		list.add("test");
 		tree = TreeCreator.getInstance().getTree(id, GOAL, list);
