@@ -1,11 +1,11 @@
-package dac28.controller.test;
+package dac28.support.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 
-import dac28.controller.TextFileReader;
+import dac28.support.TextFileReader;
 
 public class TextFileReaderTest {
 

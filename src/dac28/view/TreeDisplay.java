@@ -34,14 +34,6 @@ public class TreeDisplay {
 	 */
 	protected TreePanel treePanel;
 	/**
-	 * The scroll pane that the tree panel will be placed in.
-	 */
-	protected JScrollPane scroller;
-	/**
-	 * The max width and height of the tree panel instance.
-	 */
-	protected int maxWidth, maxHeight;
-	/**
 	 * The tree being displayed onto the tree panel instance. 
 	 */
 	protected Tree tree = null;
@@ -71,17 +63,15 @@ public class TreeDisplay {
 	 */
 	protected final JScrollPane initialiseTreePanel(final int WIDTH,final int HEIGHT) {
 
-		maxWidth = WIDTH-20;
-		maxHeight = HEIGHT-35;
-
 		treePanel = new TreePanel();
-		treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
-		treePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		treePanel.setPreferredSize(new Dimension(WIDTH-20,HEIGHT-35));
+		treePanel.setBorder(null);
 		treePanel.setBackground(Color.white);
 
-		scroller = new JScrollPane(treePanel);
+	
+		JScrollPane scroller = new JScrollPane(treePanel);
 		scroller.setPreferredSize(new Dimension(WIDTH,HEIGHT));
-		scroller.setBorder(null);
+		scroller.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		return scroller;
 	}
@@ -176,7 +166,7 @@ public class TreeDisplay {
 			if(tree==null || searchAlgorithm==null) {
 				return;
 			}
-
+			
 			// HashMap holding with a point key and point value. Used to draw lines between these 2 points.
 			Map<Point,Point> lineCoords = new HashMap<Point,Point>();
 			// Holds the line connection coordinates of parent nodes.
@@ -187,10 +177,13 @@ public class TreeDisplay {
 			// The size of the boxes that are being drawn.
 			int boxsize = 40;
 
+			int width = this.getWidth();
+			int height = this.getHeight();
+			
 			// The x position of the root node.
-			final int ROOT_X_POS = (maxWidth/2)-(boxsize/2);
+			final int ROOT_X_POS = (width/2)-(boxsize/2);
 			// The y position of the root node.
-			final int ROOT_Y_POS = (maxHeight/TREE_DEPTH)/4;
+			final int ROOT_Y_POS = (height/TREE_DEPTH)/4;
 									
 			drawTreeBox(tree.getRoot(),g,ROOT_X_POS,ROOT_Y_POS,boxsize,boxsize);
 
@@ -232,14 +225,14 @@ public class TreeDisplay {
 					// For all the children on this level.
 					for(int i=0;i<NODES_ON_LEVEL;i++) {
 
-						if((boxsize+((2*boxsize)/3))*NODES_ON_LEVEL > maxWidth) maxWidth = (boxsize+((2*boxsize)/3))*NODES_ON_LEVEL;
+						if((boxsize+((2*boxsize)/3))*NODES_ON_LEVEL > width) width = (boxsize+((2*boxsize)/3))*NODES_ON_LEVEL;
 						// Gives the nodes x position, using math to give visually pleasing spacing.
-						int xPos = (maxWidth/(NODES_ON_LEVEL+1)) + (i*(maxWidth/(NODES_ON_LEVEL+1))) - (boxsize/2);
+						int xPos = (width/(NODES_ON_LEVEL+1)) + (i*(width/(NODES_ON_LEVEL+1))) - (boxsize/2);
 
-						if(((2*boxsize)+(boxsize/3))*TREE_DEPTH > maxHeight) maxHeight = (boxsize+((2*boxsize)+(boxsize/3)))*TREE_DEPTH;
+						if(((2*boxsize)+(boxsize/3))*TREE_DEPTH > height) height = (boxsize+((2*boxsize)+(boxsize/3)))*TREE_DEPTH;
 						// Get the nodes y position by multiplying the node level with the 
 						// amount of space each level takes in relation to the max height.
-						int yPos = nodeLevel*(maxHeight/TREE_DEPTH);
+						int yPos = nodeLevel*(height/TREE_DEPTH);
 						
 					    drawTreeBox(children.get(i),g,xPos,yPos,boxsize,boxsize);
 
@@ -290,9 +283,7 @@ public class TreeDisplay {
 				g.drawLine(lines.getKey().x, lines.getKey().y, lines.getValue().x, lines.getValue().y);
 			}
 			
-			treePanel.setPreferredSize(new Dimension(maxWidth,maxHeight));
-			scroller.setViewportView(treePanel);
-
+			treePanel.setPreferredSize(new Dimension(width,height));
 		}
 
 		final void fillBox(Graphics g,int xPos, int yPos, int boxWidth, int boxHeight) {
