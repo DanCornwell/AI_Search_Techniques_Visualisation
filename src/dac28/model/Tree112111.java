@@ -29,29 +29,11 @@ class Tree112111 extends Tree {
 	}
 
 	@Override
-	protected void construct() {
-		
-		Node one = new Node("1",id++);
-		Node two = new Node("2",id++);
-		Node three = new Node("3",id++);
-		Node four = new Node("4",id++);
-		Node five = new Node("5",id++);
-		Node six = new Node("6",id++);
-		
-		one.addChild(two);
-		one.addChild(three);
-		two.addChild(four);
-		four.addChild(five);
-		five.addChild(six);
-		
-		root.addChild(one);
-	}
+	protected void constructNodes(Queue<String> values) {
 
-	@Override
-	protected void construct(Queue<String> values) {
-
+		int defaultValue = 1;
 		while(values.size() < 6) {
-			values.add("Node");
+			values.add(String.valueOf(defaultValue++));
 		}
 		
 		Node one = new Node(values.poll(),id++);
@@ -69,7 +51,7 @@ class Tree112111 extends Tree {
 		
 		root.addChild(one);
 	}
-
+	
 	@Override
 	protected Tree getTree(String goalValue, Queue<String> values) {
 		return new Tree112111(goalValue,values);

@@ -45,10 +45,10 @@ public abstract class Tree {
 		
 		id = 0;
 		
+		Queue<String> nodeValues = new LinkedList<String>();
+		
 		if(!values.isEmpty()) {
-			
-			Queue<String> validatedValues = new LinkedList<String>();
-			
+						
 			int defaultValue = 1;
 			
 			while(!values.isEmpty()) {
@@ -57,22 +57,22 @@ public abstract class Tree {
 				
 				if(values.contains("N"+String.valueOf(defaultValue))) defaultValue++;
 				
-				if(value.trim().equals("")) validatedValues.add("N"+String.valueOf(defaultValue++));
+				if(value.trim().equals("")) nodeValues.add("N"+String.valueOf(defaultValue++));
 
-				else validatedValues.add(value);
+				else nodeValues.add(value);
 				
 			}
-			
-			root = new Node(validatedValues.poll(),id++);
-						
-			construct(validatedValues); 
+		
 		}
 		
-		// Use default number values for node values
+		// Use predefined values for node values
 		else {
-			root = new Node("0",id++);
-			construct();
+			nodeValues.add("ROOT");
 		}
+		
+		root = new Node(nodeValues.poll(),id++);
+		
+		constructNodes(nodeValues); 
 		
 		pathCosts = new LinkedList<Integer>();
 	} 
@@ -172,21 +172,16 @@ public abstract class Tree {
 	public final Queue<Integer> getPathCosts() {
 		return new LinkedList<Integer>(pathCosts);
 	}
-	
-	/**
-	 * Creates nodes and connects them to the root node using default number values.
-	 * Subclasses will decide what these default values are.
-	 */
-	protected abstract void construct();
 
 	/**
-	 * Creates nodes with specified values and connected them to the root node.
+	 * Creates nodes with specified values and connects them to the root node.
+	 * If the queue is empty subclasses should fill the queue with default values of their choosing.
 	 * Subclasses should poll the supplied queue of the values for the nodes.
 	 * 
 	 * @param values - queue of values that can be polled for the values of the nodes
 	 */
-	protected abstract void construct(Queue<String> values);
-
+	protected abstract void constructNodes(Queue<String> values);
+	
 	/**
 	 * Returns a concrete instance of the subclass tree.
 	 * If the values is empty, default values will be used.
@@ -196,5 +191,5 @@ public abstract class Tree {
 	 * @return a concrete tree
 	 */
 	protected abstract Tree getTree(String goalValue,Queue<String> values);
-
+	
 } 

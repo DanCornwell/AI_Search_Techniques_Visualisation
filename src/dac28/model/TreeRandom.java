@@ -19,44 +19,10 @@ class TreeRandom extends Tree {
 	}
 
 	@Override
-	protected void construct() {
+	protected void constructNodes(Queue<String> values) {
 
-		Random random = new Random();
-		final int HIGH = 5;
-		final int LOW = 3;
 		int defaultValue = 1;
-
-		final int MAX_DEPTH = random.nextInt(HIGH+1-LOW) + LOW;
-		final int LEVEL_1_MAX_WIDTH = random.nextInt(HIGH+1-LOW) + LOW;
-
-		for(int i=0;i<LEVEL_1_MAX_WIDTH;i++) {
-			Node child = new Node(String.valueOf(defaultValue++),id++);
-			root.addChild(child);
-		}
-		List<Node> parentList = root.getChildren();
-
-		for(int j=0;j<MAX_DEPTH;j++) {
-
-			final int MAX_WIDTH = random.nextInt(HIGH+1-LOW) + LOW;
-
-			for(int k=0;k<MAX_WIDTH;k++) {
-				int index = random.nextInt(parentList.size()-1);
-				Node child = new Node(String.valueOf(defaultValue++),id++);
-				parentList.get(index).addChild(child);
-			}
-
-			List<Node> temp = new LinkedList<Node>();
-			for(Node node: parentList) {
-				temp.addAll(node.getChildren());
-			}
-			parentList = temp;
-		}
-
-	}
-
-	@Override
-	protected void construct(Queue<String> values) {
-
+		
 		Random random = new Random();
 		final int HIGH = 6;
 		final int LOW = 4;
@@ -65,9 +31,8 @@ class TreeRandom extends Tree {
 		final int LEVEL_1_MAX_WIDTH = random.nextInt(HIGH+1-LOW) + LOW;
 
 		for(int i=0;i<LEVEL_1_MAX_WIDTH;i++) {
-			String value = "Node";
-			if(values.peek()!=null) value = values.poll();
-			Node child = new Node(String.valueOf(value),id++);
+			if(values.isEmpty()) values.add(String.valueOf(defaultValue++));
+			Node child = new Node(values.poll(),id++);
 			root.addChild(child);
 		}
 		List<Node> parentList = root.getChildren();
@@ -78,9 +43,8 @@ class TreeRandom extends Tree {
 
 			for(int k=0;k<MAX_WIDTH;k++) {
 				int index = random.nextInt(parentList.size()-1);
-				String value = "Node";
-				if(values.peek()!=null) value = values.poll();
-				Node child = new Node(String.valueOf(value),id++);
+				if(values.isEmpty()) values.add(String.valueOf(defaultValue++));
+				Node child = new Node(values.poll(),id++);
 				parentList.get(index).addChild(child);
 			}
 

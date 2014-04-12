@@ -29,33 +29,11 @@ class Tree124 extends Tree {
 	}
 
 	@Override
-	protected void construct() {
+	protected void constructNodes(Queue<String> values) {
 
-		// Create nodes
-		Node one = new Node("1",id++);
-		Node two = new Node("2",id++);
-		Node three = new Node("3",id++);
-		Node four = new Node("4",id++);
-		Node five = new Node("5",id++);
-		Node six = new Node("6",id++);
-
-		// Create child links
-		one.addChild(three);
-		one.addChild(four);
-		two.addChild(five);
-		two.addChild(six);
-
-		// Create child links for root node
-		root.addChild(one);
-		root.addChild(two);
-
-	}
-
-	@Override
-	protected void construct(Queue<String> values) {
-
+		int defaultValue = 1;
 		while(values.size() < 6) {
-			values.add("Node");
+			values.add(String.valueOf(defaultValue++));
 		}
 		
 		// Create nodes
