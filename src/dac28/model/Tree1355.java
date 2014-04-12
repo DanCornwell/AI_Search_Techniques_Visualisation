@@ -58,9 +58,9 @@ class Tree1355 extends Tree {
 		eight.addChild(thirteen);
 		
 		// Create child links for root node
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
 		
 	}
 	
@@ -99,9 +99,9 @@ class Tree1355 extends Tree {
 		eight.addChild(thirteen);
 		
 		// Create child links for root node
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
 	}
 
 	@Override

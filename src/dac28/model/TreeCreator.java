@@ -29,9 +29,9 @@ public class TreeCreator {
 
 	/**
 	 * Constructor for the tree creator. 
-	 * Adds all known trees to the HashMap. 0 is a trivial constructor value for the trees.
+	 * Adds all known trees to the HashMap.
 	 */
-	TreeCreator() {
+	protected TreeCreator() {
 
 		List<String> treeNames = null;
 
@@ -42,16 +42,7 @@ public class TreeCreator {
 		int id = 0;
 
 		for(String treeName: treeNames) {
-			try {
-
-				Class<?> tree = Class.forName("dac28.model.".concat(treeName));
-				Tree treeInstance = (Tree) tree.getDeclaredConstructor(String.class,Queue.class).newInstance("",new LinkedList<String>());
-				trees.put(id, treeInstance);
-				id++;
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
-					| IllegalArgumentException | InvocationTargetException 
-					| NoSuchMethodException | SecurityException e) {
-			}
+			putTree(id++,treeName);
 		}
 	}
 
@@ -80,5 +71,20 @@ public class TreeCreator {
 		return trees.get(uID).getTree(goalValue,values);
 	}
 
+	/**
+	 * Adds a new tree to the trees hash, using a tree name and unique id key.
+	 * 
+	 * @param id - the key for the hash
+	 * @param treeName - the name of the tree that will be the value for the hash
+	 */
+	public final void putTree(int id,String treeName) {
+		try {
 
+			Class<?> tree = Class.forName("dac28.model.".concat(treeName));
+			Tree treeInstance = (Tree) tree.getDeclaredConstructor(String.class,Queue.class).newInstance("",new LinkedList<String>());
+			trees.put(id, treeInstance);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
+				| IllegalArgumentException | InvocationTargetException 
+				| NoSuchMethodException | SecurityException e) { e.printStackTrace();
+		}	}
 }

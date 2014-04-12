@@ -40,14 +40,14 @@ class Tree1834 extends Tree {
 		Node fourteen = new Node("14",id++);
 		Node fifthteen = new Node("15",id++);
 		
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
-		ROOT.addChild(four);
-		ROOT.addChild(five);
-		ROOT.addChild(six);
-		ROOT.addChild(seven);
-		ROOT.addChild(eight);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
+		root.addChild(four);
+		root.addChild(five);
+		root.addChild(six);
+		root.addChild(seven);
+		root.addChild(eight);
 		
 		one.addChild(nine);
 		five.addChild(ten);
@@ -84,14 +84,14 @@ class Tree1834 extends Tree {
 		Node fourteen = new Node(values.poll(),id++);
 		Node fifthteen = new Node(values.poll(),id++);
 		
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
-		ROOT.addChild(four);
-		ROOT.addChild(five);
-		ROOT.addChild(six);
-		ROOT.addChild(seven);
-		ROOT.addChild(eight);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
+		root.addChild(four);
+		root.addChild(five);
+		root.addChild(six);
+		root.addChild(seven);
+		root.addChild(eight);
 		
 		one.addChild(nine);
 		five.addChild(ten);

@@ -44,7 +44,7 @@ class Tree112111 extends Tree {
 		four.addChild(five);
 		five.addChild(six);
 		
-		ROOT.addChild(one);
+		root.addChild(one);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ class Tree112111 extends Tree {
 		four.addChild(five);
 		five.addChild(six);
 		
-		ROOT.addChild(one);
+		root.addChild(one);
 	}
 
 	@Override

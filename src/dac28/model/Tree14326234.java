@@ -57,10 +57,10 @@ public class Tree14326234 extends Tree {
 		Node twentyThree = new Node("23",id++);
 		Node twentyFour = new Node("24",id++);
 		
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
-		ROOT.addChild(four);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
+		root.addChild(four);
 		
 		one.addChild(five);
 		two.addChild(six);
@@ -129,10 +129,10 @@ public class Tree14326234 extends Tree {
 		Node twentyThree = new Node(values.poll(),id++);
 		Node twentyFour = new Node(values.poll(),id++);
 		
-		ROOT.addChild(one);
-		ROOT.addChild(two);
-		ROOT.addChild(three);
-		ROOT.addChild(four);
+		root.addChild(one);
+		root.addChild(two);
+		root.addChild(three);
+		root.addChild(four);
 		
 		one.addChild(five);
 		two.addChild(six);

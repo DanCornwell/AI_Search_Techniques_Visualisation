@@ -46,8 +46,8 @@ class Tree124 extends Tree {
 		two.addChild(six);
 
 		// Create child links for root node
-		ROOT.addChild(one);
-		ROOT.addChild(two);
+		root.addChild(one);
+		root.addChild(two);
 
 	}
 
@@ -73,8 +73,8 @@ class Tree124 extends Tree {
 		two.addChild(six);
 
 		// Create child links for root node
-		ROOT.addChild(one);
-		ROOT.addChild(two);
+		root.addChild(one);
+		root.addChild(two);
 	}
 
 	@Override

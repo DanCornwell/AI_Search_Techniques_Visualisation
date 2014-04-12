@@ -16,11 +16,11 @@ public abstract class Tree {
 	/**
 	 * The goal value.
 	 */
-	private final String GOAL;
+	protected String goal;
 	/**
 	 * The root node, any tree will always have a root node.
 	 */
-	protected final Node ROOT;
+	protected Node root;
 	/**
 	 * The integer which nodes will have their unique id set to.
 	 */
@@ -36,12 +36,12 @@ public abstract class Tree {
 	 * If the values supplied have blank strings or duplicates, these are replaced by default values
 	 * If the values parameter is empty, then it will be used to set the node values.
 	 * 
-	 * @param GOAL - String to the set the goal node
+	 * @param goal - String to the set the goal node
 	 * @param values - a queue of strings that will set the node values, can empty list to use default values
 	 */
-	Tree(final String GOAL,Queue<String> values) {
+	Tree(final String goal,Queue<String> values) {
 
-		this.GOAL = GOAL;
+		this.goal = goal;
 		
 		id = 0;
 		
@@ -63,15 +63,14 @@ public abstract class Tree {
 				
 			}
 			
-			ROOT = new Node(validatedValues.poll(),id++);
+			root = new Node(validatedValues.poll(),id++);
 						
-			construct(validatedValues);
+			construct(validatedValues); 
 		}
 		
 		// Use default number values for node values
 		else {
-			
-			ROOT = new Node("0",id++);
+			root = new Node("0",id++);
 			construct();
 		}
 		
@@ -81,10 +80,10 @@ public abstract class Tree {
 	/**
 	 * Returns the goal value.
 	 * 
-	 * @return - the goal variable
+	 * @return - string matching the goal value
 	 */
 	public final String getGoal() {
-		return GOAL;
+		return new String(goal);
 	}
 
 	/**
@@ -93,7 +92,7 @@ public abstract class Tree {
 	 * @return - the root variable
 	 */
 	public final Node getRoot() {
-		return ROOT;
+		return root;
 	}
 
 	/**
@@ -103,7 +102,7 @@ public abstract class Tree {
 	 * @return integer representing the maximum depth of the tree
 	 */
 	public final int getTreeDepth() {
-		return getTreeDepth(ROOT);
+		return getTreeDepth(root);
 	}
 
 	/**
@@ -133,7 +132,7 @@ public abstract class Tree {
 
 		Queue<Node> parents = new LinkedList<Node>();
 		Queue<Node> children = new LinkedList<Node>();
-		parents.add(ROOT);
+		parents.add(root);
 
 		int width = 0;
 		while(!parents.isEmpty()) {

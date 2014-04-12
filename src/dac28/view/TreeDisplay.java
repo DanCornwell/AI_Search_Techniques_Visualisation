@@ -140,7 +140,9 @@ public class TreeDisplay {
 				
 		g.setColor(Color.white);
 		
+		// if at goal change colour to goal node colour
 		if(value.equals(tree.getGoal())) g.setColor(GOAL_NODE);
+		// if at the current node and not at the beginning change colour to current node colour
 		if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && searchAlgorithm.canUndo()) g.setColor(currentNode);
 
 		treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);

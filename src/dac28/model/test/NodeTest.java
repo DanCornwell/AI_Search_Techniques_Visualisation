@@ -22,7 +22,7 @@ public class NodeTest {
 	@Before
 	public void setup() {
 		try {
-			node = Whitebox.invokeConstructor(Node.class,new Class[] { String.class }, new Object[] { "4" });
+			node = Whitebox.invokeConstructor(Node.class,new Class[] { String.class,int.class }, new Object[] { "4",0 });
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,6 +32,12 @@ public class NodeTest {
 	public void testGetValueReturnsCorrectValue() {
 		assertEquals("Incorrect value was returned","4",node.getValue());
 		assertEquals("Incorrect value was returned",Whitebox.getInternalState(node, "VALUE"),node.getValue());
+	}
+	
+	@Test
+	public void testGetUIDReturnsUID() {
+		assertEquals("Incorrect value was returned",0,node.getUID());
+		assertEquals("Incorrect value was returned",Whitebox.getInternalState(node, "UID"),node.getUID());
 	}
 	
 	@Test

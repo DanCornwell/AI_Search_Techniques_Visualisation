@@ -46,11 +46,12 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 		g.setColor(Color.white);
 		
+		// if at goal node
 		if(value.equals(tree.getGoal())) {
 			g.setColor(GOAL_NODE);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}
-
+		// if both algorithms are at the same node
 		if(searchAlgorithm.canUndo() && dualSearchAlgorithm.canUndo()) {
 			if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
 
@@ -62,10 +63,12 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 
 			}
 			else {
+				// algorithm 1 is at the node
 				if(node.getUID()==searchAlgorithm.getCurrentNode().getUID()) {
 					g.setColor(currentNode);
 					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 				}
+				// algorithm 2 is at the node
 				else if(node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
 					g.setColor(dualCurrentNode);
 					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
