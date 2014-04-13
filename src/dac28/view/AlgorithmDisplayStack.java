@@ -102,7 +102,7 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		right.setPreferredSize(new Dimension(WIDTH-80,HEIGHT));
 
 		// Add the visited list to a scroll pane and add that scroll pane
-		expandedScroller = new JScrollPane(expandedPanel);
+		JScrollPane expandedScroller = new JScrollPane(expandedPanel);
 		expandedScroller.setBorder(null);
 		expandedScroller.setHorizontalScrollBarPolicy((JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		expandedScroller.setPreferredSize(new Dimension(BOX_SIZE.width+10,BOX_SIZE.height*onscreenExpandedBoxes));
@@ -110,7 +110,7 @@ public class AlgorithmDisplayStack extends AlgorithmDisplay {
 		// Add holding panels to the left and right
 		left.add(expandedScroller);
 		// Add the visited list to a scroll pane and add that scroll pane
-		visitedScroller = new JScrollPane(visitedPanel);
+		JScrollPane visitedScroller = new JScrollPane(visitedPanel);
 		visitedScroller.setBorder(null);
 		visitedScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		visitedScroller.setPreferredSize(new Dimension(panelWidth-50,panelHeight-10));

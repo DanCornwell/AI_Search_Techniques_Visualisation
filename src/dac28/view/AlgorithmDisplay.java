@@ -1,4 +1,4 @@
- package dac28.view;
+package dac28.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -79,10 +79,6 @@ public class AlgorithmDisplay {
 	 */
 	protected JPanel expandedPanel, visitedPanel;
 	/**
-	 * JScrollPanes for the expanded list and visited list.
-	 */
-	protected JScrollPane expandedScroller, visitedScroller;	
-	/**
 	 * The maximum number of boxes the expanded list can show at one time.
 	 * Subclasses should define this number when they override the initialise method.
 	 */
@@ -139,7 +135,7 @@ public class AlgorithmDisplay {
 		pause.setEnabled(false);
 		skip = new JButton("Skip to End");
 		skip.setEnabled(false);
-		
+
 	}
 
 	/**
@@ -152,7 +148,7 @@ public class AlgorithmDisplay {
 	 * @return JPanel containing fields to display a search algorithm's data
 	 */
 	protected JPanel initialiseAlgorithmPanel(final int WIDTH,final int HEIGHT) {
-		
+
 		JPanel algorithmPanel = new JPanel();
 		algorithmPanel.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
@@ -163,7 +159,7 @@ public class AlgorithmDisplay {
 
 		onscreenExpandedBoxes = 11;
 		onscreenVisitedBoxes = 11;
-		
+
 		// Title Panel
 		JPanel titlePanel = getHoldingPanel(panelWidth,panelHeight-20);
 		titlePanel.add(title);
@@ -232,14 +228,14 @@ public class AlgorithmDisplay {
 		algorithmPanel.add(titlePanel);
 		algorithmPanel.add(p1);
 		// Add the expanded list to a scroll pane and add that scroll pane
-		expandedScroller = new JScrollPane(expandedPanel);
+		JScrollPane expandedScroller = new JScrollPane(expandedPanel);
 		expandedScroller.setBorder(null);
 		expandedScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		expandedScroller.setPreferredSize(new Dimension(panelWidth,panelHeight));
 		algorithmPanel.add(expandedScroller);
 		algorithmPanel.add(p3);
 		// Add the visited list to a scroll pane and add that scroll pane
-		visitedScroller = new JScrollPane(visitedPanel);
+		JScrollPane visitedScroller = new JScrollPane(visitedPanel);
 		visitedScroller.setBorder(null);
 		visitedScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		visitedScroller.setPreferredSize(new Dimension(panelWidth,panelHeight));
@@ -305,7 +301,7 @@ public class AlgorithmDisplay {
 	public final void togglePause(boolean bool) {
 		pause.setEnabled(bool);
 	}
-	
+
 	/**
 	 * Returns the expanded list
 	 * 
@@ -382,19 +378,20 @@ public class AlgorithmDisplay {
 		// Reset the memento stacks
 		expandedMementos.clear();
 		visitedMementos.clear();
-		
+
 		// Removes any added boxes and the scroll bar until the boxes match the maximum allowed on screen
 		while(onscreenExpandedBoxes < expandedList.size()) {
+
 			expandedPanel.remove(expandedList.size()-1);
 			expandedList.removeLast();
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
-			expandedScroller.setViewportView(expandedPanel);
+			expandedPanel.revalidate();
 		}	
 		while(onscreenVisitedBoxes < visitedList.size()) {
 			visitedPanel.remove(visitedList.size()-1);
 			visitedList.removeLast();
 			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
-			visitedScroller.setViewportView(visitedPanel);
+			visitedPanel.revalidate();
 		}
 
 	}
@@ -523,14 +520,14 @@ public class AlgorithmDisplay {
 			expandedPanel.remove(expandedList.size()-1);
 			expandedList.removeLast();
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
-			expandedScroller.setViewportView(expandedPanel);
+			expandedPanel.revalidate();
 		}
 
 		if(onscreenVisitedBoxes <= visitedPanel.getComponentCount()-1) {
 			visitedPanel.remove(visitedList.size()-1);
 			visitedList.removeLast();
 			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
-			visitedScroller.setViewportView(visitedPanel);
+			visitedPanel.revalidate();
 		}
 
 	}
@@ -553,7 +550,7 @@ public class AlgorithmDisplay {
 			expandedList.add(label);
 			expandedPanel.add(label);
 			expandedPanel.setPreferredSize(new Dimension(expandedList.size()*BOX_SIZE.width,expandedPanel.getHeight()));
-			expandedScroller.setViewportView(expandedPanel);
+			expandedPanel.revalidate();
 		}
 
 		// If there are more visited values than labels, create more visited labels
@@ -566,7 +563,7 @@ public class AlgorithmDisplay {
 			visitedList.add(label);
 			visitedPanel.add(label);
 			visitedPanel.setPreferredSize(new Dimension(visitedList.size()*BOX_SIZE.width,visitedPanel.getHeight()));
-			visitedScroller.setViewportView(visitedPanel);
+			visitedPanel.revalidate();
 			visitedPanel.scrollRectToVisible(new Rectangle(visitedList.size()*BOX_SIZE.width,0,1,1));
 		}
 
@@ -625,6 +622,7 @@ public class AlgorithmDisplay {
 			label.setText("");
 			label.setBackground(DEFAULT);
 		}
+		
 	}
 
 	/**
