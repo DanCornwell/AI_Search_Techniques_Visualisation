@@ -453,7 +453,27 @@ public class TopLevelContainer {
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
-
+		
+		// add action listener watching the 2 display's buttons
+		ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				toggleButtons();
+			}		
+		};
+		algorithmDisplay.registerAutoListener(listener);
+		algorithmDisplay.registerStepListener(listener);
+		algorithmDisplay.registerSkipListener(listener);
+		algorithmDisplay.registerUndoListener(listener);
+		algorithmDisplay.registerResetListener(listener);
+		algorithmDisplay.registerPauseListener(listener);
+		dualAlgorithmDisplay.registerAutoListener(listener);
+		dualAlgorithmDisplay.registerStepListener(listener);
+		dualAlgorithmDisplay.registerSkipListener(listener);
+		dualAlgorithmDisplay.registerUndoListener(listener);
+		dualAlgorithmDisplay.registerResetListener(listener);
+		dualAlgorithmDisplay.registerPauseListener(listener);
+		
 		// create master button panel
 		JPanel p = new JPanel();
 		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));
