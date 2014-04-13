@@ -45,37 +45,36 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 		String value = node.getValue();
 
 		g.setColor(Color.white);
-		
+
 		// if at goal node
 		if(value.equals(tree.getGoal())) {
 			g.setColor(GOAL_NODE);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}
 		// if both algorithms are at the same node
-		if(searchAlgorithm.canUndo() && dualSearchAlgorithm.canUndo()) {
-			if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
+		if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && searchAlgorithm.canUndo()
+				&& node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID() && dualSearchAlgorithm.canUndo()) {
 
+			g.setColor(currentNode);
+			treePanel.fillBox(g,xPos, yPos, (boxWidth/2)+1, boxHeight);
+
+			g.setColor(dualCurrentNode);
+			treePanel.fillBox(g,xPos+(boxWidth/2), yPos, boxWidth/2, boxHeight);
+
+		}
+		else {
+			// algorithm 1 is at the node
+			if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && searchAlgorithm.canUndo()) {
 				g.setColor(currentNode);
-				treePanel.fillBox(g,xPos, yPos, (boxWidth/2)+1, boxHeight);
-
-				g.setColor(dualCurrentNode);
-				treePanel.fillBox(g,xPos+(boxWidth/2), yPos, boxWidth/2, boxHeight);
-
+				treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 			}
-			else {
-				// algorithm 1 is at the node
-				if(node.getUID()==searchAlgorithm.getCurrentNode().getUID()) {
-					g.setColor(currentNode);
-					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
-				}
-				// algorithm 2 is at the node
-				else if(node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID()) {
-					g.setColor(dualCurrentNode);
-					treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
-				}
+			// algorithm 2 is at the node
+			else if(node.getUID()==dualSearchAlgorithm.getCurrentNode().getUID() && dualSearchAlgorithm.canUndo()) {
+				g.setColor(dualCurrentNode);
+				treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 			}
 		}
-		
+
 		g.setColor(Color.black);
 		g.drawRect(xPos, yPos, boxWidth, boxHeight);
 		g.drawString(value, xPos+(boxWidth/2), yPos+(boxHeight/2));
