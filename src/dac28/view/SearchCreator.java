@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import dac28.support.TextFileReader;
 import dac28.model.Node;
+import dac28.model.TextFileReader;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
 

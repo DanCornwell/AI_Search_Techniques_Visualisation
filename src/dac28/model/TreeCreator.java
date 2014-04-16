@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import dac28.support.TextFileReader;
 
 /**
  * The tree creator class. 

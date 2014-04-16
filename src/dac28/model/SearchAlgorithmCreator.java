@@ -1,6 +1,5 @@
 package dac28.model;
 
-import dac28.support.TextFileReader;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

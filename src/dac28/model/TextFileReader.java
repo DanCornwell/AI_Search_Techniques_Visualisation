@@ -1,4 +1,4 @@
-package dac28.support;
+package dac28.model;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

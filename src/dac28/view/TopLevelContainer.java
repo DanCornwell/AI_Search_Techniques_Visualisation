@@ -24,9 +24,9 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import dac28.controller.AlgorithmController;
-import dac28.support.TextFileReader;
 import dac28.controller.TreeController;
 import dac28.model.SearchAlgorithm;
+import dac28.model.TextFileReader;
 import dac28.model.Tree;
 import dac28.model.TreeCreator;
 import dac28.model.SearchAlgorithmCreator;
@@ -37,7 +37,7 @@ import dac28.model.SearchAlgorithmCreator;
  * @author Dan Cornwell
  *
  */
-public class TopLevelContainer {
+class TopLevelContainer {
 
 	/**
 	 * The algorithm display being used.
@@ -51,10 +51,6 @@ public class TopLevelContainer {
 	 * The tree display being used.
 	 */
 	private TreeDisplay treeDisplay;
-	/**
-	 * Menu items that the user can interact with.
-	 */
-	private JMenuItem newSearch,newDualSearch,quit,about,legend;
 	/**
 	 * Base frame for the application.
 	 */
@@ -95,7 +91,7 @@ public class TopLevelContainer {
 		menuBar.setPreferredSize(new Dimension(width, 30));
 		JMenu file = new JMenu("File");
 
-		newSearch = new JMenuItem("New Search...");
+		JMenuItem newSearch = new JMenuItem("New Search...");
 		// Add an action listener to the single search menu item
 		// Calls the method to display the input dialog and get the chosen tree, then does
 		// single specific methods
@@ -153,7 +149,7 @@ public class TopLevelContainer {
 
 			}
 		});
-		newDualSearch = new JMenuItem("New Dual Search...");
+		JMenuItem newDualSearch = new JMenuItem("New Dual Search...");
 		// Add an action listener to the dual search menu item
 		// Calls the method to display the input dialog and get the chosen tree, then does
 		// dual specific methods
@@ -234,7 +230,7 @@ public class TopLevelContainer {
 		file.add(newSearch);
 		file.add(newDualSearch);
 		file.addSeparator();
-		quit = new JMenuItem("Quit");
+		JMenuItem quit = new JMenuItem("Quit");
 		quit.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -246,14 +242,36 @@ public class TopLevelContainer {
 		});
 		file.add(quit);
 		JMenu help = new JMenu("Help");
-		about = new JMenuItem("About");
+		JMenuItem about = new JMenuItem("About");
 		about.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				String[] close = {"Close"};
+				JOptionPane.showOptionDialog(null,"\nThis tool was designed as a minor project at Aberystwyth University." +
+						"\nFor instructions on how to use the application go to File -> How to use\n", 
+						"About",JOptionPane.YES_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null, close, close[0]);	
 			}
 		});
-		legend = new JMenuItem("Legend");
+		JMenuItem howTo = new JMenuItem("How to use");
+		howTo.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String[] close = {"Close"};
+				JOptionPane.showOptionDialog(null,"\nTo use this tool go to File then either New Search or " +
+						"New Dual Search to choose a tree and algorithm(s)." +
+						"\nYou can define a goal value when you choose your tree and algorithm(s)." +
+						"This value does not have to been within the tree." +
+						"\nClick the radio button custom whilst choosing your tree and algorithm(s) to set custom" +
+						"names for the nodes. \n(Note that if two nodes both equal the specified goal value then they will" +
+						"both be consider goal nodes.)" +
+						"\n\nUse the buttons provided to iteration your chosen search algorithm and perform other actions."+
+						"\n\nGo to Help -> Legend for a window displaying what the colours represent in the algorithm\n", 
+						"How to use",JOptionPane.YES_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null, close, close[0]);	
+			}
+		});
+		JMenuItem legend = new JMenuItem("Legend");
 		legend.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -261,6 +279,7 @@ public class TopLevelContainer {
 			}
 		});
 		help.add(about);
+		help.add(howTo);
 		help.add(legend);
 
 		// Adds menus to the menu bar
@@ -308,12 +327,12 @@ public class TopLevelContainer {
 						warnings.add("A node name was blank. A default value will be used instead.\n");
 						break;
 					}
-					
+
 				}
 				if(creator.getGoal().trim().equals("")) warnings.add("The goal value was blank.\n");
 				else if(!creator.getNodeValues().contains(creator.getGoal())) 
 					warnings.add("The goal value was not found in the tree.\n");
-				
+
 				for(String value: creator.getPathValues()) {
 
 					try {
@@ -453,7 +472,7 @@ public class TopLevelContainer {
 		base.getContentPane().add(algorithmDisplay.initialiseAlgorithmPanel(width/3, height-30-MASTER_BUTTON_HEIGHT),BorderLayout.WEST);
 		base.getContentPane().add(treeDisplay.initialiseTreePanel(width/3,height-30-MASTER_BUTTON_HEIGHT));
 		base.getContentPane().add(dualAlgorithmDisplay.initialiseAlgorithmPanel(width/3,height-30-MASTER_BUTTON_HEIGHT),BorderLayout.EAST);
-		
+
 		// add action listener watching the 2 display's buttons
 		ActionListener listener = new ActionListener() {
 			@Override
@@ -473,7 +492,7 @@ public class TopLevelContainer {
 		dualAlgorithmDisplay.registerUndoListener(listener);
 		dualAlgorithmDisplay.registerResetListener(listener);
 		dualAlgorithmDisplay.registerPauseListener(listener);
-		
+
 		// create master button panel
 		JPanel p = new JPanel();
 		p.setPreferredSize(new Dimension(width,MASTER_BUTTON_HEIGHT));
@@ -719,25 +738,13 @@ public class TopLevelContainer {
 	 */
 	private class LegendPanel {
 
-		/**
-		 * Border for the legend boxes.
-		 */
-		private final Border BOX_BORDER = BorderFactory.createLineBorder(Color.black);
-		/**
-		 * Size for the legend boxes.
-		 */
-		private final Dimension BOX_SIZE = new Dimension(20,20);
-		/**
-		 * Size for the panel that all legend data is inside.
-		 */
-		private final Dimension PANEL_SIZE = new Dimension(350,30);
-		/**
-		 * The default colour.
-		 */
-		private final Color DEFAULT = Color.white;
-
 		private JDialog showLegend() {
 
+			final Border BOX_BORDER = BorderFactory.createLineBorder(Color.black);
+			final Dimension BOX_SIZE = new Dimension(20,20);
+			final Dimension PANEL_SIZE = new Dimension(350,30);
+			final Color DEFAULT = Color.white;
+			
 			JDialog legend = new JDialog(base,"Legend",false);
 			legend.setLayout(new FlowLayout());
 
