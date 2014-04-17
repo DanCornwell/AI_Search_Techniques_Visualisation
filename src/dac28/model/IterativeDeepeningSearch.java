@@ -33,9 +33,21 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 	 */
 	private int prevVisitedSize;
 
-	protected IterativeDeepeningSearch(Tree TREE) {
+	/**
+	 * Iterative deepening constructor.
+	 * Calls the superclass constructor.
+	 * 
+	 * Initialises the expanded list as a Stack and adds the root onto it.
+	 * Gets the tree depth and initialises the iteration number.
+	 * Also takes note of the visited list size.
+	 * Calls the private setup method.
+	 * 
+	 * @param TREE - the tree which the algorithm will traverse on
+	 * @param GOAL - the goal value that algorithm will search for
+	 */
+	protected IterativeDeepeningSearch(Tree TREE,String GOAL) {
 
-		super(TREE);
+		super(TREE,GOAL);
 
 		// Initialise HashMap
 		nodeLevels = new HashMap<Node,Integer>();
@@ -99,8 +111,8 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 	}
 	
 	@Override
-	protected SearchAlgorithm getAlgorithm(Tree tree) {
-		return new IterativeDeepeningSearch(tree);
+	protected SearchAlgorithm getAlgorithm(Tree tree,String goal) {
+		return new IterativeDeepeningSearch(tree,goal);
 	}
 
 	/**

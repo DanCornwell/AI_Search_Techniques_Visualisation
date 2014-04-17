@@ -19,13 +19,12 @@ class Tree112111 extends Tree {
 
 	/**
 	 * Tree112111 constructor.
-	 * Takes a goal parameter and calls the super constructor using it.
+	 * Calls the superclass constructor.
 	 * 
-	 * @param GOAL - the goal value
 	 * @param values - the values to set the nodes to, can be empty to use default values
 	 */
-	Tree112111(String GOAL, Queue<String> values) {
-		super(GOAL, values);
+	Tree112111(Queue<String> values) {
+		super(values);
 	}
 
 	@Override
@@ -53,8 +52,8 @@ class Tree112111 extends Tree {
 	}
 	
 	@Override
-	protected Tree getTree(String goalValue, Queue<String> values) {
-		return new Tree112111(goalValue,values);
+	protected Tree getTree(Queue<String> values) {
+		return new Tree112111(values);
 	}
 	
 }

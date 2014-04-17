@@ -109,7 +109,7 @@ class TopLevelContainer {
 				if(tree==null) return;
 
 				// Get the algorithm from the user input
-				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree);
+				SearchAlgorithm algorithm = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree, creator.getGoal());
 				if(algorithm==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -142,6 +142,9 @@ class TopLevelContainer {
 				treeDisplay.setCurrentNodeColor(colors);
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE);
 
+				// Set the goal value for the tree display
+				treeDisplay.setGoalValue(creator.getGoal());
+				
 				// Create a new tree controller
 				TreeController treeController = new TreeController(algorithms,tree,treeDisplay);
 				// Create a new algorithm controller
@@ -167,7 +170,7 @@ class TopLevelContainer {
 				if(tree==null) return;
 
 				// Get the first algorithm from the user input		
-				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree);
+				SearchAlgorithm algorithm1 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithmUID(), tree, creator.getGoal());
 				if(algorithm1==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -177,7 +180,7 @@ class TopLevelContainer {
 					return;
 				}
 				// Get the second algorithm from the user input		
-				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithm2UID(), tree);
+				SearchAlgorithm algorithm2 = SearchAlgorithmCreator.getInstance().getAlgorithm(creator.getAlgorithm2UID(), tree, creator.getGoal());
 				if(algorithm2==null) {
 					Object[] ok = {"Ok"};
 					JOptionPane.showOptionDialog(null,"The selected algorithm was not found in the dac28.model package" +
@@ -219,6 +222,9 @@ class TopLevelContainer {
 				algorithmDisplay.setCurrentNodeColor(CURRENT_NODE_1);
 				dualAlgorithmDisplay.setCurrentNodeColor(CURRENT_NODE_2);
 
+				// Set the goal value for the tree display
+				treeDisplay.setGoalValue(creator.getGoal());
+				
 				// Create new tree controller
 				TreeController treeController = new TreeController(searchAlgorithms,tree,treeDisplay);
 				// Create new algorithm controller for algorithm 1
@@ -386,7 +392,7 @@ class TopLevelContainer {
 	private Tree getUserInputTreeChoice(SearchCreator creator) {
 
 		// Create a tree and algorithm with the user supplied information. Return if null.
-		Tree tree = TreeCreator.getInstance().getTree(creator.getTreeUID(), creator.getGoal(), creator.getNodeValues());
+		Tree tree = TreeCreator.getInstance().getTree(creator.getTreeUID(),creator.getNodeValues());
 
 		if(tree==null) {
 			Object[] ok = {"Ok"};

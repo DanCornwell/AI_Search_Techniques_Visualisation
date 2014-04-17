@@ -55,7 +55,7 @@ public class TreeCreatorTest {
 		when(hash.get(ID)).thenReturn(mock(Tree.class));
 		Whitebox.setInternalState(creator, "trees", hash);
 
-		creator.getTree(ID, "0",new LinkedList<String>());
+		creator.getTree(ID,new LinkedList<String>());
 		verify(hash).containsKey(ID);
 		verify(hash).get(ID);
 	}
@@ -69,7 +69,7 @@ public class TreeCreatorTest {
 		when(hash.containsKey(ID)).thenReturn(false);
 		Whitebox.setInternalState(creator, "trees", hash);
 
-		assertTrue(creator.getTree(ID, "0",new LinkedList<String>()) == null);
+		assertTrue(creator.getTree(ID,new LinkedList<String>()) == null);
 		
 		// verify contains key is called but get is not
 		verify(hash).containsKey(ID);

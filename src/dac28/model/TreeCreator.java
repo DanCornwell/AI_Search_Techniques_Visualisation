@@ -59,15 +59,14 @@ public class TreeCreator {
 	 * Retrieves a tree from the hash.
 	 * 
 	 * @param uID - id of the tree to get
-	 * @param goalValue - the goal value of the tree
 	 * @param values - a queue of strings for the node values
 	 * @return a concrete tree with a defined goal value
 	 */
-	public final Tree getTree(int uID,String goalValue,Queue<String> values) {
+	public final Tree getTree(int uID,Queue<String> values) {
 
 		if(!trees.containsKey(uID)) return null;
 
-		return trees.get(uID).getTree(goalValue,values);
+		return trees.get(uID).getTree(values);
 	}
 
 	/**
@@ -80,7 +79,7 @@ public class TreeCreator {
 		try {
 
 			Class<?> tree = Class.forName("dac28.model.".concat(treeName));
-			Tree treeInstance = (Tree) tree.getDeclaredConstructor(String.class,Queue.class).newInstance("",new LinkedList<String>());
+			Tree treeInstance = (Tree) tree.getDeclaredConstructor(Queue.class).newInstance(new LinkedList<String>());
 			trees.put(id, treeInstance);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
 				| IllegalArgumentException | InvocationTargetException 

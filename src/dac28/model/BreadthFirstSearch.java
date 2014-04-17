@@ -15,14 +15,16 @@ class BreadthFirstSearch extends SearchAlgorithm {
 
 	/**
 	 * Breadth first search algorithm constructor.
-	 * Creates the expanded node list and adds the root node to it.
-	 * Takes a tree parameter which is used to set the goal and root node.
+	 * Calls the superclass constructor.
 	 * 
-	 * @param TREE - the tree the algorithm will be using
+	 * Initialises the expanded list as a LinkedList and adds the root onto it.
+	 * 
+	 * @param TREE - the tree which the algorithm will traverse on
+	 * @param GOAL - the goal value that algorithm will search for
 	 */
-	BreadthFirstSearch(Tree TREE) {
+	BreadthFirstSearch(Tree TREE,String GOAL) {
 
-		super(TREE);
+		super(TREE,GOAL);
 		// LinkedList is a queue type data structure
 		expanded = new LinkedList<Node>();
 		// Add root to expanded list to allow algorithm to start
@@ -49,8 +51,8 @@ class BreadthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected SearchAlgorithm getAlgorithm(Tree tree) {
-		return new BreadthFirstSearch(tree);
+	protected SearchAlgorithm getAlgorithm(Tree tree,String goal) {
+		return new BreadthFirstSearch(tree,goal);
 	}
 
 

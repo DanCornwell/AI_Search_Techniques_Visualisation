@@ -44,21 +44,22 @@ public abstract class SearchAlgorithm {
 
 	/**
 	 * Constructor for a search algorithm.
-	 * Takes a Tree parameter, which is used to retrieve the goal node
-	 * and the root node.
+	 * Takes a Tree parameter, which is used to retrieve the tree root.
+	 * Takes a String parameter, which is used as the goal value.
 	 * Also initiates the visited list and sets the goal reached boolean to false.
 	 * Subclasses must add ROOT node to their respective expanded lists in order for 
 	 * the algorithm to work.
 	 * 
 	 * @param TREE - the tree which the algorithm will traverse on
+	 * @param GOAL - the goal value that algorithm will search for
 	 */
-	protected SearchAlgorithm(final Tree TREE) {
+	protected SearchAlgorithm(final Tree TREE,final String GOAL) {
 
 		visited = new LinkedList<Node>();
 		mementos = new Stack<Memento>();
 
-		GOAL = TREE.getGoal();
 		ROOT = TREE.getRoot();
+		this.GOAL = GOAL;
 		
 		currentNode = ROOT;
 
@@ -220,9 +221,10 @@ public abstract class SearchAlgorithm {
 	/**
 	 * Returns a concrete search algorithm
 	 * 
-	 * @param tree - tree instance to initialise algorithm with
+	 * @param tree - tree instance the algorithm will search upon
+	 * @param goal - the goal value the algorithm will search for 
 	 * @return a concrete search algorithm
 	 */
-	protected abstract SearchAlgorithm getAlgorithm(Tree tree);
+	protected abstract SearchAlgorithm getAlgorithm(Tree tree,String goal);
 
 }

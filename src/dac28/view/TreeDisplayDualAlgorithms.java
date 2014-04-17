@@ -47,7 +47,7 @@ public class TreeDisplayDualAlgorithms extends TreeDisplay {
 		g.setColor(Color.white);
 
 		// if at goal node
-		if(value.equals(tree.getGoal())) {
+		if(value.equals(goal)) {
 			g.setColor(GOAL_NODE);
 			treePanel.fillBox(g, xPos, yPos, boxWidth, boxHeight);
 		}

@@ -14,8 +14,14 @@ import java.util.Random;
  */
 class TreeRandom extends Tree {
 
-	TreeRandom(String GOAL, Queue<String> values) {
-		super(GOAL, values);
+	/** 
+	 * The TreeRandom constructor.
+	 * Calls the superclass constructor.
+	 * 
+	 * @param values - the values to set the nodes to, can be empty to use default values
+	 */
+	TreeRandom(Queue<String> values) {
+		super(values);
 	}
 
 	@Override
@@ -57,19 +63,9 @@ class TreeRandom extends Tree {
 	}
 
 	@Override
-	protected Tree getTree(String goalValue, Queue<String> values) {
-		setGoalValue(goalValue);
+	protected Tree getTree(Queue<String> values) {
 		setNodeValues(values);
 		return this;
-	}
-
-	/**
-	 * Sets the goal value.
-	 * 
-	 * @param goalValue - the new goal value
-	 */
-	private void setGoalValue(String goalValue) {
-		goal = goalValue;
 	}
 
 	/**

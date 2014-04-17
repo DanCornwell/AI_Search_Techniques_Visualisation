@@ -5,7 +5,7 @@ import java.util.Queue;
 
 /**
  * Abstract class the defines methods for the search trees.
- * Provides method to return the goal value and root node.
+ * Provides method to return root node of the tree.
  * Defines a construct method which subclasses will use to build specific trees.
  * 
  * @author Dan Cornwell
@@ -13,10 +13,6 @@ import java.util.Queue;
  */
 public abstract class Tree {
 
-	/**
-	 * The goal value.
-	 */
-	protected String goal;
 	/**
 	 * The root node, any tree will always have a root node.
 	 */
@@ -32,16 +28,14 @@ public abstract class Tree {
 		
 	/**
 	 * Constructor.
-	 * Sets the goal variable and creates the root node.
+	 * Creates the root node and calls the constructNodes method to build the tree structure.
+	 * Sets the node values to that in the supplied values queue.
 	 * If the values supplied have blank strings or duplicates, these are replaced by default values
 	 * If the values parameter is empty, then it will be used to set the node values.
 	 * 
-	 * @param goal - String to the set the goal node
 	 * @param values - a queue of strings that will set the node values, can empty list to use default values
 	 */
-	Tree(final String goal,Queue<String> values) {
-
-		this.goal = goal;
+	Tree(Queue<String> values) {
 		
 		id = 0;
 		
@@ -76,15 +70,6 @@ public abstract class Tree {
 		
 		pathCosts = new LinkedList<Integer>();
 	} 
-
-	/**
-	 * Returns the goal value.
-	 * 
-	 * @return - string matching the goal value
-	 */
-	public final String getGoal() {
-		return new String(goal);
-	}
 
 	/**
 	 * Returns the root node.
@@ -186,10 +171,9 @@ public abstract class Tree {
 	 * Returns a concrete instance of the subclass tree.
 	 * If the values is empty, default values will be used.
 	 * 
-	 * @param goalValue - goal value to initialise tree with
 	 * @param values - values to set the nodes. If this is empty, default values are supplied
 	 * @return a concrete tree
 	 */
-	protected abstract Tree getTree(String goalValue,Queue<String> values);
+	protected abstract Tree getTree(Queue<String> values);
 	
 } 

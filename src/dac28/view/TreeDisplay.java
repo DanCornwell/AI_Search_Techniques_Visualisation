@@ -53,6 +53,10 @@ public class TreeDisplay {
 	 * Colour of the current node in the tree display.
 	 */
 	protected Color currentNode;
+	/**
+	 * The goal value of the search algorithm.
+	 */
+	protected String goal;
 	
 	/**
 	 * Initialises a tree panel instance, and return it in a JScrollPane.
@@ -112,6 +116,10 @@ public class TreeDisplay {
 		if(colors.length < 1) return;
 		this.currentNode = colors[0];
 	}
+	
+	public void setGoalValue(String goal) {
+		this.goal = goal;
+	}
 
 	/**
 	 * Draws the boxes in the trees. Calls the tree panel's fillBox method to set the background
@@ -129,9 +137,9 @@ public class TreeDisplay {
 		String value = node.getValue();
 				
 		g.setColor(Color.white);
-		
+	
 		// if at goal change colour to goal node colour
-		if(value.equals(tree.getGoal())) g.setColor(GOAL_NODE);
+		if(value.equals(goal)) g.setColor(GOAL_NODE);
 		// if at the current node and not at the beginning change colour to current node colour
 		if(node.getUID()==searchAlgorithm.getCurrentNode().getUID() && searchAlgorithm.canUndo()) g.setColor(currentNode);
 

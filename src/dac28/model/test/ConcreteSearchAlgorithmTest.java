@@ -34,6 +34,7 @@ import dac28.model.Tree;
 public class ConcreteSearchAlgorithmTest {
 
 	private Tree tree;
+	private final String GOAL = "GOAL";
 
 	@Before
 	public void setup() {
@@ -55,7 +56,6 @@ public class ConcreteSearchAlgorithmTest {
 			e.printStackTrace();
 		}
 
-		doReturn("GOAL").when(tree).getGoal();
 		doReturn(root).when(tree).getRoot();
 
 	}
@@ -65,7 +65,7 @@ public class ConcreteSearchAlgorithmTest {
 
 		int bfsID = TextFileReader.getAlgorithms().indexOf("BreadthFirstSearch");
 		assertTrue("Algorithm was not found in list",bfsID!=-1);
-		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree);
+		SearchAlgorithm bfs = SearchAlgorithmCreator.getInstance().getAlgorithm(bfsID, tree,GOAL);
 		
 		List<Node> expanded = Whitebox.getInternalState(bfs, "expanded");
 		List<Node> expandedSpy = PowerMockito.spy(expanded);
@@ -97,7 +97,7 @@ public class ConcreteSearchAlgorithmTest {
 	
 		int dfsID = TextFileReader.getAlgorithms().indexOf("DepthFirstSearch");
 		assertTrue("Algorithm was not found in list",dfsID!=-1);
-		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree);
+		SearchAlgorithm dfs = SearchAlgorithmCreator.getInstance().getAlgorithm(dfsID, tree,GOAL);
 
 		Stack<Node> expanded = Whitebox.getInternalState(dfs, "expanded");
 		Stack<Node> expandedSpy = PowerMockito.spy(expanded);
@@ -130,7 +130,7 @@ public class ConcreteSearchAlgorithmTest {
 	
 		int deepID = TextFileReader.getAlgorithms().indexOf("IterativeDeepeningSearch");
 		assertTrue("Algorithm was not found in list",deepID!=-1);
-		SearchAlgorithm deep = SearchAlgorithmCreator.getInstance().getAlgorithm(deepID, tree);
+		SearchAlgorithm deep = SearchAlgorithmCreator.getInstance().getAlgorithm(deepID, tree,GOAL);
 
 		Stack<Node> expanded = Whitebox.getInternalState(deep, "expanded");
 		Stack<Node> expandedSpy = PowerMockito.spy(expanded);
@@ -168,7 +168,7 @@ public class ConcreteSearchAlgorithmTest {
 		
 		int costID = TextFileReader.getAlgorithms().indexOf("UniformCostSearch");
 		assertTrue("Algorithm was not found in list",costID!=-1);
-		SearchAlgorithm cost = SearchAlgorithmCreator.getInstance().getAlgorithm(costID, tree);
+		SearchAlgorithm cost = SearchAlgorithmCreator.getInstance().getAlgorithm(costID, tree,GOAL);
 		
 		LinkedList<Node> expanded = Whitebox.getInternalState(cost, "expanded");
 		LinkedList<Node> expandedSpy = PowerMockito.spy(expanded);

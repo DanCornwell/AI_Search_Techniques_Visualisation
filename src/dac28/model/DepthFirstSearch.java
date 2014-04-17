@@ -15,14 +15,16 @@ class DepthFirstSearch extends SearchAlgorithm {
 
 	/**
 	 * Depth first search algorithm constructor.
-	 * Creates the expanded node list and adds the root node to it.
-	 * Takes a tree parameter which is used to set the goal and root node.
+	 * Calls the superclass constructor.
 	 * 
-	 * @param TREE - the tree the algorithm will be using
+	 * Initialises the expanded list as a Stack and pushes the root onto it.
+	 * 
+	 * @param TREE - the tree which the algorithm will traverse on
+	 * @param GOAL - the goal value that algorithm will search for
 	 */
-	DepthFirstSearch(Tree TREE) {
+	DepthFirstSearch(Tree TREE,String GOAL) {
 
-		super(TREE);
+		super(TREE,GOAL);
 		// Depth first search uses a stack data structure
 		expanded = new Stack<Node>();
 		// Add root to expanded list to allow algorithm to start
@@ -49,8 +51,8 @@ class DepthFirstSearch extends SearchAlgorithm {
 	}
 
 	@Override
-	protected SearchAlgorithm getAlgorithm(Tree tree) {
-		return new DepthFirstSearch(tree);
+	protected SearchAlgorithm getAlgorithm(Tree tree,String goal) {
+		return new DepthFirstSearch(tree,goal);
 	}
 
 }

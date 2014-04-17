@@ -39,12 +39,6 @@ public class TreeTest {
 	}
 
 	@Test
-	public void testGetGoal() {
-		Whitebox.setInternalState(tree, "goal", "value");
-		assertEquals("Tree's goal variable was not returned",Whitebox.getInternalState(tree, "goal"),tree.getGoal());
-	}
-
-	@Test
 	public void testGetRoot() {	
 		Whitebox.setInternalState(tree, "root", mock(Node.class));
 		assertEquals("Tree's root variable was not returned",Whitebox.getInternalState(tree,"root"),tree.getRoot());

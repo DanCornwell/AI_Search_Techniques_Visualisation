@@ -20,15 +20,18 @@ class UniformCostSearch extends SearchAlgorithm {
 	private HashMap<Node,Integer> pathCosts;
 	
 	/**
-	 * Constructor.
-	 * Initialises the expanded list and adds the root to it.
-	 * Initialises the path costs HashMap and puts root onto it with value 0.
+	 * Uniform cost search constructor.
+	 * Calls the superclass constructor.
 	 * 
-	 * @param TREE - the tree to search upon
+	 * Initialises the expanded list as a LinkedList and adds the root onto it.
+	 * Creates a hash map of nodes and integers and calls the private setup method to fill it.
+	 * 
+	 * @param TREE - the tree which the algorithm will traverse on
+	 * @param GOAL - the goal value that algorithm will search for
 	 */
-	protected UniformCostSearch(Tree TREE) {
+	protected UniformCostSearch(Tree TREE,String GOAL) {
 	
-		super(TREE);
+		super(TREE,GOAL);
 		// LinkedList is a queue type data structure
 		expanded = new LinkedList<Node>();
 		// Add root to expanded list to allow algorithm to start
@@ -76,8 +79,8 @@ class UniformCostSearch extends SearchAlgorithm {
 	}
 	
 	@Override
-	protected SearchAlgorithm getAlgorithm(Tree tree) {
-		return new UniformCostSearch(tree);
+	protected SearchAlgorithm getAlgorithm(Tree tree,String goal) {
+		return new UniformCostSearch(tree,goal);
 	}
 
 	/**

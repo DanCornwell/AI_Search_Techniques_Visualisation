@@ -47,7 +47,7 @@ public class SearchAlgorithmCreatorTest {
 		when(hash.get(ID)).thenReturn(mock(SearchAlgorithm.class));
 		Whitebox.setInternalState(creator, "algorithms", hash);
 
-		creator.getAlgorithm(ID, mock(Tree.class));
+		creator.getAlgorithm(ID, mock(Tree.class),"");
 		verify(hash).containsKey(ID);
 		verify(hash).get(ID);
 	}
@@ -63,7 +63,7 @@ public class SearchAlgorithmCreatorTest {
 		when(hash.get(ID)).thenReturn(mock(SearchAlgorithm.class));
 		Whitebox.setInternalState(creator, "algorithms", hash);
 		
-		assertTrue(creator.getAlgorithm(ID, mock(Tree.class)) == null);
+		assertTrue(creator.getAlgorithm(ID, mock(Tree.class),"") == null);
 		
 		// verify contains key is called but get is not
 		verify(hash).containsKey(ID);

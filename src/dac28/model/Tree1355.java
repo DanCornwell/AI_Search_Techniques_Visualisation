@@ -18,13 +18,13 @@ import java.util.Queue;
 class Tree1355 extends Tree {
 
 	/**
-	 * Calls the tree superclass.
+	 * The Tree1355 construtor.
+	 * Calls the superclass constructor.
 	 * 
-	 * @param GOAL - the goal value for tree
 	 * @param values - the values to set the nodes to, can be empty to use default values
 	 */
-	Tree1355(String GOAL, Queue<String> values) {
-		super(GOAL, values);
+	Tree1355(Queue<String> values) {
+		super(values);
 	}
 	
 	@Override
@@ -69,8 +69,8 @@ class Tree1355 extends Tree {
 	}
 
 	@Override
-	protected Tree getTree(String goalValue, Queue<String> values) {
-		return new Tree1355(goalValue,values);
+	protected Tree getTree(Queue<String> values) {
+		return new Tree1355(values);
 	}
 	
 }

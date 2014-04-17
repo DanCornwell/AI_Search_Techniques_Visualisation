@@ -380,7 +380,7 @@ public class SearchCreator {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			Tree tree = TreeCreator.getInstance().getTree(getTreeUIDChangingRandom(), "", new LinkedList<String>());
+			Tree tree = TreeCreator.getInstance().getTree(getTreeUIDChangingRandom(), new LinkedList<String>());
 			if(tree==null) {
 				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 				g.drawString("Tree not found", (this.getWidth()/3)+15, this.getHeight()/2);

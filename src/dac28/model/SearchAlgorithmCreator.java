@@ -39,13 +39,13 @@ public class SearchAlgorithmCreator {
 		if(algorithmNames == null) return;
 
 		int id = 0;
-		Tree tree = new Tree124("0",new LinkedList<String>());
+		Tree tree = new Tree124(new LinkedList<String>());
 
 		for(String algorithmName: algorithmNames) {
 			try {
 
 				Class<?> algorithm = Class.forName("dac28.model.".concat(algorithmName));
-				SearchAlgorithm algorithmInstance = (SearchAlgorithm) algorithm.getDeclaredConstructor(Tree.class).newInstance(tree);
+				SearchAlgorithm algorithmInstance = (SearchAlgorithm) algorithm.getDeclaredConstructor(Tree.class,String.class).newInstance(tree,"");
 				algorithms.put(id, algorithmInstance);
 				id++;
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
@@ -74,13 +74,14 @@ public class SearchAlgorithmCreator {
 	 * 
 	 * @param uID - id of the search algorithm to get
 	 * @param tree - the tree the search algorithm will search on
+	 * @param goal - the goal value the algorithm will search for
 	 * @return a concrete search algorithm with a defined tree
 	 */
-	public final SearchAlgorithm getAlgorithm(int uID,Tree tree) {
+	public final SearchAlgorithm getAlgorithm(int uID,Tree tree,String goal) {
 
 		if(!algorithms.containsKey(uID)) return null;
 
-		return algorithms.get(uID).getAlgorithm(tree);
+		return algorithms.get(uID).getAlgorithm(tree,goal);
 	}
 
 }
