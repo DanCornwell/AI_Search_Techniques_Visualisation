@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import javax.swing.BorderFactory;
@@ -102,8 +101,8 @@ class TopLevelContainer {
 
 				SearchCreator creator = new SearchCreator();
 
-				if(!displayUserInputDialog(creator)) return;
-
+				if(!creator.getUserInput()) return;
+				
 				Tree tree = getUserInputTreeChoice(creator);
 				if(tree==null) return;
 
@@ -163,8 +162,8 @@ class TopLevelContainer {
 
 				SearchCreatorDual creator = new SearchCreatorDual();
 
-				if(!displayUserInputDialog(creator)) return;
-
+				if(!creator.getUserInput()) return;
+				
 				Tree tree = getUserInputTreeChoice(creator);
 				if(tree==null) return;
 
@@ -301,84 +300,7 @@ class TopLevelContainer {
 		initialiseSingleDisplay();
 	}
 
-	/**
-	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
-	 * 
-	 * @param creator - the SearchCreator instance that will specify which dialog to show
-	 * @return true if user clicks OK with valid input, false if they hit cancel
-	 */
-	private boolean displayUserInputDialog(SearchCreator creator) {
-
-		Object[] options = {"Confirm", "Cancel"};
-
-		// boolean used to loop the controller on invalid input
-		boolean validInput = false;
-
-		JPanel dialog = creator.getCreateDialog();
-
-		while(!validInput) {
-
-			int result = JOptionPane.showOptionDialog(null, dialog, 
-					"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-
-			if(result == JOptionPane.OK_OPTION) {
-
-				List<String> warnings = new LinkedList<String>();
-				for(String value: creator.getNodeValues()) {
-					if(value.trim().equals("")) {
-						warnings.add("A node name was blank. A default value will be used instead.\n");
-						break;
-					}
-
-				}
-				if(creator.getGoal().trim().equals("")) warnings.add("The goal value was blank.\n");
-				else if(!creator.getNodeValues().contains(creator.getGoal())) 
-					warnings.add("The goal value was not found in the tree.\n");
-
-				for(String value: creator.getPathValues()) {
-
-					try {
-						Integer.parseInt(value); 
-					}
-					catch(NumberFormatException numberError) {
-						warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
-						break;
-					}
-				}
-
-				// If warnings exist display them and let user decide whether to continue or not
-				if(!warnings.isEmpty()) {
-
-					String warningString = "";
-					for(String s: warnings) {
-						warningString+=(s+"\n");
-
-					}
-
-					Object[] warningOptions = {"Yes","Back"};
-
-					int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
-							"\n\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
-							"Application Warning",JOptionPane.YES_OPTION,
-							JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
-
-
-					if(warningResult == JOptionPane.OK_OPTION) {
-						validInput = true;
-					}
-
-				}
-				else validInput = true;
-			}
-
-			else {
-				return false;
-			}
-
-		}
-		return true;
-	}
-
+	
 	/**
 	 * Returns the user's choice of tree. If the tree could not be found null is returned.
 	 * 

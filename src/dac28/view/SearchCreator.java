@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -118,7 +119,7 @@ public class SearchCreator {
 	 * 
 	 * @return dialog window
 	 */
-	protected final JPanel getCreateDialog() {
+	private final JPanel getCreateDialog() {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
@@ -262,6 +263,85 @@ public class SearchCreator {
 		return searchChoices;
 	}
 
+	/**
+	 * Displays a dialog box allowing the user to choose their search algorithms and trees.
+	 * Validates the user input, returning warning dialog if there is a problem
+	 * 
+	 * @return true if user clicks OK, false if they hit cancel
+	 */
+	final boolean getUserInput() {
+		
+		Object[] options = {"Confirm", "Cancel"};
+
+		// boolean used to loop the controller on invalid input
+		boolean validInput = false;
+
+		JPanel dialog = getCreateDialog();
+
+		while(!validInput) {
+
+			int result = JOptionPane.showOptionDialog(null, dialog, 
+					"Algorithm and Tree Chooser",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+			if(result == JOptionPane.OK_OPTION) {
+
+				List<String> warnings = new LinkedList<String>();
+				for(String value: getNodeValues()) {
+					if(value.trim().equals("")) {
+						warnings.add("A node name was blank. A default value will be used instead.\n");
+						break;
+					}
+
+				}
+				if(getGoal().trim().equals("")) warnings.add("The goal value was blank.\n");
+				else if(!getNodeValues().contains(getGoal())) 
+					warnings.add("The goal value was not found in the tree.\n");
+
+				for(String value: getPathValues()) {
+
+					try {
+						Integer.parseInt(value); 
+					}
+					catch(NumberFormatException numberError) {
+						warnings.add("A path cost value was not an integer. Default value of 1 will be used instead.");
+						break;
+					}
+				}
+
+				// If warnings exist display them and let user decide whether to continue or not
+				if(!warnings.isEmpty()) {
+
+					String warningString = "";
+					for(String s: warnings) {
+						warningString+=(s+"\n");
+
+					}
+
+					Object[] warningOptions = {"Yes","Back"};
+
+					int warningResult = JOptionPane.showOptionDialog(null,"The following warnings were raised: " +
+							"\n\n\n".concat(warningString).concat("\nAre you sure you wish to continue?"), 
+							"Application Warning",JOptionPane.YES_OPTION,
+							JOptionPane.WARNING_MESSAGE, null, warningOptions, warningOptions[0]);
+
+
+					if(warningResult == JOptionPane.OK_OPTION) {
+						validInput = true;
+					}
+
+				}
+				else validInput = true;
+			}
+
+			else {
+				return false;
+			}
+
+		}
+		return true;
+		
+	}
+	
 	/**
 	 * Returns the the unique ID of the selected tree, which is its index within the button group.
 	 * 
