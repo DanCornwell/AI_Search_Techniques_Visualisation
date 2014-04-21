@@ -83,6 +83,6 @@ public class TreeCreator {
 			trees.put(id, treeInstance);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
 				| IllegalArgumentException | InvocationTargetException 
-				| NoSuchMethodException | SecurityException e) { e.printStackTrace();
+				| NoSuchMethodException | SecurityException e) { 
 		}	}
 }

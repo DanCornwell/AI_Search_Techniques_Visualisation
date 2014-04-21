@@ -303,24 +303,6 @@ public class AlgorithmDisplay {
 	}
 
 	/**
-	 * Returns the expanded list
-	 * 
-	 * @return a list of JLabels
-	 */
-	public final LinkedList<JLabel> getExpandedList() {
-		return new LinkedList<JLabel>(expandedList);
-	}
-
-	/**
-	 * Returns the visited list
-	 * 
-	 * @return a list of JLabels
-	 */
-	public final LinkedList<JLabel> getVisitedList() {
-		return new LinkedList<JLabel>(visitedList);
-	}
-
-	/**
 	 * Sets the current node and at goal labels.
 	 * Changes the background colour if we are at the goal.
 	 * Reset the labels if we are the beginning of the search, i.e only the root is in the expanded list
@@ -368,8 +350,9 @@ public class AlgorithmDisplay {
 	/**
 	 * Resets the display
 	 */
-	public final void reset() {
-		resetLabels();
+	public final void reset(String rootNodeValue) {
+		clearLabels();
+		expandedList.getFirst().setText(rootNodeValue);
 		node.setText("");
 		node.setBackground(DEFAULT);
 		atGoal.setText("");
@@ -567,8 +550,8 @@ public class AlgorithmDisplay {
 			visitedPanel.scrollRectToVisible(new Rectangle(visitedList.size()*BOX_SIZE.width,0,1,1));
 		}
 
-		// Reset the list labels
-		resetLabels();
+		// Clear the list labels
+		clearLabels();
 
 		// Sets the lists elements to the new values
 		for(int i=0;i<expandedValues.size();i++) {
@@ -610,9 +593,9 @@ public class AlgorithmDisplay {
 	}
 
 	/**
-	 * Resets the list labels
+	 * Clears the list labels
 	 */
-	protected final void resetLabels() {
+	protected final void clearLabels() {
 
 		for(JLabel label:expandedList) {
 			label.setText("");

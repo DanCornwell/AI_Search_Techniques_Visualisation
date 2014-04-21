@@ -44,7 +44,7 @@ public class AlgorithmController {
 		this.searchAlgorithm = searchAlgorithm;
 		this.algorithmDisplay = algorithmDisplay;
 
-		initialiseExpandedList();
+		resetExpandedList();
 
 		this.algorithmDisplay.toggleAuto(true);
 		this.algorithmDisplay.toggleStep(true);
@@ -65,23 +65,16 @@ public class AlgorithmController {
 	} 
 
 	/**
-	 * Initialise the expanded list with its values.
+	 * Resets the expanded list then adds the root nodes value to it, like in the begining of a search.
 	 * Called within the constructor and reset method.
 	 * A visited list equivalent is not needed due to that list being empty on start. 
 	 */
-	private void initialiseExpandedList() {
-
-		if(searchAlgorithm.getExpanded().size() > algorithmDisplay.getExpandedList().size()) {
-			return;
-		}
+	private void resetExpandedList() {
 
 		// Reset the algorithm and display
 		searchAlgorithm.reset();
-		algorithmDisplay.reset();
-
-		// Get the root element from the expanded list
-		algorithmDisplay.getExpandedList().get(0).setText(String.valueOf(searchAlgorithm.getExpanded().get(0).getValue()));
-
+		algorithmDisplay.reset(searchAlgorithm.getCurrentNode().getValue());
+		
 	}
 
 	/**
@@ -272,8 +265,9 @@ public class AlgorithmController {
 		@Override
 		protected void buttonLogic() {
 
-			// Initialises the display as if it were new.
-			initialiseExpandedList();
+			// Reset the display 
+			
+			resetExpandedList();
 
 			iterationNumber = 0;
 			expandedSizes.clear();
