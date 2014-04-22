@@ -1,10 +1,7 @@
 package dac28.model;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -18,47 +15,33 @@ import java.util.LinkedList;
 public class TextFileReader {
 
 	/**
-	 * String representation of the path for the algorithms file.
-	 */
-	private static final String ALGORITHMS_TXT = "loader_files/algorithms.txt";
-	/**
-	 * String representation of the path for the trees file.
-	 */
-	private static final String TREES_TXT = "loader_files/trees.txt";
-
-	/**
 	 * Returns a list of the available algorithm names the application can use.
+	 * If the algorithm.txt file does not exist then the default known algorithms are used.
 	 * 
 	 * @return string list of search algorithm's names
 	 * @throws IOException 
 	 */
 	private final static LinkedList<String> readAlgorithms() throws IOException {	
 
-		// create directory if it doesn't exist
-		File dir = new File("loader_files");
-		if(!dir.exists() || !dir.isDirectory()) {
-			if(!dir.mkdir()) return null;
-		}
-
-		// create algorithm text file if it doesn't exist, and write known algorithms to it
-		File alg = new File(ALGORITHMS_TXT);
-		if(!alg.exists() || alg.isDirectory()) {
-			if(!alg.createNewFile()) return null;
-			final String ALGORITHMS = "BreadthFirstSearch\nDepthFirstSearch";
-			FileWriter fw = new FileWriter(alg.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(ALGORITHMS);
-			bw.close();
-		}
-
 		LinkedList<String> algorithms = new LinkedList<String>();
-		BufferedReader reader = new BufferedReader(new FileReader(ALGORITHMS_TXT));
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			line.trim();
-			algorithms.add(line);
+
+		try {
+			BufferedReader algorithmFile = 
+					new BufferedReader(new InputStreamReader(TextFileReader.class.getClassLoader().getResourceAsStream("algorithms.txt")));
+			String line;
+			while((line=algorithmFile.readLine()) != null) {
+				line.trim();
+				algorithms.add(line);
+			}
+			algorithmFile.close();
 		}
-		reader.close();
+		catch(NullPointerException e) {
+			algorithms.add("BreadthFirstSearch");
+			algorithms.add("DepthFirstSearch");
+			algorithms.add("IterativeDeepeningSearch");
+			algorithms.add("UniformCostSearch");
+		}
+
 		return algorithms;
 	}
 
@@ -78,37 +61,35 @@ public class TextFileReader {
 
 	/**
 	 * Returns a list of the available tree names the application can use.
+	 * If the trees.txt file does not exist then the default known trees are used.
 	 * 
 	 * @return string list of tree names
 	 * @throws IOException 
 	 */
 	private final static LinkedList<String> readTrees() throws IOException {	
 
-		// create directory if it doesn't exist
-		File dir = new File("loader_files");
-		if(!dir.exists() || !dir.isDirectory()) {
-			if(!dir.mkdir()) return null;
-		}
-
-		// create tree text file if it doesn't exist, and write known trees to it
-		File treeFile = new File(TREES_TXT);
-		if(!treeFile.exists() || treeFile.isDirectory()) {
-			if(!treeFile.createNewFile()) return null;
-			final String TREES = "Tree124\nTree1355\nTree112111";
-			FileWriter fw = new FileWriter(treeFile.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(TREES);
-			bw.close();
-		}
-
 		LinkedList<String> trees = new LinkedList<String>();
-		BufferedReader reader = new BufferedReader(new FileReader(TREES_TXT));
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			line.trim();
-			trees.add(line);
+
+		try {
+			BufferedReader treeFile = 
+					new BufferedReader(new InputStreamReader(TextFileReader.class.getClassLoader().getResourceAsStream("trees.txt")));
+			String line;
+			while((line=treeFile.readLine()) != null) {
+				line.trim();
+				trees.add(line);
+			}
+			treeFile.close();
+
 		}
-		reader.close();
+		catch(NullPointerException e) {
+			trees.add("Tree124");
+			trees.add("Tree1355");
+			trees.add("Tree112111");
+			trees.add("Tree1834");
+			trees.add("Tree14326234");
+			trees.add("TreeRandom");
+		}
+
 		return trees;
 	}
 

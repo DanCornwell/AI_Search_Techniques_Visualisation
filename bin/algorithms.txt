@@ -1,0 +1,4 @@
+BreadthFirstSearch
+DepthFirstSearch
+IterativeDeepeningSearch
+UniformCostSearch
