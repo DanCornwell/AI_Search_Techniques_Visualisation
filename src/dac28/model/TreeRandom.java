@@ -30,8 +30,8 @@ class TreeRandom extends Tree {
 		int defaultValue = 1;
 		
 		Random random = new Random();
-		final int HIGH = 6;
-		final int LOW = 4;
+		final int HIGH = 5;
+		final int LOW = 2;
 
 		final int MAX_DEPTH = random.nextInt(HIGH+1-LOW) + LOW;
 		final int LEVEL_1_MAX_WIDTH = random.nextInt(HIGH+1-LOW) + LOW;

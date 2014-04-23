@@ -204,6 +204,11 @@ public class SearchCreator {
 		treeOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				// 'Reset' the random tree if it is selected
+				if(treeOptions.getSelectedItem().equals("TreeRandom")) 
+					TreeCreator.getInstance().putTree(treeOptions.getSelectedIndex(),"TreeRandom");
+				
 				NUMBER.doClick();
 				// Clear the text fields list
 				nodeValues.clear();
@@ -352,19 +357,6 @@ public class SearchCreator {
 		return treeOptions.getSelectedIndex();
 
 	}
-	
-	/**
-	 * Returns the the unique ID of the selected tree, which is its index within the button group.
-	 * If the random tree has been selected, it is added again to the hash so it creates a 'new' random tree.
-	 * 
-	 * @return Integer representing the tree's ID
-	 */
-	private final int getTreeUIDChangingRandom() {
-		
-		if(treeOptions.getSelectedItem().equals("TreeRandom")) 
-			TreeCreator.getInstance().putTree(treeOptions.getSelectedIndex(),"TreeRandom");
-		return getTreeUID();
-	}
 
 	/**
 	 * Returns the unique id of the selected algorithm, which is its index within the button group.
@@ -460,7 +452,7 @@ public class SearchCreator {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			Tree tree = TreeCreator.getInstance().getTree(getTreeUIDChangingRandom(), new LinkedList<String>());
+			Tree tree = TreeCreator.getInstance().getTree(getTreeUID(), new LinkedList<String>());
 			if(tree==null) {
 				g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 				g.drawString("Tree not found", (this.getWidth()/3)+15, this.getHeight()/2);
