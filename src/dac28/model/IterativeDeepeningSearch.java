@@ -63,12 +63,10 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		setup();
 
 	}
-		
+
 	@Override
 	protected void algorithmStepLogic() {
 
-	//	if(expanded.contains(ROOT) && expanded.size()==1) visited.clear();
-		
 		currentNode = ((Stack<Node>) expanded).pop();
 		if(atGoal()) {
 			// Goal reached so stop
@@ -76,11 +74,11 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		}
 		else {
 			visited.add(currentNode);
-			
+
 			// if the next level (current node's children) is bigger than the iteration number and has children
 			// add the children as in depth first search
 			if(nodeLevels.get(currentNode)+1 <= iteration && currentNode.hasChild()) {
-				
+
 				for(int i=currentNode.getChildren().size()-1;i>-1;i--) {
 					((Stack<Node>) expanded).push(currentNode.getChildren().get(i));
 				}
@@ -88,7 +86,7 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		}
 
 		prevVisitedSize = visited.size();
-		
+
 		// if the expanded list is empty and iteration number is smaller than the tree depth (i.e more level to iterate over)
 		if(expanded.isEmpty() && iteration < TREE_DEPTH) {
 			iteration++;
@@ -104,12 +102,12 @@ class IterativeDeepeningSearch extends SearchAlgorithm {
 		// else if visited is 0 we are at special case of iteration 1, so set iteration to 0
 		else if(visited.size() == 0) iteration = 0;
 	}
-	
+
 	@Override
 	protected void algorithmResetLogic() {
 		iteration = 0;
 	}
-	
+
 	@Override
 	protected SearchAlgorithm getAlgorithm(Tree tree,String goal) {
 		return new IterativeDeepeningSearch(tree,goal);

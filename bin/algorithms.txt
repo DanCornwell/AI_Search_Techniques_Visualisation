@@ -1,3 +1,6 @@
+# Add the class names of the search algorithms subclasses here
+# Make sure the classes named here extends the Search Algorithm abstract class
+
 BreadthFirstSearch
 DepthFirstSearch
 IterativeDeepeningSearch

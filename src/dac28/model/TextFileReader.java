@@ -30,8 +30,9 @@ public class TextFileReader {
 					new BufferedReader(new InputStreamReader(TextFileReader.class.getClassLoader().getResourceAsStream("algorithms.txt")));
 			String line;
 			while((line=algorithmFile.readLine()) != null) {
-				line.trim();
-				algorithms.add(line);
+				line = line.trim();
+				if(!line.startsWith("#") && !line.isEmpty()) 
+					algorithms.add(line);
 			}
 			algorithmFile.close();
 		}
@@ -75,8 +76,9 @@ public class TextFileReader {
 					new BufferedReader(new InputStreamReader(TextFileReader.class.getClassLoader().getResourceAsStream("trees.txt")));
 			String line;
 			while((line=treeFile.readLine()) != null) {
-				line.trim();
-				trees.add(line);
+				line = line.trim();
+				if(!line.startsWith("#") && !line.isEmpty()) 
+					trees.add(line);
 			}
 			treeFile.close();
 
