@@ -72,12 +72,14 @@ public abstract class Tree {
 	} 
 
 	/**
-	 * Returns the root node.
+	 * Returns a copy of the root node.
 	 * 
-	 * @return - the root variable
+	 * @return - copy of the root variable
 	 */
 	public final Node getRoot() {
-		return root;
+		Node rootCopy = new Node(root.getValue(),root.getUID());
+		for(Node child: root.getChildren()) rootCopy.addChild(child);
+		return rootCopy;
 	}
 
 	/**
