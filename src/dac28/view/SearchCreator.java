@@ -207,7 +207,7 @@ public class SearchCreator {
 				
 				// 'Reset' the random tree if it is selected
 				if(treeOptions.getSelectedItem().equals("TreeRandom")) 
-					TreeCreator.getInstance().putTree(treeOptions.getSelectedIndex(),"TreeRandom");
+					TreeCreator.getInstance().resetRandomTree();
 				
 				NUMBER.doClick();
 				// Clear the text fields list

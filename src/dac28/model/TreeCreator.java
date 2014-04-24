@@ -41,7 +41,16 @@ public class TreeCreator {
 		int id = 0;
 
 		for(String treeName: treeNames) {
-			putTree(id++,treeName);
+			try {
+
+				Class<?> tree = Class.forName("dac28.model.".concat(treeName));
+				Tree treeInstance = (Tree) tree.getDeclaredConstructor(Queue.class).newInstance(new LinkedList<String>());
+				trees.put(id, treeInstance);
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
+					| IllegalArgumentException | InvocationTargetException 
+					| NoSuchMethodException | SecurityException e) { 
+			}
+			id++;
 		}
 	}
 
@@ -70,19 +79,10 @@ public class TreeCreator {
 	}
 
 	/**
-	 * Adds a new tree to the trees hash, using a tree name and unique id key.
-	 * 
-	 * @param id - the key for the hash
-	 * @param treeName - the name of the tree that will be the value for the hash
+	 * Adds new random tree in place of the old one.
 	 */
-	public final void putTree(int id,String treeName) {
-		try {
-
-			Class<?> tree = Class.forName("dac28.model.".concat(treeName));
-			Tree treeInstance = (Tree) tree.getDeclaredConstructor(Queue.class).newInstance(new LinkedList<String>());
-			trees.put(id, treeInstance);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException 
-				| IllegalArgumentException | InvocationTargetException 
-				| NoSuchMethodException | SecurityException e) { 
-		}	}
+	public void resetRandomTree() {
+		int randomTreeID = TextFileReader.getTrees().indexOf("TreeRandom");
+		if(randomTreeID!=-1) trees.put(randomTreeID, new TreeRandom(new LinkedList<String>()));
+	}
 }
